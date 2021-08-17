@@ -42,6 +42,12 @@ jobs:
       # - name: 🐛 Run tests
       #   run: npm run test
 
+      - name: Link project
+        id: build-netlify
+        uses: netlify/actions/cli@master
+        with:
+          args: link
+
       - name: 📦 Build project
         id: build-netlify
         uses: netlify/actions/cli@master
