@@ -30,10 +30,11 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Install yarn
+        run: npm install -g yarn
+
       - name: 🧰 Install dependencies
-        run: |
-          npm install -g yarn
-          yarn install
+        run: yarn install
 
       # - name: 🧹 Run lint
       #   run: npm run lint
@@ -41,13 +42,16 @@ jobs:
       # - name: 🐛 Run tests
       #   run: npm run test
 
-      - name: 🛠  Build project
-        uses: netlify/actions/build@master
+      - name: Build project
+        id: build-netlify
+        uses: netlify/actions/cli@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          args: build
 
-      - name: 🌍 Preview deploy to Netlify
+      - name: Preview deploy to Netlify
         if: ${{ github.event_name == 'pull_request' }}
         id: preview-deploy-netlify
         uses: netlify/actions/cli@master
@@ -58,7 +62,7 @@ jobs:
           args: deploy -m '${{ github.head_ref }}' --alias '${{ github.head_ref }}'
 
       # Deploy to Netlify with a personalized message
-      - name: 🚀 Production deploy to Netlify
+      - name: Production deploy to Netlify
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         id: deploy-netlify
         uses: netlify/actions/cli@master
