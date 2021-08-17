@@ -30,11 +30,10 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install yarn
-        run: npm install -g yarn
-
       - name: 🧰 Install dependencies
-        run: yarn install
+        run: |
+          npm install -g yarn
+          yarn install
 
       # - name: 🧹 Run lint
       #   run: npm run lint
@@ -44,12 +43,11 @@ jobs:
 
       - name: Build project
         id: build-netlify
-        uses: netlify/actions/cli@master
+        run: |
+          netlify build
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: build
 
       - name: Preview deploy to Netlify
         if: ${{ github.event_name == 'pull_request' }}
