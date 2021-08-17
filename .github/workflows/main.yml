@@ -62,7 +62,7 @@ jobs:
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         id: deploy-netlify
         run: |
-          netlify deploy -m '${{ github.head_ref }}' --prod
+          netlify deploy -m 'Production deploy - ${{ github.sha }}' --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
