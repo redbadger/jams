@@ -1,35 +1,40 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
-import firebase from '../config/firebaseConfig';
+import fire from '../config/firebaseConfig';
 
-export default function Home() {
+export default function Home () {
   const [name, setName] = useState();
-  useEffect(() => {
-    fetch('/api/hello')
-      .then(res => res.json())
-      .then(data => {
-        setName(data.name);
-      });
-  }, []);
+  useEffect( () => {
+    fetch( '/api/hello' )
+      .then( res => res.json() )
+      .then( data => {
+        setName( data.name );
+      } );
+  }, [] );
 
-  useEffect(() => {
-    const db = firebase.firestore();
-    db.collection("jams").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const jam = doc.data();
-          jam.statements = [];
-          db.collection("jams")
-            .doc(doc.id)
-            .collection("statements").get().then(query => {
-            query.forEach(statement => jam.statements.push(statement.data()))
-          })
-          console.log(jam);
-        });
-    });
-  }, []);
+  useEffect( () => {
+    const db = fire.firestore();
+    db.collection( "jams" ).get().then( ( querySnapshot ) => {
+      querySnapshot.forEach( ( doc ) => {
+        const jam = doc.data();
+        jam.statements = [];
+        db.collection( "jams" )
+          .doc( doc.id )
+          .collection( "statements" ).get().then( query => {
+            query.forEach( statement => jam.statements.push( statement.id ) )
+          } )
+        console.log( jam );
+      } );
+    } );
+
+    const allStuff = []
+    db.collection( "participants" ).doc( 'BlNS4ZNBIJhEt1GJqEvm' ).collection( "votes" ).
+      get().then( query => query.forEach( votes => allStuff.push( votes.data() ) ) )
+    console.log( allStuff )
+  }, [] );
 
   // get all the statements a participant has voted on 
 
