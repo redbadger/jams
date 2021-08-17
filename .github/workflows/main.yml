@@ -43,23 +43,34 @@ jobs:
       #   run: npm run test
 
       - name: Link project
-        id: build-netlify
+        id: link-netlify
         uses: netlify/actions/cli@master
         with:
           args: link
 
-      - name: 📦 Build project
+      - name: Build project
         id: build-netlify
         uses: netlify/actions/cli@master
         with:
           args: build
 
+      - name: Preview deploy to Netlify
+        if: ${{ github.event_name == 'pull_request' }}
+        id: preview-deploy-netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          args: deploy -m '${{ github.head_ref }}' --alias '${{ github.head_ref }}'
+
       # Deploy to Netlify with a personalized message
-      - name: 🚀 Deploy to Netlify
+      - name: Production deploy to Netlify
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         id: deploy-netlify
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy -m '${{ github.head_ref }}'
+          args: deploy -m '${{ github.head_ref }}' --prod
