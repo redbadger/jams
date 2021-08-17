@@ -45,12 +45,3 @@ jobs:
       # - name: 🐛 Run tests
       #   run: npm run test
 
-      # Deploy to Netlify with a personalized message
-      - name: 🚀 Deploy to Netlify
-        id: deploy-netlify
-        uses: netlify/actions/cli@master
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: deploy -m '${{ github.head_ref }}'
