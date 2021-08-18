@@ -1,97 +1,132 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
 import { useEffect, useState } from 'react';
-
+import { useCookies } from 'react-cookie';
 import fire from '../config/firebaseConfig';
+import { pickBy } from 'lodash';
 
-import { pickBy } from 'lodash'
-
-export default function Home () {
+export default function Home() {
   const [question, setQuestion] = useState();
-  const [isDone, setIsDone] = useState( false );
+  const [isDone, setIsDone] = useState(false);
+  const [cookies, setCookies] = useCookies();
+  const [participantId, setParticipantId] = useState();
 
-  useEffect( () => {
-    loadQuestion()
-  }, [] );
+  useEffect(() => {
+    if (participantId) {
+      loadQuestion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participantId]);
 
+  useEffect(() => {
+    const id = cookies['jams-participant'];
+    if (id) {
+      setParticipantId(id);
+    } else {
+      settingIdCookies();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cookies]);
+
+  const db = fire.firestore();
+  const participantsRef = db.collection('participants');
+  const jamsRef = db.collection('jams');
   const loadQuestion = () => {
-    const db = fire.firestore();
-    db.collection( "jams" ).get().then( ( querySnapshot ) => {
-      querySnapshot.forEach( ( doc ) => {
+    jamsRef
+      .doc('6y4qC5HoThwkMKJiBrLn')
+      .get()
+      .then((doc) => {
         let jam = doc.data();
-        jam.statements = {}
-        const statementsPromise = db.collection( "jams" )
-          .doc( doc.id )
-          .collection( "statements" ).get().then( query => {
-            query.forEach( statement => {
-              const statement_id = statement.id
-              jam.statements[statement_id] = statement.data()
-            } )
-            return jam;
-          } );
-
-        const allVotes = []
-        const votesPromise = db.collection( "participants" )
-          .doc( 'BlNS4ZNBIJhEt1GJqEvm' )
-          .collection( "votes" )
+        jam.statements = {};
+        const statementsPromise = jamsRef
+          .doc(doc.id)
+          .collection('statements')
           .get()
-          .then( query => {
-            query.forEach( vote => allVotes.push( vote.data().statementId ) );
+          .then((query) => {
+            query.forEach((statement) => {
+              const statement_id = statement.id;
+              jam.statements[statement_id] = statement.data();
+            });
+            return jam;
+          });
+
+        const allVotes = [];
+        const votesPromise = participantsRef
+          .doc(participantId)
+          .collection('votes')
+          .get()
+          .then((query) => {
+            query.forEach((vote) =>
+              allVotes.push(vote.data().statementId),
+            );
             return allVotes;
-          } )
+          });
 
-        Promise.all( [statementsPromise, votesPromise] )
-          .then( ( [jam, votes] ) => {
-            const unansweredQs = pickBy( jam.statements, ( value, key ) => !votes.includes( key ) )
-
-            const keys = Object.keys( unansweredQs );
-            if ( !keys.length ) {
-              setIsDone( true )
+        Promise.all([statementsPromise, votesPromise]).then(
+          ([jam, votes]) => {
+            const unansweredQs = pickBy(
+              jam.statements,
+              (value, key) => !votes.includes(key),
+            );
+            const keys = Object.keys(unansweredQs);
+            if (!keys.length) {
+              setIsDone(true);
               return;
             }
 
-            const randomKey = keys[keys.length * Math.random() << 0]
+            const randomKey =
+              keys[(keys.length * Math.random()) << 0];
             const randomQ = unansweredQs[randomKey];
-            randomQ.key = randomKey
+            randomQ.key = randomKey;
 
-            setQuestion( randomQ )
-          } );
-      } );
-    } );
-  }
+            setQuestion(randomQ);
+          },
+        );
+      });
+  };
 
-  const sendRequest = ( vote ) => {
-    const db = fire.firestore();
-    let voteValue = ""
-    switch ( vote ) {
-      case "agree": {
+  const sendRequest = (vote) => {
+    let voteValue = '';
+    switch (vote) {
+      case 'agree': {
         voteValue = 1;
         break;
       }
-      case "disagree": {
+      case 'disagree': {
         voteValue = -1;
         break;
       }
-      case "skip": { voteValue = 0; break; }
-      default: console.error( "No vote" )
+      case 'skip': {
+        voteValue = 0;
+        break;
+      }
+      default:
+        console.error('No vote');
     }
 
+    participantsRef
+      .doc(participantId)
+      .collection('votes')
+      .add({
+        jamId: '6y4qC5HoThwkMKJiBrLn',
+        statementId: question.key,
+        vote: voteValue,
+        createdAt: fire.firestore.Timestamp.now(),
+      })
+      .then(() => {
+        console.log('Document successfully written!');
+        loadQuestion();
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  };
 
-    db.collection( "participants" ).doc( "BlNS4ZNBIJhEt1GJqEvm" ).collection( "votes" ).add( {
-      jamId: "6y4qC5HoThwkMKJiBrLn",
-      statementId: question.key,
-      vote: voteValue,
-      createdAt: fire.firestore.Timestamp.now()
-    } )
-      .then( () => {
-        console.log( "Document successfully written!" );
-        loadQuestion()
-      } )
-      .catch( ( error ) => {
-        console.error( "Error writing document: ", error );
-      } );
-  }
+  const settingIdCookies = () => {
+    participantsRef.add({}).then((docRef) => {
+      setCookies('jams-participant', docRef.id);
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -101,23 +136,30 @@ export default function Home () {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {!isDone ? question ? question.text : 'Loading...' : 'All done'}
+          {!isDone
+            ? question
+              ? question.text
+              : 'Loading...'
+            : 'All done'}
         </h1>
 
-        {!isDone &&
+        {!isDone && (
           <>
-            <button onClick={() => sendRequest( "agree" )}>Agree</button>
-            <button onClick={() => sendRequest( "disagree" )}>Disagree</button>
-            <button onClick={() => sendRequest( "skip" )}>Skip</button>
+            <h3>Participant id: {participantId}</h3>
+            <button onClick={() => sendRequest('agree')}>
+              Agree
+            </button>
+            <button onClick={() => sendRequest('disagree')}>
+              Disagree
+            </button>
+            <button onClick={() => sendRequest('skip')}>Skip</button>
           </>
-        }
+        )}
       </main>
 
       <footer className={styles.footer}>
-        <a>
-          Powered by Red Badger
-        </a>
+        <a>Powered by Red Badger</a>
       </footer>
     </div>
-  )
+  );
 }
