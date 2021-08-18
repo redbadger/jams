@@ -10,6 +10,7 @@ import {pickBy} from 'lodash'
 export default function Home () {
   const [name, setName] = useState();
   const [question, setQuestion] = useState();
+  const [isDone, setIsDone] = useState(false);
   useEffect(() => {
     fetch( '/api/hello' )
       .then( res => res.json() )
@@ -19,6 +20,10 @@ export default function Home () {
   }, [] );
 
   useEffect( () => {
+    loadQuestion()
+  }, []);
+
+  const loadQuestion = () => {
     const db = fire.firestore();
     db.collection("jams").get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -40,7 +45,7 @@ export default function Home () {
           .collection("votes")
           .get()
           .then(query => {
-            query.forEach( vote => allVotes.push(vote.data().statement_id));
+            query.forEach( vote => allVotes.push(vote.data().statementId));
             return allVotes;
           })
 
@@ -49,13 +54,37 @@ export default function Home () {
             const unansweredQs = pickBy(jam.statements, (value, key) => !votes.includes(key))
 
             const keys = Object.keys(unansweredQs);
-            const randomQ = unansweredQs[keys[keys.length * Math.random() << 0]];
+            if (!keys.length) {
+              setIsDone(true)
+              return;
+            }
 
-            setQuestion(randomQ.text)
+            const randomKey = keys[keys.length * Math.random() << 0]
+            const randomQ = unansweredQs[randomKey];
+            randomQ.key = randomKey
+
+            setQuestion(randomQ)
           });
       });
     });
-  }, []);
+  }
+
+  const sendRequest = (vote) => {
+    const db = fire.firestore();
+    db.collection("participants").doc("BlNS4ZNBIJhEt1GJqEvm").collection("votes").add({
+      jamId: "6y4qC5HoThwkMKJiBrLn",
+      statementId: question.key,
+      vote: vote ? 1 : -1,
+      createdAt: fire.firestore.Timestamp.now()
+    })
+    .then(() => {
+        console.log("Document successfully written!");
+        loadQuestion()
+    })
+    .catch((error) => {
+        console.error("Error writing document: ", error);
+    });
+  }
 
   return (
     <div className={styles.container}>
@@ -67,8 +96,11 @@ export default function Home () {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {question}
+          {!isDone ? question ? question.text : 'Loading...' : 'All done'}
         </h1>
+
+        <button onClick={() => sendRequest(true)}>Agree</button>
+        <button onClick={() => sendRequest(false)}>Disagree</button>
 
         <p className={styles.description}>
           Get started by editing{' '}
