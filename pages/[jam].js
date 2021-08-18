@@ -8,7 +8,10 @@ import { useCookies } from 'react-cookie';
 
 const Post = () => {
   const router = useRouter();
-  const { jamId } = router.query;
+  const { jam: jamId } = router.query;
+  const db = fire.firestore();
+  const participantsRef = db.collection('participants');
+  const jamsRef = db.collection('jams');
 
   const [question, setQuestion] = useState();
   const [isDone, setIsDone] = useState(false);
@@ -34,10 +37,6 @@ const Post = () => {
   }, [cookies]);
 
   const loadQuestion = () => {
-    const db = fire.firestore();
-    const participantsRef = db.collection('participants');
-    const jamsRef = db.collection('jams');
-
     jamsRef
       .where('urlPath', '==', jamId)
       .get()
