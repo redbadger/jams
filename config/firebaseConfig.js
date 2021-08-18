@@ -10,9 +10,9 @@ const firebaseConfig = {
 };
 
 try {
-  firebase.initializeApp(firebaseConfig);
-} catch(e){
-  console.error(e);
+  firebase.initializeApp( firebaseConfig );
+} catch ( e ) {
+  console.error( e );
 }
 
 export default firebase;

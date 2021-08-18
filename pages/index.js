@@ -1,68 +1,69 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useEffect, useState } from 'react';
-
+import { useCookies } from 'react-cookie';
 import fire from '../config/firebaseConfig';
-
 import { pickBy } from 'lodash'
 
 export default function Home () {
   const [question, setQuestion] = useState();
   const [isDone, setIsDone] = useState( false );
+  const [cookies, setCookies] = useCookies( "" )
+  const [participantId, setParticipantId] = useState()
+
 
   useEffect( () => {
-    loadQuestion()
-  }, [] );
+    if ( participantId ) { loadQuestion() }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participantId] );
+
+  const db = fire.firestore();
+  const participantsRef = db.collection( "participants" )
+  const jamsRef = db.collection( "jams" )
 
   const loadQuestion = () => {
-    const db = fire.firestore();
-    db.collection( "jams" ).get().then( ( querySnapshot ) => {
-      querySnapshot.forEach( ( doc ) => {
-        let jam = doc.data();
-        jam.statements = {}
-        const statementsPromise = db.collection( "jams" )
-          .doc( doc.id )
-          .collection( "statements" ).get().then( query => {
-            query.forEach( statement => {
-              const statement_id = statement.id
-              jam.statements[statement_id] = statement.data()
-            } )
-            return jam;
-          } );
-
-        const allVotes = []
-        const votesPromise = db.collection( "participants" )
-          .doc( 'BlNS4ZNBIJhEt1GJqEvm' )
-          .collection( "votes" )
-          .get()
-          .then( query => {
-            query.forEach( vote => allVotes.push( vote.data().statementId ) );
-            return allVotes;
+    jamsRef.doc( '6y4qC5HoThwkMKJiBrLn' ).get().then( ( doc ) => {
+      let jam = doc.data();
+      jam.statements = {}
+      const statementsPromise = jamsRef
+        .doc( doc.id )
+        .collection( "statements" ).get().then( query => {
+          query.forEach( statement => {
+            const statement_id = statement.id
+            jam.statements[statement_id] = statement.data()
           } )
+          return jam;
+        } );
 
-        Promise.all( [statementsPromise, votesPromise] )
-          .then( ( [jam, votes] ) => {
-            const unansweredQs = pickBy( jam.statements, ( value, key ) => !votes.includes( key ) )
+      const allVotes = []
+      const votesPromise = participantsRef
+        .doc( participantId )
+        .collection( "votes" )
+        .get()
+        .then( query => {
+          query.forEach( vote => allVotes.push( vote.data().statementId ) );
+          return allVotes;
+        } )
 
-            const keys = Object.keys( unansweredQs );
-            if ( !keys.length ) {
-              setIsDone( true )
-              return;
-            }
+      Promise.all( [statementsPromise, votesPromise] )
+        .then( ( [jam, votes] ) => {
+          const unansweredQs = pickBy( jam.statements, ( value, key ) => !votes.includes( key ) )
+          const keys = Object.keys( unansweredQs );
+          if ( !keys.length ) {
+            setIsDone( true )
+            return;
+          }
 
-            const randomKey = keys[keys.length * Math.random() << 0]
-            const randomQ = unansweredQs[randomKey];
-            randomQ.key = randomKey
+          const randomKey = keys[keys.length * Math.random() << 0]
+          const randomQ = unansweredQs[randomKey];
+          randomQ.key = randomKey
 
-            setQuestion( randomQ )
-          } );
-      } );
+          setQuestion( randomQ )
+        } );
     } );
   }
 
   const sendRequest = ( vote ) => {
-    const db = fire.firestore();
     let voteValue = ""
     switch ( vote ) {
       case "agree": {
@@ -78,7 +79,7 @@ export default function Home () {
     }
 
 
-    db.collection( "participants" ).doc( "BlNS4ZNBIJhEt1GJqEvm" ).collection( "votes" ).add( {
+    participantsRef.doc( participantId ).collection( "votes" ).add( {
       jamId: "6y4qC5HoThwkMKJiBrLn",
       statementId: question.key,
       vote: voteValue,
@@ -91,6 +92,19 @@ export default function Home () {
       .catch( ( error ) => {
         console.error( "Error writing document: ", error );
       } );
+  }
+
+  useEffect( () => {
+    const id = cookies['jams-participant'];
+    if ( id ) { setParticipantId( id ) }
+    else { settingIdCookies() }
+
+  }, [cookies] )
+
+  const settingIdCookies = () => {
+    participantsRef.add( {} ).then( docRef => {
+      setCookies( "jams-participant", docRef.id )
+    } )
   }
 
   return (
@@ -106,6 +120,7 @@ export default function Home () {
 
         {!isDone &&
           <>
+            <h3>Participant id: {participantId}</h3>
             <button onClick={() => sendRequest( "agree" )}>Agree</button>
             <button onClick={() => sendRequest( "disagree" )}>Disagree</button>
             <button onClick={() => sendRequest( "skip" )}>Skip</button>
