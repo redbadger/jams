@@ -8,7 +8,7 @@
  - createdAt: Timestamp
 
 ### List of statements subcollection
- - state???: number (approved: 1/ unseen(default): 0/ rejected: -1)
+ - state: number (approved: 1/ unseen(default): 0/ rejected: -1)
  - isUserSubmitted: boolean
  - text: String
  - numAgrees: number
@@ -16,13 +16,12 @@
 
 ## Participant collection
  - id: String (cookie?)
- - hash: String
  - votes: Subcollection
 
-### Votes (sub)collection
+### Votes subcollection
  - jamId: String
  - statementId: String
- - vote: number (agree: 1/ pass: 0/ disagree: -1???)
+ - vote: number (agree: 1/ pass: 0/ disagree: -1)
 
 
 ### Responding to statements loop
