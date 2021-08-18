@@ -5,9 +5,12 @@ import { useEffect, useState } from 'react';
 
 import fire from '../config/firebaseConfig';
 
+import {pickBy} from 'lodash'
+
 export default function Home () {
   const [name, setName] = useState();
-  useEffect( () => {
+  const [question, setQuestion] = useState();
+  useEffect(() => {
     fetch( '/api/hello' )
       .then( res => res.json() )
       .then( data => {
@@ -17,26 +20,42 @@ export default function Home () {
 
   useEffect( () => {
     const db = fire.firestore();
-    db.collection( "jams" ).get().then( ( querySnapshot ) => {
-      querySnapshot.forEach( ( doc ) => {
-        const jam = doc.data();
-        jam.statements = [];
-        db.collection( "jams" )
-          .doc( doc.id )
-          .collection( "statements" ).get().then( query => {
-            query.forEach( statement => jam.statements.push( statement.id ) )
-          } )
-        console.log( jam );
-      } );
-    } );
+    db.collection("jams").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        let jam = doc.data();
+        jam.statements = {}
+        const statementsPromise = db.collection("jams")
+          .doc(doc.id)
+          .collection("statements").get().then(query => {
+            query.forEach(statement => {
+              const statement_id = statement.id
+              jam.statements[statement_id] = statement.data()
+            })
+            return jam;
+          });
 
-    const allStuff = []
-    db.collection( "participants" ).doc( 'BlNS4ZNBIJhEt1GJqEvm' ).collection( "votes" ).
-      get().then( query => query.forEach( votes => allStuff.push( votes.data() ) ) )
-    console.log( allStuff )
-  }, [] );
+        const allVotes = []
+        const votesPromise = db.collection("participants")
+          .doc('BlNS4ZNBIJhEt1GJqEvm')
+          .collection("votes")
+          .get()
+          .then(query => {
+            query.forEach( vote => allVotes.push(vote.data().statement_id));
+            return allVotes;
+          })
 
-  // get all the statements a participant has voted on 
+        Promise.all([statementsPromise, votesPromise])
+          .then(([jam, votes]) => {
+            const unansweredQs = pickBy(jam.statements, (value, key) => !votes.includes(key))
+
+            const keys = Object.keys(unansweredQs);
+            const randomQ = unansweredQs[keys[keys.length * Math.random() << 0]];
+
+            setQuestion(randomQ.text)
+          });
+      });
+    });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -48,7 +67,7 @@ export default function Home () {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome {name}!
+          {question}
         </h1>
 
         <p className={styles.description}>
