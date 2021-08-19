@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 import fire from '../config/firebaseConfig';
 import { pickBy } from 'lodash';
 import { useCookies } from 'react-cookie';
+import JamButton from '../components/JamButton'
 
 const Post = () => {
   const router = useRouter();
@@ -15,9 +16,14 @@ const Post = () => {
 
   const [question, setQuestion] = useState();
   const [isDone, setIsDone] = useState(false);
+  const [participantId, setParticipantId] = useState();
   const [cookies, setCookies] = useCookies();
 
-  const [participantId, setParticipantId] = useState();
+  const ids = {
+    participantId: participantId,
+    jamId: jamId,
+    statementId: question ? question.key : null
+  }
 
   useEffect(() => {
     if (router.isReady && participantId) {
@@ -94,43 +100,6 @@ const Post = () => {
       });
   };
 
-  const sendRequest = (vote) => {
-    let voteValue = '';
-    switch (vote) {
-      case 'agree': {
-        voteValue = 1;
-        break;
-      }
-      case 'disagree': {
-        voteValue = -1;
-        break;
-      }
-      case 'skip': {
-        voteValue = 0;
-        break;
-      }
-      default:
-        console.error('No vote');
-    }
-
-    participantsRef
-      .doc(participantId)
-      .collection('votes')
-      .add({
-        jamId: jamId,
-        statementId: question.key,
-        vote: voteValue,
-        createdAt: fire.firestore.Timestamp.now(),
-      })
-      .then(() => {
-        console.log('Document successfully written!');
-        loadQuestion();
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
-  };
-
   const settingIdCookies = () => {
     participantsRef.add({}).then((docRef) => {
       setCookies('jams-participant', docRef.id);
@@ -155,13 +124,9 @@ const Post = () => {
         <h3>Participant id: {participantId}</h3>
         {!isDone && (
           <>
-            <button onClick={() => sendRequest('agree')}>
-              Agree
-            </button>
-            <button onClick={() => sendRequest('disagree')}>
-              Disagree
-            </button>
-            <button onClick={() => sendRequest('skip')}>Skip</button>
+            <JamButton vote='Agree' ids={ids} onComplete={loadQuestion}/>
+            <JamButton vote='Disagree' ids={ids} onComplete={loadQuestion}/>
+            <JamButton vote='Skip' ids={ids} onComplete={loadQuestion}/>
           </>
         )}
       </main>
