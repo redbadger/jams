@@ -6,6 +6,7 @@ import fire from '../config/firebaseConfig';
 import { pickBy } from 'lodash';
 import { useCookies } from 'react-cookie';
 import JamButton from '../components/JamButton'
+import Layout from '../components/Layout'
 
 const Post = () => {
   const router = useRouter();
@@ -131,9 +132,6 @@ const Post = () => {
         )}
       </main>
 
-      <footer className={styles.footer}>
-        <a>Powered by Red Badger</a>
-      </footer>
     </div>
   );
 };
