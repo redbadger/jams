@@ -1,6 +1,6 @@
 import fire from '../../config/firebaseConfig';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${method} Not Allowed`);
@@ -9,17 +9,17 @@ export default function handler(req, res) {
   const db = fire.firestore();
   const participantsRef = db.collection('participants');
 
-  return new Promise(() => {
-    participantsRef
-      .add({})
-      .then((participant) => {
-        return res
-          .status(201)
-          .setHeader('Content-Type', 'application/json')
-          .json({ participantId: participant.id });
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
-  });
+  res = await participantsRef
+    .add({})
+    .then((participant) => {
+      return res
+        .status(201)
+        .setHeader('Content-Type', 'application/json')
+        .json({ participantId: participant.id });
+    })
+    .catch((error) => {
+      console.error('Error writing document: ', error);
+    });
+
+  return res;
 }
