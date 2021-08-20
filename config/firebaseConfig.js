@@ -1,12 +1,12 @@
 import firebase from 'firebase';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCNxC0OuGeQNS7PyALPJfgLomOYRJ1YD4w',
-  authDomain: 'jams-dev.firebaseapp.com',
-  projectId: 'jams-dev',
-  storageBucket: 'jams-dev.appspot.com',
-  messagingSenderId: '317272519033',
-  appId: '1:317272519033:web:7e4522195dde405e5f3fa8',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 if (!firebase.apps.length) {
