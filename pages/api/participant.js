@@ -19,7 +19,6 @@ export default async function handler(req, res) {
     })
     .catch((error) => {
       console.error('Error writing document: ', error);
+      return res.status(500).end();
     });
-
-  return res;
 }
