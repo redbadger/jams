@@ -1,4 +1,4 @@
-import fire from '../../config/firebaseConfig';
+import fire from '../../config/firebaseAdminConfig';
 import { pickBy } from 'lodash';
 
 export default function handler(req, res) {

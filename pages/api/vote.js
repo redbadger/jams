@@ -1,4 +1,4 @@
-import fire from '../../config/firebaseConfig';
+import fire from '../../config/firebaseAdminConfig';
 
 export default function handler(req, res) {
   if (req.method !== 'POST') {
