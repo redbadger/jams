@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import JamButton from '../components/JamButton';
+import JamButton from '../../components/JamButton';
 
 const Jam = () => {
   const router = useRouter();
