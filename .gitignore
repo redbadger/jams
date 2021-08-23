@@ -35,3 +35,8 @@ yarn-error.log*
 
 # next-on-netlify build output
 out_*
+
+# vscode files
+.vscode/
+
+secrets/
