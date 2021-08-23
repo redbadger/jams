@@ -1,9 +1,6 @@
-import fire from '../config/firebaseConfig';
 import { merge } from 'lodash';
 
 export default function JamButton({ vote, ids, onComplete }) {
-  const db = fire.firestore();
-
   const sendRequest = (vote) => {
     fetch('/api/vote', {
       method: 'POST',
