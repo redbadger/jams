@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
 import { Stack } from '@chakra-ui/layout';
+import AddNewStatement from '../components/AddNewStatement';
 
 const Jam = () => {
   const router = useRouter();
@@ -87,7 +88,7 @@ const Jam = () => {
         <h3>Participant id: {participantId}</h3>
         {!isDone && (
           <>
-            <Stack direction="row" spacing={4} align="left">
+            <Stack direction="row" spacing={4} align="left" mb={3}>
               <JamButton
                 vote="Agree"
                 ids={ids}
@@ -107,6 +108,8 @@ const Jam = () => {
             </Stack>
           </>
         )}
+
+        <AddNewStatement />
       </main>
 
       <footer>
