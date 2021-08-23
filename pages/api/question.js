@@ -55,22 +55,19 @@ export default function handler(req, res) {
 
               const keys = Object.keys(unansweredQs);
               if (!keys.length) {
-                res
-                  .status(200)
-                  .setHeader('Content-Type', 'application/json')
-                  .json({});
-                return;
+                res.status(200);
+                res.setHeader('Content-Type', 'application/json');
+                res.json({});
+              } else {
+                const randomKey =
+                  keys[(keys.length * Math.random()) << 0];
+                const randomQ = unansweredQs[randomKey];
+                randomQ.key = randomKey;
+
+                res.status(200);
+                res.setHeader('Content-Type', 'application/json');
+                res.json(randomQ);
               }
-
-              const randomKey =
-                keys[(keys.length * Math.random()) << 0];
-              const randomQ = unansweredQs[randomKey];
-              randomQ.key = randomKey;
-
-              res
-                .status(200)
-                .setHeader('Content-Type', 'application/json')
-                .json(randomQ);
             },
           );
         });
