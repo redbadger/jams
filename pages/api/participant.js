@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const db = fire.firestore();
   const participantsRef = db.collection('participants');
 
-  res = await participantsRef
+  await participantsRef
     .add({})
     .then((participant) => {
       return res
