@@ -55,10 +55,11 @@ export default function handler(req, res) {
 
               const keys = Object.keys(unansweredQs);
               if (!keys.length) {
-                return res
+                res
                   .status(200)
                   .setHeader('Content-Type', 'application/json')
                   .json({});
+                return;
               }
 
               const randomKey =
@@ -66,7 +67,7 @@ export default function handler(req, res) {
               const randomQ = unansweredQs[randomKey];
               randomQ.key = randomKey;
 
-              return res
+              res
                 .status(200)
                 .setHeader('Content-Type', 'application/json')
                 .json(randomQ);
