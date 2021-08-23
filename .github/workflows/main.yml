@@ -30,6 +30,13 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Add Firebase secret
+        run: |
+          mkdir secrets
+          echo $FIREBASE_ADMIN_CREDENTIALS | base64 -d > secrets/firebase_admin_credentials.json
+        env:
+          FIREBASE_ADMIN_CREDENTIALS: ${{ secrets.FIREBASE_ADMIN_CREDENTIALS }}
+
       - name: 🧰 Install dependencies
         run: |
           npm install -g yarn
