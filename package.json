@@ -10,9 +10,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.6",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@netlify/plugin-nextjs": "^3.8.0",
     "firebase": "8.9.1",
     "firebase-admin": "^9.11.1",
+    "framer-motion": "^4",
     "lodash": "^4.17.21",
     "next": "^11.1.0",
     "react": "17.0.2",
