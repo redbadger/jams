@@ -18,22 +18,22 @@ export default function handler(req, res) {
   };
 
   if (!(vote in STATES)) {
-    return res.status(400).send({ message: 'Vote not recognised.' });
+    res.status(400).send({ message: 'Vote not recognised.' });
+  } else {
+    return new Promise(() => {
+      participantsRef
+        .doc(participantId)
+        .collection('votes')
+        .add({
+          jamId: jamId,
+          statementId: statementId,
+          vote: STATES[vote],
+          createdAt: fire.firestore.Timestamp.now(),
+        })
+        .then(() => res.status(201).end())
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    });
   }
-
-  return new Promise(() => {
-    participantsRef
-      .doc(participantId)
-      .collection('votes')
-      .add({
-        jamId: jamId,
-        statementId: statementId,
-        vote: STATES[vote],
-        createdAt: fire.firestore.Timestamp.now(),
-      })
-      .then(() => res.status(201).end())
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
-  });
 }
