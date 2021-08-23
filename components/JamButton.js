@@ -1,6 +1,13 @@
 import { merge } from 'lodash';
 
-export default function JamButton({ vote, ids, onComplete }) {
+import { Button } from '@chakra-ui/react';
+
+export default function JamButton({
+  vote,
+  ids,
+  onComplete,
+  ...props
+}) {
   const sendRequest = (vote) => {
     fetch('/api/vote', {
       method: 'POST',
@@ -13,5 +20,9 @@ export default function JamButton({ vote, ids, onComplete }) {
       .catch((error) => console.error('Error saving vote: ', error));
   };
 
-  return <button onClick={() => sendRequest(vote)}>{vote}</button>;
+  return (
+    <Button onClick={() => sendRequest(vote)} {...props}>
+      {vote}
+    </Button>
+  );
 }

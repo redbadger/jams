@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
+import { Stack } from '@chakra-ui/layout';
 
 const Jam = () => {
   const router = useRouter();
@@ -86,21 +87,24 @@ const Jam = () => {
         <h3>Participant id: {participantId}</h3>
         {!isDone && (
           <>
-            <JamButton
-              vote="Agree"
-              ids={ids}
-              onComplete={loadQuestion}
-            />
-            <JamButton
-              vote="Disagree"
-              ids={ids}
-              onComplete={loadQuestion}
-            />
-            <JamButton
-              vote="Skip"
-              ids={ids}
-              onComplete={loadQuestion}
-            />
+            <Stack direction="row" spacing={4} align="left">
+              <JamButton
+                vote="Agree"
+                ids={ids}
+                onComplete={loadQuestion}
+              />
+              <JamButton
+                vote="Disagree"
+                ids={ids}
+                onComplete={loadQuestion}
+              />
+              <JamButton
+                variant="link"
+                vote="Skip"
+                ids={ids}
+                onComplete={loadQuestion}
+              />
+            </Stack>
           </>
         )}
       </main>
