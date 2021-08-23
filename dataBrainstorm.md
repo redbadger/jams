@@ -13,6 +13,9 @@
  - text: String
  - numAgrees: number
  - numDisagrees: number
+ - approvedAt: timestamp
+ - rejectedAt: timestamp
+ - submittedAt: timestamp
 
 ## Participant collection
  - id: String (cookie?)
