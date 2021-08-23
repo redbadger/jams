@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css';
 import { useCookies } from 'react-cookie';
 import JamButton from '../components/JamButton';
 
@@ -70,13 +69,13 @@ const Jam = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>JAMS</title>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
+      <main>
+        <h1>
           {!isDone
             ? question
               ? question.text
@@ -106,8 +105,8 @@ const Jam = () => {
         )}
       </main>
 
-      <footer className={styles.footer}>
-        <a>Powered by Red Badger</a>
+      <footer>
+        <a href="https://red-badger.com">Powered by Red Badger</a>
       </footer>
     </div>
   );
