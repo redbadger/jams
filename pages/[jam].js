@@ -16,7 +16,7 @@ const Jam = () => {
 
   const ids = {
     participantId: participantId,
-    jamId: jamId,
+    jamId: question ? question.jamId : null,
     statementId: question ? question.key : null,
   };
 

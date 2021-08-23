@@ -63,6 +63,7 @@ export default function handler(req, res) {
                   keys[(keys.length * Math.random()) << 0];
                 const randomQ = unansweredQs[randomKey];
                 randomQ.key = randomKey;
+                randomQ.jamId = doc.id;
 
                 res.status(200);
                 res.setHeader('Content-Type', 'application/json');
