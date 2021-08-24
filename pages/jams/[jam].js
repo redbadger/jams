@@ -5,12 +5,13 @@ import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
 import { Stack } from '@chakra-ui/layout';
 import AddNewStatement from '../../components/AddNewStatement';
-import { Center, Heading } from '@chakra-ui/react';
+import { Center, Heading, Text } from '@chakra-ui/react';
 
 const Jam = () => {
   const router = useRouter();
-  const { jam: jamId } = router.query;
+  const { jam: jamUrlPath } = router.query;
 
+  const [jam, setJam] = useState();
   const [question, setQuestion] = useState();
   const [isDone, setIsDone] = useState(false);
   const [participantId, setParticipantId] = useState();
@@ -18,16 +19,24 @@ const Jam = () => {
 
   const ids = {
     participantId: participantId,
-    jamId: question ? question.jamId : null,
+    jamId: jam ? jam.key : null,
     statementId: question ? question.key : null,
   };
 
   useEffect(() => {
     if (router.isReady && participantId) {
-      loadQuestion();
+      loadJam();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, participantId]);
+
+  useEffect(() => {
+    if (jam == null) {
+      return;
+    }
+
+    loadQuestion();
+  }, [jam]);
 
   useEffect(() => {
     const id = cookies['jams-participant'];
@@ -39,10 +48,18 @@ const Jam = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookies]);
 
+  const loadJam = () => {
+    fetch(`/api/jam?jamUrlPath=${encodeURIComponent(jamUrlPath)}`)
+      .then((response) => response.json())
+      .then((json) => {
+        setJam(json);
+      });
+  };
+
   const loadQuestion = () => {
     fetch(
       `/api/question?jamId=${encodeURIComponent(
-        jamId,
+        jam.key,
       )}&participantId=${encodeURIComponent(participantId)}`,
     )
       .then((response) => response.json())
@@ -63,7 +80,6 @@ const Jam = () => {
     })
       .then((response) => response.json())
       .then((participant) => {
-        // Can we do this using a Set-Cookie header?
         setCookies('jams-participant', participant.participantId);
       })
       .catch((error) =>
@@ -79,6 +95,15 @@ const Jam = () => {
         </Head>
 
         <Stack direction="column" spacing={2} mb={5}>
+          {jam && (
+            <>
+              <Heading as="h1" size="2xl">
+                {jam.name}
+              </Heading>
+              <Text>{jam.description}</Text>
+            </>
+          )}
+
           <Heading as="h1" size="3xl">
             {!isDone
               ? question
