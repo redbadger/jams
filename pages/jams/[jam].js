@@ -136,7 +136,7 @@ const Jam = () => {
             </>
           )}
 
-          <AddNewStatement />
+          <AddNewStatement jamId={jam ? jam.key : null} />
         </Stack>
 
         <footer>
