@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import { Center, Heading } from '@chakra-ui/react';
-import styles from '../styles/Home.module.css';
+import { Center, Heading, Button } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 
 export default function Home() {
@@ -12,26 +11,22 @@ export default function Home() {
           <title>Welcome to JAMS</title>
         </Head>
 
-        <main>
-          <Heading as="h1" size="4xl">
-            Welcome to JAM
-          </Heading>
-        </main>
-
         {!session && (
           <>
             Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
+            <Button onClick={() => signIn()}>Sign in</Button>
           </>
         )}
         {session && (
           <>
             <h2>Signed in as {session.user.email}</h2> <br />
-            <button onClick={() => signOut()}>Sign out</button>
+            <Button onClick={() => signOut()}>Sign out</Button>
           </>
         )}
-        <main className={styles.main}>
-          <h1 className={styles.title}>Welcome to JAM</h1>
+        <main>
+          <Heading as="h1" size="4xl">
+            Welcome to JAM
+          </Heading>
           <a href="/dashboard">Click here for the Admin Dashboard</a>
         </main>
 

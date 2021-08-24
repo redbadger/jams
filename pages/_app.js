@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import React from 'react';
+import { useEffect } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'next-auth/client';
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }) {
 function Auth({ children }) {
   const [session, loading] = useSession();
   const isUser = !!session?.user;
-  React.useEffect(() => {
+  useEffect(() => {
     if (loading) return;
     if (!isUser) signIn();
   }, [isUser, loading]);
