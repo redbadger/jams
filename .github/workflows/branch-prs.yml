@@ -72,7 +72,7 @@ jobs:
       - name: 🐛 Run tests
         run: yarn test
 
-      - name: 🛠   Bild project
+      - name: 🛠  Build project
         id: build-netlify
         run: |
           netlify build
