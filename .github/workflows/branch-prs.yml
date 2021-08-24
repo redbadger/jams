@@ -1,14 +1,24 @@
-name: Production build+deploy
+name: Pull Request build+deploy
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    types: [opened, synchronize, reopened]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Starting deployment
+        uses: bobheadxi/deployments@v0.4.3
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ github.head_ref }}
+          ref: ${{ github.head_ref }}
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -62,7 +72,7 @@ jobs:
       - name: 🐛 Run tests
         run: yarn test
 
-      - name: 🛠   Bild project
+      - name: 🛠  Build project
         id: build-netlify
         run: |
           netlify build
@@ -70,11 +80,28 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: 🚀 Production deploy to Netlify
-        id: deploy-netlify
+      - name: 🌍 Preview deploy to Netlify
+        id: preview-deploy
         run: |
-          netlify deploy -m 'Production deploy - ${{ github.sha }}' --prod
+          COMMAND="netlify deploy -m ${{ github.head_ref }} --alias ${{ github.head_ref }}"
+          OUTPUT=$(sh -c "$COMMAND")
+          NETLIFY_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*(--)[a-zA-Z0-9./?=_-]*') #Unique key: --
+          NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') #Unique key: app.netlify.com
+
+          echo "::set-output name=NETLIFY_OUTPUT::$OUTPUT"
+          echo "::set-output name=NETLIFY_URL::$NETLIFY_URL"
+          echo "::set-output name=NETLIFY_LOGS_URL::$NETLIFY_LOGS_URL"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v0.4.3
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.preview-deploy.outputs.NETLIFY_URL }}
+          logs: ${{ steps.preview-deploy.outputs.NETLIFY_LOGS_URL }}
