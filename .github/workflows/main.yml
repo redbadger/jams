@@ -40,6 +40,8 @@ jobs:
           envkey_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           envkey_FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
           envkey_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBAGE_STORAGE_BUCKET }}
+          directory: './'
+          file_name: '.env'
 
       - name: Add Firebase secret
         run: |
