@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Center, Heading, Button } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/client';
+import Link from 'next/link';
 
 export default function Home() {
   const [session, _loading] = useSession();
@@ -27,7 +28,9 @@ export default function Home() {
           <Heading as="h1" size="4xl">
             Welcome to JAM
           </Heading>
-          <a href="/dashboard">Click here for the Admin Dashboard</a>
+          <Link href="/dashboard">
+            Click here for the Admin Dashboard
+          </Link>
         </main>
 
         <footer>
