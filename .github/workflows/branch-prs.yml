@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    environment: branch-deploy
     runs-on: ubuntu-latest
     steps:
       - name: Starting deployment
@@ -16,7 +17,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: ${{ github.head_ref }}
+          env: branch-deploy
           ref: ${{ github.head_ref }}
 
       - name: Checkout code
