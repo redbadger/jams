@@ -29,19 +29,11 @@ This project is using the following tech and 3rd parties:
 1. The project expects a `.env.local` file with the following keys set:
 
     ```
-    AUTH0_SECRET
-    AUTH0_BASE_URL
     AUTH0_ISSUER_BASE_URL
     AUTH0_CLIENT_ID
     AUTH0_CLIENT_SECRET
     NEXTAUTH_URL
     FIREBASE_DB_URL
-    FIREBASE_API_KEY
-    FIREBASE_AUTH_DOMAIN
-    FIREBASE_PROJECT_ID
-    FIREBASE_STORAGE_BUCKET
-    FIREBASE_SENDER_ID
-    FIREBASE_APP_ID
     ```
 
     It's probably better to ask one of the project maintainers for this.
