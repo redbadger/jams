@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
 import { Stack } from '@chakra-ui/layout';
-import AddNewStatement from '../components/AddNewStatement';
+import AddNewStatement from '../../components/AddNewStatement';
+import { Center, Heading } from '@chakra-ui/react';
 
 const Jam = () => {
   const router = useRouter();
@@ -71,51 +72,53 @@ const Jam = () => {
   };
 
   return (
-    <div>
-      <Head>
-        <title>JAMS</title>
-      </Head>
+    <Center h="100vh">
+      <div>
+        <Head>
+          <title>JAMS</title>
+        </Head>
 
-      <main>
-        <h1>
-          {!isDone
-            ? question
-              ? question.text
-              : 'Loading...'
-            : 'All done'}
-        </h1>
+        <Stack direction="column" spacing={2} mb={5}>
+          <Heading as="h1" size="3xl">
+            {!isDone
+              ? question
+                ? question.text
+                : 'Loading...'
+              : 'All done'}
+          </Heading>
 
-        <h3>Participant id: {participantId}</h3>
-        {!isDone && (
-          <>
-            <Stack direction="row" spacing={4} align="left" mb={3}>
-              <JamButton
-                vote="Agree"
-                ids={ids}
-                onComplete={loadQuestion}
-              />
-              <JamButton
-                vote="Disagree"
-                ids={ids}
-                onComplete={loadQuestion}
-              />
-              <JamButton
-                variant="link"
-                vote="Skip"
-                ids={ids}
-                onComplete={loadQuestion}
-              />
-            </Stack>
-          </>
-        )}
+          <h3>Participant id: {participantId}</h3>
+          {!isDone && (
+            <>
+              <Stack direction="row" spacing={4} align="left" mb={3}>
+                <JamButton
+                  vote="Agree"
+                  ids={ids}
+                  onComplete={loadQuestion}
+                />
+                <JamButton
+                  vote="Disagree"
+                  ids={ids}
+                  onComplete={loadQuestion}
+                />
+                <JamButton
+                  variant="link"
+                  vote="Skip"
+                  ids={ids}
+                  onComplete={loadQuestion}
+                />
+              </Stack>
+            </>
+          )}
 
-        <AddNewStatement />
-      </main>
+          <AddNewStatement />
+        </Stack>
 
-      <footer>
-        <a href="https://red-badger.com">Powered by Red Badger</a>
-      </footer>
-    </div>
+        <footer>
+          <a href="https://red-badger.com">Powered by Red Badger</a>
+        </footer>
+      </div>
+    </Center>
   );
 };
 
