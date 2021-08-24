@@ -16,7 +16,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: integration
+          env: ${{ github.head_ref }}
           ref: ${{ github.head_ref }}
 
       - name: Checkout code
