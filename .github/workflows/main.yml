@@ -31,7 +31,7 @@ jobs:
           node-version: 14.x
 
       - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1.1
+        uses: SpicyPizza/create-envfile@v1
         with:
           envkey_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           envkey_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
@@ -39,8 +39,7 @@ jobs:
           envkey_FIREBASE_DB_URL: ${{ secrets.FIREBASE_DB_URL }}
           envkey_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           envkey_FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
-          envkey_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBAGE_STORAGE_BUCKET }}
-          directory: './'
+          envkey_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
           file_name: '.env'
 
       - name: Add Firebase secret
