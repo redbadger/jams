@@ -91,13 +91,12 @@ function Moderator() {
     console.log(`title: ${title}, statement: ${statement}`);
   };
 
-  const handleDeletePropsedStatement = (e) => {
-    const deleteKey = e.target.getAttribute('index');
-    console.log(deleteKey);
+  const handleDeletePropsedStatement = (deleteIndex) => {
+    console.log(deleteIndex);
     setAllStatements((allStatements) =>
-      allStatements.filter((statement, index) => {
-        index !== deleteKey;
-      }),
+      allStatements.filter(
+        (statement, index) => index !== deleteIndex,
+      ),
     );
   };
 
