@@ -1,44 +1,34 @@
 import {
   Heading,
   VStack,
-  HStack,
   Container,
   Input,
   Text,
   Textarea,
   Button,
-  Spacer,
   Flex,
-  Divider,
   Box,
 } from '@chakra-ui/react';
-import { hello } from '../../dummy_data';
 import { useEffect, useState } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
 import { cloneDeep } from 'lodash';
 
 function Moderator() {
-  const greeting = hello();
   const [title, setTitle] = useState();
   const [allStatements, setAllStatements] = useState([]);
   const [currentStatement, setCurrentStatement] = useState('');
   const [description, setDescriptionValue] = useState();
   const [submitted, setSubmitted] = useState();
-  // const jamId = encodeURIComponent('6y4qC5HoThwkMKJiBrLn');
-
-  // useEffect(() => {
-  //   uploadStatement();
-  // }, []);
 
   // Call API to upload new statement into firestore
-  const createStatementRequest = () => {
-    fetch(`/api/statement`, {
+  const createJam = () => {
+    fetch(`/api/jam`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        jamId: '6y4qC5HoThwkMKJiBrLn',
+        name: title,
         description: description,
         statement: allStatements,
       }),
@@ -52,13 +42,11 @@ function Moderator() {
       });
   };
 
-  // Collect user input from the form
   const handleTitleChange = (e) => {
     let titleValue = e.target.value;
     setTitle(titleValue);
   };
 
-  // Add a description.
   const handleDescriptionChange = (e) => {
     let descriptionValue = e.target.value;
     setDescriptionValue(descriptionValue);
@@ -76,6 +64,7 @@ function Moderator() {
     setCurrentStatement('');
 
     setSubmitted(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitted]);
 
   const handleStatementChange = (e) => {
@@ -83,27 +72,17 @@ function Moderator() {
     setCurrentStatement(statementValue);
   };
 
-  // save handler
   const handleSave = () => {
     setSubmitted(true);
   };
 
-  const handleForm = () => {
-    console.log(`title: ${title}, statement: ${statement}`);
-  };
-
   const handleDeletePropsedStatement = (deleteIndex) => {
-    console.log(deleteIndex);
     setAllStatements((allStatements) =>
-      allStatements.filter(
-        (statement, index) => index !== deleteIndex,
-      ),
+      allStatements.filter((_, index) => index !== deleteIndex),
     );
   };
 
   const handleEditExistingStatement = (editIndex, statement) => {
-    console.log(editIndex);
-    console.log(statement);
     setAllStatements((allStatements) => {
       const copyStatements = cloneDeep(allStatements);
       copyStatements[editIndex] = statement;
@@ -114,7 +93,7 @@ function Moderator() {
   return (
     <Container>
       <VStack align="start" spacing={5}>
-        <Heading>Create a new Jam: {greeting}</Heading>
+        <Heading>Create a new Jam:</Heading>
 
         <Text fontSize="xl">Title</Text>
         <Text fontSize="xs" color="gray.500">
@@ -190,9 +169,7 @@ function Moderator() {
       <Flex justifyContent="flex-end">
         <Button>Cancel</Button>
         <Box p="1"></Box>
-        <Button onClick={() => createStatementRequest()}>
-          Publish
-        </Button>
+        <Button onClick={() => createJam()}>Publish</Button>
       </Flex>
     </Container>
   );

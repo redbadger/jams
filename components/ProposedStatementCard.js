@@ -1,16 +1,18 @@
 import {
-  Stack,
-  HStack,
   VStack,
   Text,
   Button,
   Flex,
   Textarea,
 } from '@chakra-ui/react';
-import { Fragment } from 'react';
 import { useState } from 'react';
 
-const EditableStatement = ({ children, index, onSave, onCancel }) => {
+const EditableStatement = ({
+  children,
+  index,
+  onSave,
+  invertEditable,
+}) => {
   const [statement, setStatement] = useState(children);
 
   const handleStatementChange = (e) => {
@@ -28,11 +30,11 @@ const EditableStatement = ({ children, index, onSave, onCancel }) => {
         />
       </VStack>
       <Flex justifyContent="flex-end">
-        <Button onClick={() => onCancel()}>Cancel</Button>
+        <Button onClick={() => invertEditable()}>Cancel</Button>
         <Button
           onClick={() => {
             onSave(index, statement);
-            onCancel();
+            invertEditable();
           }}
         >
           Save
@@ -42,12 +44,11 @@ const EditableStatement = ({ children, index, onSave, onCancel }) => {
   );
 };
 
-// Add visible only component.
 const VisibleOnlyStatement = ({
   children,
   index,
   onDelete,
-  onEdit,
+  invertEditable,
 }) => {
   return (
     <>
@@ -55,8 +56,8 @@ const VisibleOnlyStatement = ({
         <Text>{children}</Text>
       </VStack>
       <Flex justifyContent="flex-end">
-        <Button onClick={() => onClick(index)}>Delete</Button>
-        <Button onClick={() => onEdit()}>Edit</Button>
+        <Button onClick={() => onDelete(index)}>Delete</Button>
+        <Button onClick={() => invertEditable()}>Edit</Button>
       </Flex>
     </>
   );
@@ -65,18 +66,16 @@ const VisibleOnlyStatement = ({
 function ProposedStatementCard(props) {
   const [isEditable, setIsEditable] = useState(false);
 
-  const handleEdit = () => {
+  const invertEditable = () => {
     setIsEditable((isEditable) => !isEditable);
-    console.log('changing editable');
   };
 
-  // show component based on whether editing or viewing only.
   if (isEditable) {
     return (
       <EditableStatement
         index={props.index}
         onSave={props.onSave}
-        onCancel={handleEdit}
+        invertEditable={invertEditable}
       >
         {props.children}
       </EditableStatement>
@@ -86,7 +85,7 @@ function ProposedStatementCard(props) {
       <VisibleOnlyStatement
         index={props.index}
         onDelete={props.onDelete}
-        onEdit={handleEdit}
+        invertEditable={invertEditable}
       >
         {props.children}
       </VisibleOnlyStatement>
