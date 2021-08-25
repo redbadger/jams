@@ -23,7 +23,9 @@ export default function handler(req, res) {
         numDisagrees: 0,
         numSkipped: 0,
       })
-      .then(() => res.status(201).end())
+      .then(() => {
+        res.status(201).end();
+      })
       .catch((error) => {
         console.error('Error writing document: ', error);
       });

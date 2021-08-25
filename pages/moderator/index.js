@@ -12,24 +12,101 @@ import {
   Divider,
   Box,
 } from '@chakra-ui/react';
+import { hello } from '../../dummy_data';
+import { useEffect, useState } from 'react';
 
 function Moderator() {
+  const greeting = hello();
+  const [title, setTitle] = useState();
+  const [allStatements, setAllStatements] = useState([]);
+  const [currentStatement, setCurrentStatement] = useState('');
+  const [description, setDescriptionValue] = useState();
+  const [submitted, setSubmitted] = useState();
+  // const jamId = encodeURIComponent('6y4qC5HoThwkMKJiBrLn');
+
+  // useEffect(() => {
+  //   uploadStatement();
+  // }, []);
+
+  // Call API to upload new statement into firestore
+  const createStatementRequest = () => {
+    fetch(`/api/statement`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jamId: '6y4qC5HoThwkMKJiBrLn',
+        description: description,
+        statement: allStatements,
+      }),
+    })
+      .then((response) => {
+        setSubmitted(response.status);
+        console.log(`status code: ${submitted}`);
+      })
+      .catch((error) => {
+        console.error('Error saving statement: ', error);
+      });
+  };
+
+  // Collect user input from the form
+  const handleTitleChange = (e) => {
+    let titleValue = e.target.value;
+    setTitle(titleValue);
+  };
+
+  // Add a description.
+  const handleDescriptionChange = (e) => {
+    let descriptionValue = e.targe.value;
+    setDescriptionValue(descriptionValue);
+  };
+
+  const handleStatementChange = (e) => {
+    let statementValue = e.target.value;
+    setCurrentStatement(statementValue);
+    console.log(currentStatement);
+  };
+
+  // save handler
+  const handleSave = () => {
+    // setTheArray(oldArray => [...oldArray, newElement]);
+    setAllStatements((allStatements) => [
+      ...allStatements,
+      currentStatement,
+    ]);
+    setCurrentStatement('');
+    console.log(allStatements);
+  };
+
+  const handleForm = () => {
+    console.log(`title: ${title}, statement: ${statement}`);
+  };
+
   return (
     <Container>
       <VStack align="start" spacing={5}>
-        <Heading>Create a new Jam</Heading>
+        <Heading>Create a new Jam: {greeting}</Heading>
 
         <Text fontSize="xl">Title</Text>
         <Text fontSize="xs" color="gray.500">
           The title cannot be edited after the Jam is published
         </Text>
-        <Input placeholder="title" size="md" />
+        <Input
+          placeholder="title"
+          size="md"
+          onChange={handleTitleChange}
+        />
 
         <Text fontSize="xl">Description</Text>
         <Text fontSize="xs" color="gray.500">
           The description cannot be edited after the Jam is published
         </Text>
-        <Textarea placeholder="description" size="md" />
+        <Textarea
+          placeholder="description"
+          size="md"
+          onChange={handleDescriptionChange}
+        />
 
         <Text fontSize="xl">Statements</Text>
 
@@ -48,7 +125,12 @@ function Moderator() {
             different point
           </Text>
         </VStack>
-        <Textarea placeholder="statements" size="md" />
+        <Textarea
+          placeholder="statements"
+          size="md"
+          value={currentStatement}
+          onChange={handleStatementChange}
+        />
       </VStack>
 
       <Flex>
@@ -56,9 +138,9 @@ function Moderator() {
       </Flex>
 
       <Flex justifyContent="flex-end">
-        <Button>Delete</Button>
+        <Button>Cancel</Button>
         <Box p="1"></Box>
-        <Button>Edit</Button>
+        <Button onClick={handleSave}>Save</Button>
       </Flex>
       <Flex>
         <Box p="6" />
@@ -67,7 +149,9 @@ function Moderator() {
       <Flex justifyContent="flex-end">
         <Button>Cancel</Button>
         <Box p="1"></Box>
-        <Button>Publish</Button>
+        <Button onClick={() => createStatementRequest()}>
+          Publish
+        </Button>
       </Flex>
     </Container>
   );

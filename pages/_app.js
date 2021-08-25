@@ -10,13 +10,14 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider>
       <CookiesProvider>
         <Provider session={pageProps.session}>
-          {Component.auth ? (
+          {/* {Component.auth ? (
             <Auth>
               <Component {...pageProps} />
             </Auth>
           ) : (
             <Component {...pageProps} />
-          )}
+          )} */}
+          <Component {...pageProps} />
         </Provider>
       </CookiesProvider>
     </ChakraProvider>
