@@ -10,20 +10,33 @@ import {
 import { Fragment } from 'react';
 import { useState } from 'react';
 
-const EditableStatement = ({
-  children,
-  index,
-  onClick,
-  onCancel,
-}) => {
+const EditableStatement = ({ children, index, onSave, onCancel }) => {
+  const [statement, setStatement] = useState(children);
+
+  const handleStatementChange = (e) => {
+    let statementValue = e.target.value;
+    setStatement(statementValue);
+  };
+
   return (
     <>
       <VStack>
-        <Textarea size="md" defaultValue={children} />
+        <Textarea
+          size="md"
+          defaultValue={children}
+          onChange={handleStatementChange}
+        />
       </VStack>
       <Flex justifyContent="flex-end">
         <Button onClick={() => onCancel()}>Cancel</Button>
-        <Button>Save</Button>
+        <Button
+          onClick={() => {
+            onSave(index, statement);
+            onCancel();
+          }}
+        >
+          Save
+        </Button>
       </Flex>
     </>
   );
@@ -33,7 +46,7 @@ const EditableStatement = ({
 const VisibleOnlyStatement = ({
   children,
   index,
-  onClick,
+  onDelete,
   onEdit,
 }) => {
   return (
@@ -54,7 +67,7 @@ function ProposedStatementCard(props) {
 
   const handleEdit = () => {
     setIsEditable((isEditable) => !isEditable);
-    console.log('edit clicked');
+    console.log('changing editable');
   };
 
   // show component based on whether editing or viewing only.
@@ -62,7 +75,7 @@ function ProposedStatementCard(props) {
     return (
       <EditableStatement
         index={props.index}
-        onClick={props.onClick}
+        onSave={props.onSave}
         onCancel={handleEdit}
       >
         {props.children}
@@ -72,7 +85,7 @@ function ProposedStatementCard(props) {
     return (
       <VisibleOnlyStatement
         index={props.index}
-        onClick={props.onClick}
+        onDelete={props.onDelete}
         onEdit={handleEdit}
       >
         {props.children}

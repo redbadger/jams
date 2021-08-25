@@ -15,6 +15,7 @@ import {
 import { hello } from '../../dummy_data';
 import { useEffect, useState } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
+import { cloneDeep } from 'lodash';
 
 function Moderator() {
   const greeting = hello();
@@ -100,6 +101,16 @@ function Moderator() {
     );
   };
 
+  const handleEditExistingStatement = (editIndex, statement) => {
+    console.log(editIndex);
+    console.log(statement);
+    setAllStatements((allStatements) => {
+      const copyStatements = cloneDeep(allStatements);
+      copyStatements[editIndex] = statement;
+      return copyStatements;
+    });
+  };
+
   return (
     <Container>
       <VStack align="start" spacing={5}>
@@ -132,7 +143,8 @@ function Moderator() {
             <ProposedStatementCard
               key={index}
               index={index}
-              onClick={handleDeletePropsedStatement}
+              onDelete={handleDeletePropsedStatement}
+              onSave={handleEditExistingStatement}
             >
               {statement}
             </ProposedStatementCard>
