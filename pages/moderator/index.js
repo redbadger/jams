@@ -58,25 +58,32 @@ function Moderator() {
 
   // Add a description.
   const handleDescriptionChange = (e) => {
-    let descriptionValue = e.targe.value;
+    let descriptionValue = e.target.value;
     setDescriptionValue(descriptionValue);
   };
 
-  const handleStatementChange = (e) => {
-    let statementValue = e.target.value;
-    setCurrentStatement(statementValue);
-    console.log(currentStatement);
-  };
+  useEffect(() => {
+    if (!submitted) {
+      return;
+    }
 
-  // save handler
-  const handleSave = () => {
-    // setTheArray(oldArray => [...oldArray, newElement]);
     setAllStatements((allStatements) => [
       ...allStatements,
       currentStatement,
     ]);
     setCurrentStatement('');
-    console.log(allStatements);
+
+    setSubmitted(false);
+  }, [submitted]);
+
+  const handleStatementChange = (e) => {
+    let statementValue = e.target.value;
+    setCurrentStatement(statementValue);
+  };
+
+  // save handler
+  const handleSave = () => {
+    setSubmitted(true);
   };
 
   const handleForm = () => {
@@ -110,6 +117,12 @@ function Moderator() {
 
         <Text fontSize="xl">Statements</Text>
 
+        <ul>
+          {allStatements.map((statement) => (
+            <li key={statement}>{statement}</li>
+          ))}
+        </ul>
+
         <VStack spacing={1} align="start">
           <Text fontSize="xs" color="gray.500">
             <span>&bull;</span>Staments should be easy for everyone to
@@ -140,7 +153,7 @@ function Moderator() {
       <Flex justifyContent="flex-end">
         <Button>Cancel</Button>
         <Box p="1"></Box>
-        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={() => handleSave()}>Save</Button>
       </Flex>
       <Flex>
         <Box p="6" />
