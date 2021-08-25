@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { hello } from '../../dummy_data';
 import { useEffect, useState } from 'react';
+import ProposedStatementCard from '../../components/ProposedStatementCard';
 
 function Moderator() {
   const greeting = hello();
@@ -90,6 +91,16 @@ function Moderator() {
     console.log(`title: ${title}, statement: ${statement}`);
   };
 
+  const handleDeletePropsedStatement = (e) => {
+    const deleteKey = e.target.getAttribute('index');
+    console.log(deleteKey);
+    setAllStatements((allStatements) =>
+      allStatements.filter((statement, index) => {
+        index !== deleteKey;
+      }),
+    );
+  };
+
   return (
     <Container>
       <VStack align="start" spacing={5}>
@@ -118,8 +129,14 @@ function Moderator() {
         <Text fontSize="xl">Statements</Text>
 
         <ul>
-          {allStatements.map((statement) => (
-            <li key={statement}>{statement}</li>
+          {allStatements.map((statement, index) => (
+            <ProposedStatementCard
+              key={index}
+              index={index}
+              onClick={handleDeletePropsedStatement}
+            >
+              {statement}
+            </ProposedStatementCard>
           ))}
         </ul>
 
