@@ -5,6 +5,9 @@ import {
   Button,
   Wrap,
   WrapItem,
+  Spinner,
+  Center,
+  Text,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
@@ -63,22 +66,33 @@ function Moderator() {
         </Heading>
         <HStack spacing="5">
           <Wrap>
-            {jams
-              ? jams.map((jam, i) => {
-                  return (
-                    <WrapItem key={i}>
-                      <OverviewJamCard
-                        isOpen={jam.isOpen}
-                        jamName={jam.name}
-                        openFor={timeSince(jam.createdAt._seconds)}
-                        createdAt={convertDate(
-                          jam.createdAt._seconds,
-                        )}
-                      />
-                    </WrapItem>
-                  );
-                })
-              : 'No jams to load'}
+            {jams ? (
+              jams.map((jam, i) => {
+                return (
+                  <WrapItem key={i}>
+                    <OverviewJamCard
+                      isOpen={jam.isOpen}
+                      jamName={jam.name}
+                      openFor={timeSince(jam.createdAt._seconds)}
+                      createdAt={convertDate(jam.createdAt._seconds)}
+                    />
+                  </WrapItem>
+                );
+              })
+            ) : (
+              <Container p="30px">
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="xl"
+                />
+                <Text m="20px" fontSize="18px">
+                  Loading jams...
+                </Text>
+              </Container>
+            )}
           </Wrap>
         </HStack>
       </Container>

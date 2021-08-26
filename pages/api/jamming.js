@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  jamsRef
+  await jamsRef
     .get()
     .then((querySnapshot) => {
       var jams = [];
