@@ -4,6 +4,8 @@ import {
   Button,
   Flex,
   Textarea,
+  Stack,
+  Box,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -30,12 +32,15 @@ const EditableStatement = ({
         />
       </VStack>
       <Flex justifyContent="flex-end">
-        <Button onClick={() => invertEditable()}>Cancel</Button>
+        <Button onClick={() => invertEditable()} variant="outline">
+          Cancel
+        </Button>
         <Button
           onClick={() => {
             onSave(index, statement);
             invertEditable();
           }}
+          variant="outline"
         >
           Save
         </Button>
@@ -51,15 +56,18 @@ const VisibleOnlyStatement = ({
   invertEditable,
 }) => {
   return (
-    <>
-      <VStack>
-        <Text>{children}</Text>
-      </VStack>
-      <Flex justifyContent="flex-end">
-        <Button onClick={() => onDelete(index)}>Delete</Button>
-        <Button onClick={() => invertEditable()}>Edit</Button>
-      </Flex>
-    </>
+    <Box w="100%">
+      <Text>{children}</Text>
+
+      <Stack justify="right" direction="row" spacing={2}>
+        <Button onClick={() => onDelete(index)} variant="outline">
+          Delete
+        </Button>
+        <Button onClick={() => invertEditable()} variant="outline">
+          Edit
+        </Button>
+      </Stack>
+    </Box>
   );
 };
 

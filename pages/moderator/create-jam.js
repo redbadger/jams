@@ -158,18 +158,16 @@ function Moderator() {
               <span>&bull;</span>Each one should be unique and raise a
               different point
             </Text>
-            <ul>
-              {allStatements.map((statement, index) => (
-                <ProposedStatementCard
-                  key={index}
-                  index={index}
-                  onDelete={handleDeletePropsedStatement}
-                  onSave={handleEditExistingStatement}
-                >
-                  {statement}
-                </ProposedStatementCard>
-              ))}
-            </ul>
+            {allStatements.map((statement, index) => (
+              <ProposedStatementCard
+                key={index}
+                index={index}
+                onDelete={handleDeletePropsedStatement}
+                onSave={handleEditExistingStatement}
+              >
+                {statement}
+              </ProposedStatementCard>
+            ))}
           </VStack>
           <Textarea
             placeholder="statements"
