@@ -36,13 +36,6 @@ function Moderator() {
       });
   };
 
-  // const loadingJam = () => {
-  //   fetch(`/api/jam?jamUrlPath=${encodeURIComponent(jamUrlPath)}`)
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       console.log(json);
-  //     });
-  // };
   const dummyData = [
     {
       title: 'Humanity in the Machine',
@@ -87,18 +80,16 @@ function Moderator() {
     return (
       <Box maxW="sm" borderWidth="1px" borderRadius="lg">
         <Box p="3">
-          <Text fontSize="3xl">{dummyData[index].title}</Text>
+          <Text fontSize="3xl">{dummyData[0].title}</Text>
         </Box>
         <Box p="3">
-          <Button>{dummyData[index].buttonState}</Button>
+          <Button>{dummyData[0].buttonState}</Button>
         </Box>
-        <Box p="3">{dummyData[index].dateStamp}</Box>
-        <Box p="3">{dummyData[index].created}</Box>
+        <Box p="3">{dummyData[0].dateStamp}</Box>
+        <Box p="3">{dummyData[0].created}</Box>
       </Box>
     );
   };
-
-  const list = ['homer', 'marge', 'bart', 'lisa', 'maggie'];
 
   return (
     <Container>
@@ -106,9 +97,8 @@ function Moderator() {
         Jams Overview <Button>Create a new Jam</Button>
       </Heading>
       <HStack spacing="10">
-        {list.map((item, index) => (
-          <Text key={index}>{item}</Text>
-        ))}
+        {/* Map through and display the Component */}
+        <ModeratorCard />
       </HStack>
     </Container>
   );
