@@ -7,15 +7,15 @@ import {
   Textarea,
   Button,
   Flex,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Box,
+  Stack,
+  List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
 } from '@chakra-ui/react';
+
 import { useEffect, useState } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
 import ModalCreateJam from '../../components/ModalCreateJam';
@@ -120,19 +120,20 @@ function Moderator() {
     <>
       <Container>
         <VStack align="start" spacing={5}>
-          <Heading>Create a new Jam:</Heading>
+          <Text fontSize="xl">Create a new Jam</Text>
 
-          <Text fontSize="xl">Title</Text>
-          <Text fontSize="xs" color="gray.500">
+          <Heading size="md">Title</Heading>
+          <Text fontSize="sm" color="gray.500">
             The title cannot be edited after the Jam is published
           </Text>
           <Input
             placeholder="title"
             size="md"
             onChange={handleTitleChange}
+            borderRadius="none"
           />
 
-          <Text fontSize="xl">Description</Text>
+          <Heading size="md">Description</Heading>
           <Text fontSize="xs" color="gray.500">
             The description cannot be edited after the Jam is
             published
@@ -141,23 +142,22 @@ function Moderator() {
             placeholder="description"
             size="md"
             onChange={handleDescriptionChange}
+            borderRadius="none"
           />
 
-          <Text fontSize="xl">Statements</Text>
-          <VStack spacing={1} align="start">
-            <Text fontSize="xs" color="gray.500">
-              <span>&bull;</span>Staments should be easy for everyone
-              to understand
-            </Text>
-
-            <Text fontSize="xs" color="gray.500">
-              <span>&bull;</span>Keep them clear and under 140
-              characters
-            </Text>
-            <Text fontSize="xs" color="gray.500">
-              <span>&bull;</span>Each one should be unique and raise a
-              different point
-            </Text>
+          <Heading size="md">Statements</Heading>
+          <VStack spacing={1} align="start" w="100%">
+            <UnorderedList size="sm" color="gray.500">
+              <ListItem>
+                Statements should be easy for everyone to understand
+              </ListItem>
+              <ListItem>
+                Keep them clear and under 140 characters
+              </ListItem>
+              <ListItem>
+                Each one should be unique and raise a different point
+              </ListItem>
+            </UnorderedList>
             {allStatements.map((statement, index) => (
               <ProposedStatementCard
                 key={index}
@@ -169,30 +169,28 @@ function Moderator() {
               </ProposedStatementCard>
             ))}
           </VStack>
-          <Textarea
-            placeholder="statements"
-            size="md"
-            value={currentStatement}
-            onChange={handleStatementChange}
-          />
+          <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+            <Textarea
+              placeholder="statements"
+              size="md"
+              value={currentStatement}
+              onChange={handleStatementChange}
+              mb={2}
+              borderRadius="none"
+            />
+
+            <Stack justify="flex-end" direction="row" spacing={2}>
+              <Button onClick={() => handleSave()}>Save</Button>
+            </Stack>
+          </Box>
         </VStack>
 
-        <Flex>
-          <Box p="3" />
-        </Flex>
-
-        <Flex justifyContent="flex-end">
-          <Button onClick={() => handleSave()}>Save</Button>
-        </Flex>
-        <Flex>
-          <Box p="6" />
-        </Flex>
-
-        <Flex justifyContent="flex-end">
-          <Button onClick={cancelModalOnOpen}>Cancel</Button>
-          <Box p="1"></Box>
+        <Stack justify="flex-end" direction="row" spacing={2} mt={2}>
+          <Button onClick={cancelModalOnOpen} variant="outline">
+            Cancel
+          </Button>
           <Button onClick={() => createJam()}>Publish</Button>
-        </Flex>
+        </Stack>
       </Container>
 
       <ModalCreateJam

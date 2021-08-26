@@ -23,15 +23,15 @@ const EditableStatement = ({
   };
 
   return (
-    <>
-      <VStack>
-        <Textarea
-          size="md"
-          defaultValue={children}
-          onChange={handleStatementChange}
-        />
-      </VStack>
-      <Flex justifyContent="flex-end">
+    <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+      <Textarea
+        size="md"
+        defaultValue={children}
+        onChange={handleStatementChange}
+        mb={2}
+        borderRadius="none"
+      />
+      <Stack justify="flex-end" direction="row" spacing={2}>
         <Button onClick={() => invertEditable()} variant="outline">
           Cancel
         </Button>
@@ -44,8 +44,8 @@ const EditableStatement = ({
         >
           Save
         </Button>
-      </Flex>
-    </>
+      </Stack>
+    </Box>
   );
 };
 
@@ -56,10 +56,10 @@ const VisibleOnlyStatement = ({
   invertEditable,
 }) => {
   return (
-    <Box w="100%">
+    <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
       <Text>{children}</Text>
 
-      <Stack justify="right" direction="row" spacing={2}>
+      <Stack justify="flex-end" direction="row" spacing={2}>
         <Button onClick={() => onDelete(index)} variant="outline">
           Delete
         </Button>
