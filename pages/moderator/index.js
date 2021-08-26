@@ -13,7 +13,6 @@ import { useState, useEffect } from 'react';
 
 function Moderator() {
   const [jams, setJams] = useState();
-  // const jamUrlPath = 'qwerty';
 
   useEffect(() => {
     // if (jams == null) {
