@@ -2,9 +2,17 @@ import Head from 'next/head';
 import { Center, Heading, Button } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export default function Home() {
   const [session, _loading] = useSession();
+  console.log(session);
+  useEffect(() => {
+    if (session) {
+      fetch('/api/new-function');
+    }
+  }, [session]);
+
   return (
     <Center h="100vh">
       <div>
