@@ -16,6 +16,8 @@ beforeAll(() => {
   };
 
   client.useSession.mockReturnValueOnce([mockSession, false]);
+
+  jest.spyOn(window, 'fetch').mockImplementation(() => {});
 });
 
 describe('App', () => {
