@@ -40,7 +40,12 @@ export default function AddNewStatement({ jamId }) {
 
   return (
     <>
-      <Button width="200px" variant="outline" onClick={onOpen}>
+      <Button
+        width="200px"
+        variant="outline"
+        onClick={onOpen}
+        bg={'white'}
+      >
         Add New Statement
       </Button>
 

@@ -3,9 +3,44 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
-import { Stack } from '@chakra-ui/layout';
+import { Box, Stack } from '@chakra-ui/layout';
 import AddNewStatement from '../../components/AddNewStatement';
-import { Center, Heading, Text } from '@chakra-ui/react';
+import Layout from 'components/Layout';
+import {
+  Center,
+  Heading,
+  Text,
+  GridItem,
+  HStack,
+} from '@chakra-ui/react';
+
+function JamHeader({ title, description, participantId }) {
+  return (
+    <Box as="header" p={4} pb={0} bg={'white'}>
+      <HStack>
+        <Box w={'50%'}>Jammy jams</Box>
+        <Box
+          w={'50%'}
+          align={'right'}
+          color={'gray.400'}
+          fontSize={'sm'}
+        >
+          Participant ID: {participantId}
+        </Box>
+      </HStack>
+      <Layout>
+        <GridItem colSpan={6} py={12}>
+          <Heading as="h3" size="lg" fontWeight={500}>
+            {title || 'Loading...'}
+          </Heading>
+          <Text color={'gray.400'} mt={4}>
+            {description || "Won't take long."}
+          </Text>
+        </GridItem>
+      </Layout>
+    </Box>
+  );
+}
 
 const Jam = () => {
   const router = useRouter();
@@ -36,6 +71,7 @@ const Jam = () => {
     }
 
     loadQuestion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jam]);
 
   useEffect(() => {
@@ -88,62 +124,62 @@ const Jam = () => {
   };
 
   return (
-    <Center h="100vh">
-      <div>
-        <Head>
-          <title>JAMS</title>
-        </Head>
-
-        <Stack direction="column" spacing={2} mb={5}>
-          {jam && (
-            <>
-              <Heading as="h1" size="2xl">
-                {jam.name}
-              </Heading>
-              <Text>{jam.description}</Text>
-            </>
-          )}
-
-          <Heading as="h1" size="3xl">
+    <Box>
+      <Head>
+        <title>Jams - participate in a jam</title>
+      </Head>
+      <JamHeader
+        title={jam && jam.name}
+        description={jam && jam.description}
+        participantId={participantId}
+      />
+      <Layout py={12}>
+        <GridItem colSpan={6}>
+          <Heading as="h4" size="2xl" fontWeight={500}>
             {!isDone
               ? question
                 ? question.text
                 : 'Loading...'
               : 'All done'}
           </Heading>
+        </GridItem>
 
-          <h3>Participant id: {participantId}</h3>
-          {!isDone && (
-            <>
-              <Stack direction="row" spacing={4} align="left" mb={3}>
-                <JamButton
-                  vote="Agree"
-                  ids={ids}
-                  onComplete={loadQuestion}
-                />
-                <JamButton
-                  vote="Disagree"
-                  ids={ids}
-                  onComplete={loadQuestion}
-                />
-                <JamButton
-                  variant="link"
-                  vote="Skip"
-                  ids={ids}
-                  onComplete={loadQuestion}
-                />
-              </Stack>
-            </>
-          )}
+        {!isDone && (
+          <GridItem colSpan={6}>
+            <Text pb={4} color={'gray.500'} fontWeight={500}>
+              What do you think about this statement?
+            </Text>
+            <Stack direction="row" spacing={4} align="left" mb={3}>
+              <JamButton
+                vote="Agree"
+                ids={ids}
+                onComplete={loadQuestion}
+                variant={'dark-grey'}
+              />
+              <JamButton
+                vote="Disagree"
+                ids={ids}
+                onComplete={loadQuestion}
+                variant={'dark-grey'}
+              />
+              <JamButton
+                variant="link"
+                vote="Skip"
+                ids={ids}
+                onComplete={loadQuestion}
+              />
+            </Stack>
+          </GridItem>
+        )}
 
+        <GridItem colSpan={6}>
+          <Heading as={'h5'} size={'sm'} fontWeight={500} py={2}>
+            Add a new statement to this survey:
+          </Heading>
           <AddNewStatement jamId={jam ? jam.key : null} />
-        </Stack>
-
-        <footer>
-          <a href="https://red-badger.com">Powered by Red Badger</a>
-        </footer>
-      </div>
-    </Center>
+        </GridItem>
+      </Layout>
+    </Box>
   );
 };
 
