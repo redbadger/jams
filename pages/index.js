@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 
 export default function Home() {
   const [session, _loading] = useSession();
-  console.log(session);
   useEffect(() => {
     if (session) {
       fetch('/api/new-function');

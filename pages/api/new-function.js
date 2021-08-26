@@ -44,8 +44,6 @@ export default async function handler(req, res) {
   try {
     const token = await ensureAdmin(req, res);
 
-    console.log(token);
-
     res.status(200).json({
       ok: 'true',
       userId: token.sub,
