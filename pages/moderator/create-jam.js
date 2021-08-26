@@ -18,6 +18,8 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
+import ModalCreateJam from '../../components/ModalCreateJam';
+import ModalDiscardJam from '../../components/ModalDiscardJam';
 import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
 import Link from 'next/link';
@@ -34,6 +36,11 @@ function Moderator() {
     isOpen: successModalIsOpen,
     onOpen: successModalOnOpen,
     onClose: successModalOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: cancelModalIsOpen,
+    onOpen: cancelModalOnOpen,
+    onClose: cancelModalOnClose,
   } = useDisclosure();
 
   // Call API to upload new statement into firestore
@@ -137,19 +144,6 @@ function Moderator() {
           />
 
           <Text fontSize="xl">Statements</Text>
-          <ul>
-            {allStatements.map((statement, index) => (
-              <ProposedStatementCard
-                key={index}
-                index={index}
-                onDelete={handleDeletePropsedStatement}
-                onSave={handleEditExistingStatement}
-              >
-                {statement}
-              </ProposedStatementCard>
-            ))}
-          </ul>
-
           <VStack spacing={1} align="start">
             <Text fontSize="xs" color="gray.500">
               <span>&bull;</span>Staments should be easy for everyone
@@ -164,6 +158,18 @@ function Moderator() {
               <span>&bull;</span>Each one should be unique and raise a
               different point
             </Text>
+            <ul>
+              {allStatements.map((statement, index) => (
+                <ProposedStatementCard
+                  key={index}
+                  index={index}
+                  onDelete={handleDeletePropsedStatement}
+                  onSave={handleEditExistingStatement}
+                >
+                  {statement}
+                </ProposedStatementCard>
+              ))}
+            </ul>
           </VStack>
           <Textarea
             placeholder="statements"
@@ -178,8 +184,6 @@ function Moderator() {
         </Flex>
 
         <Flex justifyContent="flex-end">
-          <Button>Cancel</Button>
-          <Box p="1"></Box>
           <Button onClick={() => handleSave()}>Save</Button>
         </Flex>
         <Flex>
@@ -187,40 +191,22 @@ function Moderator() {
         </Flex>
 
         <Flex justifyContent="flex-end">
-          <Button onClick={successModalOnOpen}>Cancel</Button>
+          <Button onClick={cancelModalOnOpen}>Cancel</Button>
           <Box p="1"></Box>
           <Button onClick={() => createJam()}>Publish</Button>
         </Flex>
       </Container>
 
-      <Modal
-        isOpen={successModalIsOpen}
-        onClose={successModalOnClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Your Jam is now live!</ModalHeader>
-          {/* GET RID OF THIS  */}
-          <ModalCloseButton />
-          <ModalBody>
-            Everyone with the below link will now be able to
-            participate in your Jam. You can toggle your Jam to closed
-            at any time.
-          </ModalBody>
-          <ModalFooter>
-            <Link href="/moderator">
-              <a>
-                <Button mr={3}>Back to overview</Button>
-              </a>
-            </Link>
-            <Link href={`/jams/${jamUrlPath}`}>
-              <a>
-                <Button colorScheme="blue">View Jam</Button>
-              </a>
-            </Link>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ModalCreateJam
+        successModalIsOpen={successModalIsOpen}
+        successModalOnClose={successModalOnClose}
+        jamUrlPath={jamUrlPath}
+      />
+
+      <ModalDiscardJam
+        cancelModalIsOpen={cancelModalIsOpen}
+        cancelModalOnClose={cancelModalOnClose}
+      />
     </>
   );
 }
