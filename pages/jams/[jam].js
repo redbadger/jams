@@ -153,16 +153,11 @@ const Jam = () => {
       <Layout py={14}>
         <GridItem colSpan={6}>
           <Heading as="h1" size="xl" fontWeight={500} mb={8}>
-            {/*
             {!isDone
               ? question
                 ? question.text
                 : 'Loading...'
               : 'All done'}
-              */}
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Aenean et varius justo, sit amet finibus quam. In varius
-            eros ut nunc mattis mattis.
           </Heading>
         </GridItem>
 
