@@ -20,8 +20,10 @@ import Layout from 'components/Layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import cloneDeep from 'lodash.clonedeep';
+import merge from 'lodash.merge';
 
-const LiveQuestionCard = ({ question, buttonText }) => {
+const LiveQuestionCard = ({ question, buttonText, onClick }) => {
   return (
     <Box
       border="1px"
@@ -54,7 +56,9 @@ const LiveQuestionCard = ({ question, buttonText }) => {
 
         <Spacer />
 
-        <Button variant="outline">{buttonText}</Button>
+        <Button variant="outline" onClick={onClick}>
+          {buttonText}
+        </Button>
       </Flex>
     </Box>
   );
@@ -103,6 +107,7 @@ const Jam = () => {
   const [approvedQuestions, setApprovedQuestions] = useState([]);
   const [rejectedQuestions, setRejectedQuestions] = useState([]);
   const [newQuestions, setNewQuestions] = useState([]);
+  const [patchSuccess, setPatchTrigger] = useState();
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -129,7 +134,7 @@ const Jam = () => {
     setNewQuestions(
       jam.questions.filter((question) => question.state === 0),
     );
-  }, [jam]);
+  }, [jam, patchSuccess]);
 
   const loadJam = () => {
     fetch(
@@ -142,6 +147,33 @@ const Jam = () => {
         setJam(jam);
         setPublished(jam.isOpen);
       });
+  };
+
+  const patchQuestion = (body) => {
+    const { jamId, statementId, ...updateFields } = body;
+    fetch('/api/statement', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(() => {
+        setJam((jam) => {
+          var questionIndex = jam.questions.findIndex(
+            (q) => q.key == statementId,
+          );
+
+          jam.questions[questionIndex] = merge(
+            jam.questions[questionIndex],
+            updateFields,
+          );
+
+          return jam;
+        });
+        setPatchTrigger((patchTrigger) => !patchTrigger);
+      })
+      .catch(() => console.error('Bad request'));
   };
 
   return (
@@ -193,24 +225,41 @@ const Jam = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {approvedQuestions.map((question) => (
+                  {approvedQuestions.map((question, index) => (
                     <LiveQuestionCard
+                      key={index}
                       question={question}
                       buttonText="Reject"
+                      onClick={() =>
+                        patchQuestion({
+                          jamId: jam.key,
+                          statementId: question.key,
+                          state: -1,
+                        })
+                      }
                     />
                   ))}
                 </TabPanel>
                 <TabPanel>
-                  {rejectedQuestions.map((question) => (
+                  {rejectedQuestions.map((question, index) => (
                     <LiveQuestionCard
+                      key={index}
                       question={question}
                       buttonText="Approve"
+                      onClick={() =>
+                        patchQuestion({
+                          jamId: jam.key,
+                          statementId: question.key,
+                          state: 1,
+                        })
+                      }
                     />
                   ))}
                 </TabPanel>
                 <TabPanel>
-                  {newQuestions.map((question) => (
+                  {newQuestions.map((question, index) => (
                     <NewQuestionCard
+                      key={index}
                       question={question}
                       buttonText="Approve"
                     />
