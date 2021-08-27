@@ -20,7 +20,9 @@ function HomeHeader({ session }) {
         <Box w={'50%'} align={'right'}>
           {!session ? (
             <>
-              <Button onClick={() => signIn()}>Sign in</Button>
+              <Button variant="outline" onClick={() => signIn()}>
+                Sign in
+              </Button>
             </>
           ) : (
             <>
@@ -32,7 +34,9 @@ function HomeHeader({ session }) {
               >
                 {session.user.email}
               </Text>
-              <Button onClick={() => signOut()}>Sign out</Button>
+              <Button variant="outline" onClick={() => signOut()}>
+                Sign out
+              </Button>
             </>
           )}
         </Box>
