@@ -25,7 +25,7 @@ const overviewCard = ({
       borderColor="#8D8D8D"
     >
       <Stack>
-        <Link href={`jams/${jamUrl}/edit`}>
+        <Link href={`moderator/${jamUrl}`}>
           <Heading
             fontSize={'18px'}
             lineHeight={'26px'}
