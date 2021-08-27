@@ -1,7 +1,7 @@
 import fire from '../../config/firebaseAdminConfig';
 import ensureAdmin from 'utils/admin-auth-middleware';
 
-async function getJamByUrlPath(jamUrlPath, includeQuestions) {
+async function getJamByUrlPath(jamUrlPath, includeStatements) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
@@ -18,22 +18,22 @@ async function getJamByUrlPath(jamUrlPath, includeQuestions) {
       return jams[0];
     });
 
-  if (!includeQuestions) {
+  if (!includeStatements) {
     return finalJam;
   }
 
-  finalJam.questions = await jamsRef
+  finalJam.statements = await jamsRef
     .doc(finalJam.key)
     .collection('statements')
     .get()
     .then((query) => {
-      const questions = [];
+      const statements = [];
       query.forEach((doc) => {
-        const question = doc.data();
-        question.key = doc.id;
-        questions.push(question);
+        const statement = doc.data();
+        statement.key = doc.id;
+        statements.push(statement);
       });
-      return questions;
+      return statements;
     });
 
   return finalJam;
@@ -81,7 +81,7 @@ function createJam({ name, description, statements }) {
 
 export default async function handler(req, res) {
   const {
-    query: { jamUrlPath, includeQuestions },
+    query: { jamUrlPath, includeStatements },
     method,
   } = req;
 
@@ -119,7 +119,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error });
     }
   } else if (method === 'GET') {
-    return getJamByUrlPath(jamUrlPath, includeQuestions).then(
+    return getJamByUrlPath(jamUrlPath, includeStatements).then(
       (jam) => {
         if (jam) {
           res.status(200);
