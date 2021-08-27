@@ -1,4 +1,5 @@
 import fire from '../../config/firebaseAdminConfig';
+import ensureAdmin from 'utils/admin-auth-middleware';
 
 function getJamByUrlPath(jamUrlPath) {
   const db = fire.firestore();
