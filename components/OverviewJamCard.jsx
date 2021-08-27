@@ -16,7 +16,6 @@ const overviewCard = ({
 }) => {
   return (
     <Box
-      maxW={'38vh'}
       bg="white"
       rounded={'md'}
       p="20px"

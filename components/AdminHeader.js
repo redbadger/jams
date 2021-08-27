@@ -19,17 +19,7 @@ const AdminHeader = () => {
       </Flex>
 
       <Box display={{ base: 'block' }}>
-        <Button
-          border="1px"
-          bg="white"
-          borderColor=" #535353"
-          rounded={'md'}
-          size="md"
-          fontSize="14px"
-          fontWeight="500"
-          _hover={{ bg: '#f4f2f2' }}
-          onClick={() => signOut()}
-        >
+        <Button variant="outline" onClick={() => signOut()}>
           Sign out
         </Button>
       </Box>

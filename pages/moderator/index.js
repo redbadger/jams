@@ -3,15 +3,17 @@ import {
   Heading,
   HStack,
   Button,
-  Wrap,
-  WrapItem,
+  GridItem,
   Spinner,
   Text,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
 import AdminHeader from 'components/AdminHeader';
+import Layout from 'components/Layout';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -48,34 +50,31 @@ function Moderator() {
   return (
     <>
       <AdminHeader />
-
       <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
-        <Heading
-          ml="6px"
-          mb="38px"
-          mt="32px"
-          fontSize="24px"
-          fontWeight="500"
-        >
-          Jams overview
-          <Button
-            borderRadius="md"
-            marginLeft="30px"
-            bg="#595959"
-            color="white"
-            fontSize="14px"
-            fontWeight="500"
-            _hover={{ bg: '#454343' }}
-          >
-            Create a new Jam
-          </Button>
-        </Heading>
+        <Wrap spacing="10px">
+          <WrapItem>
+            <Heading
+              as="h2"
+              size="lg"
+              fontWeight={400}
+              ml="20px"
+              mb="20px"
+            >
+              Jams overview
+            </Heading>
+          </WrapItem>
+          <WrapItem>
+            <Button ml="20px" mb="20px">
+              Create a new Jam
+            </Button>
+          </WrapItem>
+        </Wrap>
         <HStack spacing="5">
-          <Wrap>
+          <Layout>
             {jams ? (
               jams.map((jam, i) => {
                 return (
-                  <WrapItem key={i}>
+                  <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
                     <OverviewJamCard
                       jamUrl={jam.urlPath}
                       isOpen={jam.isOpen}
@@ -83,7 +82,7 @@ function Moderator() {
                       openFor={timeSince(jam.createdAt._seconds)}
                       createdAt={convertDate(jam.createdAt._seconds)}
                     />
-                  </WrapItem>
+                  </GridItem>
                 );
               })
             ) : (
@@ -98,7 +97,7 @@ function Moderator() {
                 <Text fontSize="18px">Loading jams...</Text>
               </Container>
             )}
-          </Wrap>
+          </Layout>
         </HStack>
       </Container>
     </>
