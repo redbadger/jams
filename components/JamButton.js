@@ -4,24 +4,17 @@ import { Button } from '@chakra-ui/react';
 
 export default function JamButton({
   vote,
-  ids,
-  onComplete,
+  votingOn,
+  voteClickHandler,
   ...props
 }) {
-  const sendRequest = (vote) => {
-    fetch('/api/vote', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(merge({ vote: vote }, ids)),
-    })
-      .then(() => onComplete())
-      .catch((error) => console.error('Error saving vote: ', error));
-  };
-
   return (
-    <Button onClick={() => sendRequest(vote)} {...props}>
+    <Button
+      isLoading={votingOn === vote}
+      disabled={!!votingOn}
+      onClick={voteClickHandler(vote)}
+      {...props}
+    >
       {vote}
     </Button>
   );
