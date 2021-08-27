@@ -50,6 +50,7 @@ const Jam = () => {
   const [jam, setJam] = useState();
   const [question, setQuestion] = useState();
   const [isDone, setIsDone] = useState(false);
+  const [votingOn, setVotingOn] = useState();
   const [participantId, setParticipantId] = useState();
   const [cookies, setCookies] = useCookies();
   const [error, setError] = useState();
@@ -108,7 +109,7 @@ const Jam = () => {
   };
 
   const loadQuestion = () => {
-    fetch(
+    return fetch(
       `/api/question?jamId=${encodeURIComponent(
         jam.key,
       )}&participantId=${encodeURIComponent(participantId)}`,
@@ -125,6 +126,16 @@ const Jam = () => {
       });
   };
 
+  const sendRequest = (vote) => {
+    return fetch('/api/vote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ vote, ...ids }),
+    }).catch((error) => console.error('Error saving vote: ', error));
+  };
+
   const settingIdCookies = () => {
     fetch('/api/participant', {
       method: 'POST',
@@ -136,6 +147,15 @@ const Jam = () => {
       .catch((error) =>
         console.error('Error saving participant: ', error),
       );
+  };
+
+  const handleVote = (vote) => (e) => {
+    setVotingOn(vote);
+    sendRequest(vote)
+      .then(loadQuestion)
+      .then(() => {
+        setVotingOn(null);
+      });
   };
 
   if (error) return <DefaultErrorPage statusCode={error} />;
@@ -169,22 +189,25 @@ const Jam = () => {
             <Stack direction="row" spacing={4} align="left" pb={8}>
               <JamButton
                 vote="Agree"
-                ids={ids}
-                onComplete={loadQuestion}
                 colorScheme={'blue'}
+                isLoading={votingOn === 'Agree'}
+                disabled={!!votingOn}
+                onClick={handleVote('Agree')}
               />
               <JamButton
                 vote="Disagree"
-                ids={ids}
-                onComplete={loadQuestion}
                 colorScheme={'blue'}
+                isLoading={votingOn === 'Disagree'}
+                disabled={!!votingOn}
+                onClick={handleVote('Disagree')}
               />
               <JamButton
                 variant="link"
                 vote="Skip"
-                ids={ids}
-                onComplete={loadQuestion}
                 colorScheme={'blue'}
+                isLoading={votingOn === 'Skip'}
+                disabled={!!votingOn}
+                onClick={handleVote('Skip')}
               />
             </Stack>
           </GridItem>
