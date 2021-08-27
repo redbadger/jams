@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import theme from 'theme';
 import { useEffect } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -7,7 +8,7 @@ import { useSession, signIn } from 'next-auth/client';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <CookiesProvider>
         <Provider session={pageProps.session}>
           {Component.auth ? (
