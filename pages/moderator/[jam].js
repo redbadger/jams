@@ -20,10 +20,9 @@ import Layout from 'components/Layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import cloneDeep from 'lodash.clonedeep';
 import merge from 'lodash.merge';
 
-const LiveQuestionCard = ({ question, buttonText, onClick }) => {
+const LiveStatementCard = ({ statement, buttonText, onClick }) => {
   return (
     <Box
       border="1px"
@@ -33,22 +32,22 @@ const LiveQuestionCard = ({ question, buttonText, onClick }) => {
       my={4}
       backgroundColor="white"
     >
-      <Text pb={5}>{question.text}</Text>
+      <Text pb={5}>{statement.text}</Text>
 
       <Flex>
         <Box>
-          {question.isUserSubmitted ? (
+          {statement.isUserSubmitted ? (
             <Text color="gray.600">
               <ChatIcon></ChatIcon> Participant submitted{' '}
               {new Date(
-                question.createdAt?._seconds * 1000,
+                statement.createdAt?._seconds * 1000,
               ).toUTCString()}
             </Text>
           ) : (
             <Text color="gray.600">
               <LockIcon></LockIcon> Moderator submitted{' '}
               {new Date(
-                question.createdAt?._seconds * 1000,
+                statement.createdAt?._seconds * 1000,
               ).toUTCString()}
             </Text>
           )}
@@ -64,8 +63,14 @@ const LiveQuestionCard = ({ question, buttonText, onClick }) => {
   );
 };
 
-const NewQuestionCard = ({ question }) => {
-  return (
+const NewStatementCard = ({ statement, jamId, patchStatement }) => {
+  const [isEditable, setIsEditable] = useState(false);
+
+  const invertEditable = () => {
+    setIsEditable((isEditable) => !isEditable);
+  };
+
+  if (isEditable) {
     <Box
       border="1px"
       p={5}
@@ -73,29 +78,62 @@ const NewQuestionCard = ({ question }) => {
       borderColor="gray.200"
       my={4}
       backgroundColor="white"
-    >
-      <Text pb={5}>{question.text}</Text>
+    ></Box>;
+  } else {
+    return (
+      <Box
+        border="1px"
+        p={5}
+        borderRadius="md"
+        borderColor="gray.200"
+        my={4}
+        backgroundColor="white"
+      >
+        <Text pb={5}>{statement.text}</Text>
 
-      <Flex>
-        <Box>
-          <Text color="gray.600">
-            <ChatIcon></ChatIcon> Participant submitted{' '}
-            {new Date(
-              question.createdAt?._seconds * 1000,
-            ).toUTCString()}
-          </Text>
-        </Box>
+        <Flex>
+          <Box>
+            <Text color="gray.600">
+              <ChatIcon></ChatIcon> Participant submitted{' '}
+              {new Date(
+                statement.createdAt?._seconds * 1000,
+              ).toUTCString()}
+            </Text>
+          </Box>
 
-        <Spacer />
+          <Spacer />
 
-        <Stack direction="row" spacing={2}>
-          <Button variant="outline">Edit</Button>
-          <Button colorScheme="blue">Reject</Button>
-          <Button colorScheme="blue">Approve</Button>
-        </Stack>
-      </Flex>
-    </Box>
-  );
+          <Stack direction="row" spacing={2}>
+            <Button variant="outline">Edit</Button>
+            <Button
+              onClick={() =>
+                patchStatement({
+                  state: -1,
+                  jamId: jamId,
+                  statementId: statement.key,
+                })
+              }
+              colorScheme="blue"
+            >
+              Reject
+            </Button>
+            <Button
+              onClick={() =>
+                patchStatement({
+                  state: 1,
+                  jamId: jamId,
+                  statementId: statement.key,
+                })
+              }
+              colorScheme="blue"
+            >
+              Approve
+            </Button>
+          </Stack>
+        </Flex>
+      </Box>
+    );
+  }
 };
 
 const Jam = () => {
@@ -104,9 +142,9 @@ const Jam = () => {
   const [jam, setJam] = useState({});
   const [published, setPublished] = useState();
   const [location, setLocation] = useState();
-  const [approvedQuestions, setApprovedQuestions] = useState([]);
-  const [rejectedQuestions, setRejectedQuestions] = useState([]);
-  const [newQuestions, setNewQuestions] = useState([]);
+  const [approvedStatements, setApprovedStatements] = useState([]);
+  const [rejectedStatements, setRejectedStatements] = useState([]);
+  const [newStatements, setNewStatements] = useState([]);
   const [patchSuccess, setPatchTrigger] = useState();
 
   useEffect(() => {
@@ -121,18 +159,18 @@ const Jam = () => {
   }, [router.isReady]);
 
   useEffect(() => {
-    if (!jam.questions) {
+    if (!jam.statements) {
       return;
     }
 
-    setApprovedQuestions(
-      jam.questions.filter((question) => question.state === 1),
+    setApprovedStatements(
+      jam.statements.filter((statement) => statement.state === 1),
     );
-    setRejectedQuestions(
-      jam.questions.filter((question) => question.state === -1),
+    setRejectedStatements(
+      jam.statements.filter((statement) => statement.state === -1),
     );
-    setNewQuestions(
-      jam.questions.filter((question) => question.state === 0),
+    setNewStatements(
+      jam.statements.filter((statement) => statement.state === 0),
     );
   }, [jam, patchSuccess]);
 
@@ -140,7 +178,7 @@ const Jam = () => {
     fetch(
       `/api/jam?jamUrlPath=${encodeURIComponent(
         jamUrlPath,
-      )}&includeQuestions=true`,
+      )}&includeStatements=true`,
     )
       .then((response) => response.json())
       .then((jam) => {
@@ -149,7 +187,7 @@ const Jam = () => {
       });
   };
 
-  const patchQuestion = (body) => {
+  const patchStatement = (body) => {
     const { jamId, statementId, ...updateFields } = body;
     fetch('/api/statement', {
       method: 'PATCH',
@@ -160,12 +198,12 @@ const Jam = () => {
     })
       .then(() => {
         setJam((jam) => {
-          var questionIndex = jam.questions.findIndex(
-            (q) => q.key == statementId,
+          var statementIndex = jam.statements.findIndex(
+            (s) => s.key == statementId,
           );
 
-          jam.questions[questionIndex] = merge(
-            jam.questions[questionIndex],
+          jam.statements[statementIndex] = merge(
+            jam.statements[statementIndex],
             updateFields,
           );
 
@@ -219,21 +257,21 @@ const Jam = () => {
             </Button>
             <Tabs>
               <TabList>
-                <Tab>Approved {approvedQuestions.length}</Tab>
-                <Tab>Rejected {rejectedQuestions.length}</Tab>
-                <Tab>New {newQuestions.length}</Tab>
+                <Tab>Approved {approvedStatements.length}</Tab>
+                <Tab>Rejected {rejectedStatements.length}</Tab>
+                <Tab>New {newStatements.length}</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {approvedQuestions.map((question, index) => (
-                    <LiveQuestionCard
+                  {approvedStatements.map((statement, index) => (
+                    <LiveStatementCard
                       key={index}
-                      question={question}
+                      statement={statement}
                       buttonText="Reject"
                       onClick={() =>
-                        patchQuestion({
+                        patchStatement({
                           jamId: jam.key,
-                          statementId: question.key,
+                          statementId: statement.key,
                           state: -1,
                         })
                       }
@@ -241,15 +279,15 @@ const Jam = () => {
                   ))}
                 </TabPanel>
                 <TabPanel>
-                  {rejectedQuestions.map((question, index) => (
-                    <LiveQuestionCard
+                  {rejectedStatements.map((statement, index) => (
+                    <LiveStatementCard
                       key={index}
-                      question={question}
+                      statement={statement}
                       buttonText="Approve"
                       onClick={() =>
-                        patchQuestion({
+                        patchStatement({
                           jamId: jam.key,
-                          statementId: question.key,
+                          statementId: statement.key,
                           state: 1,
                         })
                       }
@@ -257,11 +295,12 @@ const Jam = () => {
                   ))}
                 </TabPanel>
                 <TabPanel>
-                  {newQuestions.map((question, index) => (
-                    <NewQuestionCard
+                  {newStatements.map((statement, index) => (
+                    <NewStatementCard
                       key={index}
-                      question={question}
-                      buttonText="Approve"
+                      statement={statement}
+                      patchStatement={patchStatement}
+                      jamId={jam.key}
                     />
                   ))}
                 </TabPanel>
