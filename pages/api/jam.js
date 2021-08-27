@@ -1,4 +1,5 @@
 import fire from '../../config/firebaseAdminConfig';
+import ensureAdmin from 'utils/admin-auth-middleware';
 
 function getJamByUrlPath(jamUrlPath) {
   const db = fire.firestore();
@@ -58,44 +59,54 @@ function createJam({ name, description, statements }) {
   });
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const {
     query: { jamUrlPath },
     method,
   } = req;
 
-  if (method == 'POST') {
-    const { name, description, statements } = req.body;
-    if (statements.length === 0) {
-      res.status(400).end('No statements found');
-      return;
+  if (method === 'POST') {
+    try {
+      const token = await ensureAdmin(req, res);
+
+      const { name, description, statements } = req.body;
+      if (statements.length === 0) {
+        res.status(400).end('No statements found');
+        return;
+      }
+      if (!name) {
+        res.status(400).end('No name found');
+        return;
+      }
+      return createJam({
+        name: name,
+        description: description,
+        statements: statements,
+      })
+        .then((jam) => {
+          res.status(200).json({
+            ok: 'true',
+            userId: token.sub,
+          });
+          res.setHeader('Content-Type', 'application/json');
+          res.json(jam.data());
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error });
     }
-    if (!name) {
-      res.status(400).end('No name found');
-      return;
-    }
-    return createJam({
-      name: name,
-      description: description,
-      statements: statements,
-    })
-      .then((jam) => {
+  } else if (method === 'GET') {
+    return getJamByUrlPath(jamUrlPath).then((jam) => {
+      if (jam) {
         res.status(200);
         res.setHeader('Content-Type', 'application/json');
-        res.json(jam.data());
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
+        res.json(jam);
+      } else {
+        res.status(404).end();
+      }
+    });
   }
-
-  return getJamByUrlPath(jamUrlPath).then((jam) => {
-    if (jam) {
-      res.status(200);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(jam);
-    } else {
-      res.status(404).end();
-    }
-  });
 }
