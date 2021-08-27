@@ -40,7 +40,9 @@ function Moderator() {
     const hours = now.diff(openedAt, 'hours');
     const minutes = now.diff(openedAt, 'minutes') - hours * 60;
 
-    return hours + ':' + minutes;
+    return hours > 48
+      ? Math.floor(hours / 24) + ' days'
+      : hours + ':' + minutes;
   };
 
   return (
@@ -72,7 +74,6 @@ function Moderator() {
           <Wrap>
             {jams ? (
               jams.map((jam, i) => {
-                console.log(jam);
                 return (
                   <WrapItem key={i}>
                     <OverviewJamCard
