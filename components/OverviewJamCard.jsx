@@ -1,10 +1,22 @@
-import { Box, Heading, Text, Stack, Tag } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Text,
+  Stack,
+  Tag,
+  Link,
+} from '@chakra-ui/react';
 
-const overviewCard = ({ isOpen, jamName, createdAt, openFor }) => {
+const overviewCard = ({
+  isOpen,
+  jamName,
+  createdAt,
+  openFor,
+  jamUrl,
+}) => {
   return (
     <Box
-      maxW={'35vh'}
-      w={'full'}
+      maxW={'38vh'}
       bg="white"
       rounded={'md'}
       p="20px"
@@ -14,15 +26,17 @@ const overviewCard = ({ isOpen, jamName, createdAt, openFor }) => {
       borderColor="#8D8D8D"
     >
       <Stack>
-        <Heading
-          fontSize={'18px'}
-          lineHeight={'26px'}
-          fontWeight={'700'}
-          fontFamily={'body'}
-          mb={2}
-        >
-          {jamName}
-        </Heading>
+        <Link href={`jams/${jamUrl}/edit`}>
+          <Heading
+            fontSize={'18px'}
+            lineHeight={'26px'}
+            fontWeight={'700'}
+            fontFamily={'body'}
+            mb={2}
+          >
+            {jamName}
+          </Heading>
+        </Link>
       </Stack>
       <Tag
         color={isOpen ? '#00681D' : '#535353'}

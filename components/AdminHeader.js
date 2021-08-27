@@ -1,4 +1,5 @@
 import React from 'react';
+import { signOut } from 'next-auth/client';
 import { Box, Heading, Flex, Button, Link } from '@chakra-ui/react';
 
 const AdminHeader = () => {
@@ -27,6 +28,7 @@ const AdminHeader = () => {
           fontSize="14px"
           fontWeight="500"
           _hover={{ bg: '#f4f2f2' }}
+          onClick={() => signOut()}
         >
           Sign out
         </Button>

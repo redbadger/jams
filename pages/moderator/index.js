@@ -46,6 +46,7 @@ function Moderator() {
   return (
     <>
       <AdminHeader />
+
       <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
         <Heading
           ml="6px"
@@ -71,9 +72,11 @@ function Moderator() {
           <Wrap>
             {jams ? (
               jams.map((jam, i) => {
+                console.log(jam);
                 return (
                   <WrapItem key={i}>
                     <OverviewJamCard
+                      jamUrl={jam.urlPath}
                       isOpen={jam.isOpen}
                       jamName={jam.name}
                       openFor={timeSince(jam.createdAt._seconds)}
@@ -83,7 +86,7 @@ function Moderator() {
                 );
               })
             ) : (
-              <Container p="30px">
+              <Container p="10px">
                 <Spinner
                   thickness="4px"
                   speed="0.65s"
@@ -91,9 +94,7 @@ function Moderator() {
                   color="blue.500"
                   size="xl"
                 />
-                <Text m="20px" fontSize="18px">
-                  Loading jams...
-                </Text>
+                <Text fontSize="18px">Loading jams...</Text>
               </Container>
             )}
           </Wrap>
