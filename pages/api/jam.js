@@ -58,35 +58,43 @@ function createJam({ name, description, statements }) {
   });
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const {
     query: { jamUrlPath },
     method,
   } = req;
 
+  // TODO add 'protect admin' to the POST route.
   if (method == 'POST') {
-    const { name, description, statements } = req.body;
-    if (statements.length === 0) {
-      res.status(400).end('No statements found');
-      return;
-    }
-    if (!name) {
-      res.status(400).end('No name found');
-      return;
-    }
-    return createJam({
-      name: name,
-      description: description,
-      statements: statements,
-    })
-      .then((jam) => {
-        res.status(200);
-        res.setHeader('Content-Type', 'application/json');
-        res.json(jam.data());
+    try {
+      const { name, description, statements } = req.body;
+      if (statements.length === 0) {
+        res.status(400).end('No statements found');
+        return;
+      }
+      if (!name) {
+        res.status(400).end('No name found');
+        return;
+      }
+      return createJam({
+        name: name,
+        description: description,
+        statements: statements,
       })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
+        .then((jam) => {
+          res.status(200).json({
+            ok: 'true',
+            userId: token.sub,
+          });
+          res.setHeader('Content-Type', 'application/json');
+          res.json(jam.data());
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
   }
 
   return getJamByUrlPath(jamUrlPath).then((jam) => {
