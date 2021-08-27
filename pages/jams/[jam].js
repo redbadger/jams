@@ -17,8 +17,8 @@ import {
 
 function JamHeader({ title, description, participantId }) {
   return (
-    <Box as="header" p={4} pb={0} bg={'white'}>
-      <HStack>
+    <Box as="header" py={4} pb={0} bg={'white'}>
+      <HStack px={4}>
         <Box w={'50%'}>Jammy jams</Box>
         <Box
           w={'50%'}
