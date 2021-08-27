@@ -1,4 +1,7 @@
 const Button = {
+  baseStyle: {
+    fontWeight: '500',
+  },
   variants: {
     'dark-grey': {
       bg: 'gray.600',

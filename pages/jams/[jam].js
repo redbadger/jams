@@ -30,11 +30,11 @@ function JamHeader({ title, description, participantId }) {
         </Box>
       </HStack>
       <Layout>
-        <GridItem colSpan={6} py={12}>
-          <Heading as="h3" size="lg" fontWeight={500}>
+        <GridItem colSpan={6} py={8}>
+          <Heading as="h2" size="lg" fontWeight={400}>
             {title || 'Loading...'}
           </Heading>
-          <Text color={'gray.400'} mt={4}>
+          <Text color={'gray.600'} mt={4}>
             {description}&nbsp;
           </Text>
         </GridItem>
@@ -150,49 +150,55 @@ const Jam = () => {
         description={jam && jam.description}
         participantId={participantId}
       />
-      <Layout py={12}>
+      <Layout py={14}>
         <GridItem colSpan={6}>
-          <Heading as="h4" size="2xl" fontWeight={500}>
+          <Heading as="h1" size="xl" fontWeight={500} mb={8}>
+            {/*
             {!isDone
               ? question
                 ? question.text
                 : 'Loading...'
               : 'All done'}
+              */}
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Aenean et varius justo, sit amet finibus quam. In varius
+            eros ut nunc mattis mattis.
           </Heading>
         </GridItem>
 
         {!isDone && (
           <GridItem colSpan={6}>
-            <Text pb={4} color={'gray.500'} fontWeight={500}>
+            <Text pb={4} color={'gray.600'}>
               What do you think about this statement?
             </Text>
-            <Stack direction="row" spacing={4} align="left" mb={3}>
+            <Stack direction="row" spacing={4} align="left" pb={8}>
               <JamButton
                 vote="Agree"
                 ids={ids}
                 onComplete={loadQuestion}
-                variant={'dark-grey'}
+                colorScheme={'blue'}
               />
               <JamButton
                 vote="Disagree"
                 ids={ids}
                 onComplete={loadQuestion}
-                variant={'dark-grey'}
+                colorScheme={'blue'}
               />
               <JamButton
                 variant="link"
                 vote="Skip"
                 ids={ids}
                 onComplete={loadQuestion}
+                colorScheme={'blue'}
               />
             </Stack>
           </GridItem>
         )}
 
         <GridItem colSpan={6}>
-          <Heading as={'h5'} size={'sm'} fontWeight={500} py={2}>
+          <Text as="h5" fontWeight={600} mt={8} pb={4}>
             Add a new statement to this survey:
-          </Heading>
+          </Text>
           <AddNewStatement jamId={jam ? jam.key : null} />
         </GridItem>
       </Layout>
