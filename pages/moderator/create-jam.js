@@ -6,13 +6,9 @@ import {
   Text,
   Textarea,
   Button,
-  Flex,
   Box,
   Stack,
-  List,
   ListItem,
-  ListIcon,
-  OrderedList,
   UnorderedList,
 } from '@chakra-ui/react';
 
@@ -22,7 +18,6 @@ import ModalCreateJam from '../../components/ModalCreateJam';
 import ModalDiscardJam from '../../components/ModalDiscardJam';
 import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
-import Link from 'next/link';
 
 function Moderator() {
   const [title, setTitle] = useState();
@@ -102,7 +97,7 @@ function Moderator() {
     setStatementSubmitted(true);
   };
 
-  const handleDeletePropsedStatement = (deleteIndex) => {
+  const handleDeleteProposedStatement = (deleteIndex) => {
     setAllStatements((allStatements) =>
       allStatements.filter((_, index) => index !== deleteIndex),
     );
@@ -162,7 +157,7 @@ function Moderator() {
               <ProposedStatementCard
                 key={index}
                 index={index}
-                onDelete={handleDeletePropsedStatement}
+                onDelete={handleDeleteProposedStatement}
                 onSave={handleEditExistingStatement}
               >
                 {statement}

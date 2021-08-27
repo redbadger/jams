@@ -1,12 +1,4 @@
-import {
-  VStack,
-  Text,
-  Button,
-  Flex,
-  Textarea,
-  Stack,
-  Box,
-} from '@chakra-ui/react';
+import { Text, Button, Textarea, Stack, Box } from '@chakra-ui/react';
 import { useState } from 'react';
 
 const EditableStatement = ({
