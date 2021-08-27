@@ -2,8 +2,10 @@ import {
   Badge,
   Box,
   Button,
+  Flex,
   GridItem,
   Heading,
+  Spacer,
   Stack,
   Switch,
   Tab,
@@ -19,7 +21,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const QuestionCard = ({ question, buttonText }) => {
+const LiveQuestionCard = ({ question, buttonText }) => {
   return (
     <Box
       border="1px"
@@ -31,27 +33,63 @@ const QuestionCard = ({ question, buttonText }) => {
     >
       <Text pb={5}>{question.text}</Text>
 
-      {question.isUserSubmitted ? (
-        <Text color="gray.600">
-          <ChatIcon></ChatIcon> Participant submitted{' '}
-          {new Date(
-            question.createdAt?._seconds * 1000,
-          ).toUTCString()}
-        </Text>
-      ) : (
-        <Text color="gray.600">
-          <LockIcon></LockIcon> Moderator submitted{' '}
-          {new Date(
-            question.createdAt?._seconds * 1000,
-          ).toUTCString()}
-        </Text>
-      )}
+      <Flex>
+        <Box>
+          {question.isUserSubmitted ? (
+            <Text color="gray.600">
+              <ChatIcon></ChatIcon> Participant submitted{' '}
+              {new Date(
+                question.createdAt?._seconds * 1000,
+              ).toUTCString()}
+            </Text>
+          ) : (
+            <Text color="gray.600">
+              <LockIcon></LockIcon> Moderator submitted{' '}
+              {new Date(
+                question.createdAt?._seconds * 1000,
+              ).toUTCString()}
+            </Text>
+          )}
+        </Box>
 
-      <Stack justify="flex-end" direction="row">
-        <Button onClick={() => invertEditable()} variant="outline">
-          {buttonText}
-        </Button>
-      </Stack>
+        <Spacer />
+
+        <Button variant="outline">{buttonText}</Button>
+      </Flex>
+    </Box>
+  );
+};
+
+const NewQuestionCard = ({ question }) => {
+  return (
+    <Box
+      border="1px"
+      p={5}
+      borderRadius="md"
+      borderColor="gray.200"
+      my={4}
+      backgroundColor="white"
+    >
+      <Text pb={5}>{question.text}</Text>
+
+      <Flex>
+        <Box>
+          <Text color="gray.600">
+            <ChatIcon></ChatIcon> Participant submitted{' '}
+            {new Date(
+              question.createdAt?._seconds * 1000,
+            ).toUTCString()}
+          </Text>
+        </Box>
+
+        <Spacer />
+
+        <Stack direction="row" spacing={2}>
+          <Button variant="outline">Edit</Button>
+          <Button colorScheme="blue">Reject</Button>
+          <Button colorScheme="blue">Approve</Button>
+        </Stack>
+      </Flex>
     </Box>
   );
 };
@@ -124,7 +162,7 @@ const Jam = () => {
             </Link>
             <Stack direction="row" spacing={5}>
               <Switch
-                size="lg"
+                size="md"
                 colorScheme="green"
                 isChecked={published}
                 onChange={() =>
@@ -135,31 +173,9 @@ const Jam = () => {
                 }
               ></Switch>
               {published ? (
-                <Badge
-                  borderRadius="3xl"
-                  border="1px"
-                  borderColor="green.700"
-                  colorScheme="green"
-                  py={1}
-                  pl={3}
-                  pr={3}
-                  textTransform="none"
-                >
-                  Open
-                </Badge>
+                <Badge colorScheme="green">Open</Badge>
               ) : (
-                <Badge
-                  borderRadius="3xl"
-                  border="1px"
-                  borderColor="gray.700"
-                  colorScheme="gray"
-                  py={1}
-                  pl={3}
-                  pr={3}
-                  textTransform="none"
-                >
-                  Closed
-                </Badge>
+                <Badge colorScheme="gray">Closed</Badge>
               )}
             </Stack>
             <Text fontSize="md">{jam.description}</Text>
@@ -178,7 +194,7 @@ const Jam = () => {
               <TabPanels>
                 <TabPanel>
                   {approvedQuestions.map((question) => (
-                    <QuestionCard
+                    <LiveQuestionCard
                       question={question}
                       buttonText="Reject"
                     />
@@ -186,7 +202,7 @@ const Jam = () => {
                 </TabPanel>
                 <TabPanel>
                   {rejectedQuestions.map((question) => (
-                    <QuestionCard
+                    <LiveQuestionCard
                       question={question}
                       buttonText="Approve"
                     />
@@ -194,7 +210,7 @@ const Jam = () => {
                 </TabPanel>
                 <TabPanel>
                   {newQuestions.map((question) => (
-                    <QuestionCard
+                    <NewQuestionCard
                       question={question}
                       buttonText="Approve"
                     />
