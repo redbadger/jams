@@ -22,8 +22,10 @@ const Jam = () => {
   const { jam: jamUrlPath } = router.query;
   const [jam, setJam] = useState({});
   const [published, setPublished] = useState();
-
   const [location, setLocation] = useState();
+  const [approvedQuestions, setApprovedQuestions] = useState([]);
+  const [rejectedQuestions, setRejectedQuestions] = useState([]);
+  const [newQuestions, setNewQuestions] = useState([]);
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -35,6 +37,22 @@ const Jam = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
+
+  useEffect(() => {
+    if (!jam.questions) {
+      return;
+    }
+
+    setApprovedQuestions(
+      jam.questions.filter((question) => question.state === 1),
+    );
+    setRejectedQuestions(
+      jam.questions.filter((question) => question.state === -1),
+    );
+    setNewQuestions(
+      jam.questions.filter((question) => question.state === 0),
+    );
+  }, [jam]);
 
   const loadJam = () => {
     fetch(
@@ -104,31 +122,25 @@ const Jam = () => {
             </Button>
             <Tabs>
               <TabList>
-                <Tab>Approved</Tab>
-                <Tab>Rejected</Tab>
-                <Tab>New</Tab>
+                <Tab>Approved {approvedQuestions.length}</Tab>
+                <Tab>Rejected {rejectedQuestions.length}</Tab>
+                <Tab>New {newQuestions.length}</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {jam.questions
-                    .filter((question) => question.state === 1)
-                    .map((question) => (
-                      <p>{question.text}</p>
-                    ))}
+                  {approvedQuestions.map((question) => (
+                    <Text>{question.text}</Text>
+                  ))}
                 </TabPanel>
                 <TabPanel>
-                  {jam.questions
-                    .filter((question) => question.state === -1)
-                    .map((question) => (
-                      <p>{question.text}</p>
-                    ))}
+                  {rejectedQuestions.map((question) => (
+                    <Text>{question.text}</Text>
+                  ))}
                 </TabPanel>
                 <TabPanel>
-                  {jam.questions
-                    .filter((question) => question.state === 0)
-                    .map((question) => (
-                      <p>{question.text}</p>
-                    ))}
+                  {newQuestions.map((question) => (
+                    <Text>{question.text}</Text>
+                  ))}
                 </TabPanel>
               </TabPanels>
             </Tabs>
