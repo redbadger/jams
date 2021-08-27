@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     method,
   } = req;
 
-  if (method == 'POST') {
+  if (method === 'POST') {
     try {
       const token = await ensureAdmin(req, res);
 
@@ -95,17 +95,18 @@ export default async function handler(req, res) {
           console.error('Error writing document: ', error);
         });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: error });
     }
+  } else if (method === 'GET') {
+    return getJamByUrlPath(jamUrlPath).then((jam) => {
+      if (jam) {
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(jam);
+      } else {
+        res.status(404).end();
+      }
+    });
   }
-
-  return getJamByUrlPath(jamUrlPath).then((jam) => {
-    if (jam) {
-      res.status(200);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(jam);
-    } else {
-      res.status(404).end();
-    }
-  });
 }
