@@ -190,24 +190,21 @@ const Jam = () => {
               <JamButton
                 vote="Agree"
                 colorScheme={'blue'}
-                isLoading={votingOn === 'Agree'}
-                disabled={!!votingOn}
-                onClick={handleVote('Agree')}
+                votingOn={votingOn}
+                voteClickHandler={handleVote}
               />
               <JamButton
                 vote="Disagree"
                 colorScheme={'blue'}
-                isLoading={votingOn === 'Disagree'}
-                disabled={!!votingOn}
-                onClick={handleVote('Disagree')}
+                votingOn={votingOn}
+                voteClickHandler={handleVote}
               />
               <JamButton
                 variant="link"
                 vote="Skip"
                 colorScheme={'blue'}
-                isLoading={votingOn === 'Skip'}
-                disabled={!!votingOn}
-                onClick={handleVote('Skip')}
+                votingOn={votingOn}
+                voteClickHandler={handleVote}
               />
             </Stack>
           </GridItem>
