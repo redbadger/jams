@@ -1,11 +1,11 @@
 import fire from '../../config/firebaseAdminConfig';
 import ensureAdmin from 'utils/admin-auth-middleware';
 
-function getJamByUrlPath(jamUrlPath) {
+async function getJamByUrlPath(jamUrlPath, includeQuestions) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  return jamsRef
+  const finalJam = await jamsRef
     .where('urlPath', '==', jamUrlPath)
     .get()
     .then((querySnapshot) => {
@@ -17,6 +17,26 @@ function getJamByUrlPath(jamUrlPath) {
       });
       return jams[0];
     });
+
+  if (!includeQuestions) {
+    return finalJam;
+  }
+
+  finalJam.questions = await jamsRef
+    .doc(finalJam.key)
+    .collection('statements')
+    .get()
+    .then((query) => {
+      const questions = [];
+      query.forEach((doc) => {
+        const question = doc.data();
+        question.key = doc.id;
+        questions.push(question);
+      });
+      return questions;
+    });
+
+  return finalJam;
 }
 
 function createJam({ name, description, statements }) {
@@ -61,7 +81,7 @@ function createJam({ name, description, statements }) {
 
 export default async function handler(req, res) {
   const {
-    query: { jamUrlPath },
+    query: { jamUrlPath, includeQuestions },
     method,
   } = req;
 
@@ -99,14 +119,16 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error });
     }
   } else if (method === 'GET') {
-    return getJamByUrlPath(jamUrlPath).then((jam) => {
-      if (jam) {
-        res.status(200);
-        res.setHeader('Content-Type', 'application/json');
-        res.json(jam);
-      } else {
-        res.status(404).end();
-      }
-    });
+    return getJamByUrlPath(jamUrlPath, includeQuestions).then(
+      (jam) => {
+        if (jam) {
+          res.status(200);
+          res.setHeader('Content-Type', 'application/json');
+          res.json(jam);
+        } else {
+          res.status(404).end();
+        }
+      },
+    );
   }
 }
