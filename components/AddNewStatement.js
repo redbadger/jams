@@ -40,8 +40,8 @@ export default function AddNewStatement({ jamId }) {
 
   return (
     <>
-      <Button width="200px" variant="outline" onClick={onOpen}>
-        Add New Statement
+      <Button variant="outline" colorScheme={'blue'} onClick={onOpen}>
+        Add new statement
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
