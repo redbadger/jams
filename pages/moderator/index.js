@@ -6,12 +6,12 @@ import {
   Wrap,
   WrapItem,
   Spinner,
-  Center,
   Text,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
-import Header from 'components/Header';
+import AdminHeader from 'components/AdminHeader';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -25,24 +25,27 @@ function Moderator() {
     await fetch('/api/jamming')
       .then((response) => response.json())
       .then((jam) => {
-        console.log(jam);
         setJams(jam);
       });
   };
 
   const convertDate = (date) => {
-    return new Date(date * 1000).toLocaleString('en-GB', {
-      timeZone: 'UTC',
-    });
+    return moment(date * 1000).format('DD MMM hh:mm');
   };
 
   const timeSince = (date) => {
-    return 'not sure';
+    const openedAt = moment(new Date(date * 1000));
+    const now = moment();
+
+    const hours = now.diff(openedAt, 'hours');
+    const minutes = now.diff(openedAt, 'minutes') - hours * 60;
+
+    return hours + ':' + minutes;
   };
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
         <Heading
           ml="6px"

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Heading, Flex, Button } from '@chakra-ui/react';
+import { Box, Heading, Flex, Button, Link } from '@chakra-ui/react';
 
-const Header = () => {
+const AdminHeader = () => {
   return (
     <Flex
       as="nav"
@@ -13,7 +13,7 @@ const Header = () => {
     >
       <Flex align="center" mr={5}>
         <Heading as="h1" size="lg" letterSpacing={'tighter'}>
-          JAMS
+          <Link href="/">JAMS</Link>
         </Heading>
       </Flex>
 
@@ -35,4 +35,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default AdminHeader;

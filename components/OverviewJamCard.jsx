@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Stack, Button } from '@chakra-ui/react';
+import { Box, Heading, Text, Stack, Tag } from '@chakra-ui/react';
 
 const overviewCard = ({ isOpen, jamName, createdAt, openFor }) => {
   return (
@@ -24,16 +24,16 @@ const overviewCard = ({ isOpen, jamName, createdAt, openFor }) => {
           {jamName}
         </Heading>
       </Stack>
-      <Button
+      <Tag
         color={isOpen ? '#00681D' : '#535353'}
         border="1px"
         borderColor={isOpen ? '#00681D' : '#8D8D8D'}
         rounded="16px"
-        size="xs"
+        size="sm"
         bg={isOpen ? '#EEFFF3' : '#F5F5F5'}
       >
         {isOpen ? 'Open' : 'Closed'}
-      </Button>
+      </Tag>
       <Stack mt={2} direction={'row'} spacing={4} align={'center'}>
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>
           <Text color="#535353" fontSize="12px">
