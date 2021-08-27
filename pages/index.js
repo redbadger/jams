@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import Layout from '../components/Layout';
 
 function HomeHeader({ session }) {
@@ -64,7 +63,7 @@ export default function Home() {
             <Heading as="h1" size="4xl">
               Welcome to Jams!
             </Heading>
-            <Link href="/dashboard">
+            <Link href="/moderator">
               Click here for the Admin Dashboard
             </Link>
           </Box>
