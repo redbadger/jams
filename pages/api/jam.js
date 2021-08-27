@@ -79,6 +79,24 @@ function createJam({ name, description, statements, adminId }) {
   });
 }
 
+function patchJam(req, res) {
+  const { jamId, ...body } = req.body;
+  const db = fire.firestore();
+  const jamsRef = db.collection('jams');
+
+  return new Promise(() => {
+    jamsRef
+      .doc(jamId)
+      .update(body)
+      .then(() => {
+        res.status(200).end();
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
 export default async function handler(req, res) {
   const {
     query: { jamUrlPath, includeStatements },
@@ -127,5 +145,7 @@ export default async function handler(req, res) {
         }
       },
     );
+  } else if (method === 'PATCH') {
+    return patchJam(req, res);
   }
 }

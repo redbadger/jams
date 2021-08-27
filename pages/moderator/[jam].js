@@ -115,7 +115,7 @@ const Jam = () => {
       });
   };
 
-  const patchRequest = (body) => {
+  const patchStatementRequest = (body) => {
     const { jamId, statementId, ...updateFields } = body;
     fetch('/api/statement', {
       method: 'PATCH',
@@ -135,6 +135,25 @@ const Jam = () => {
             updateFields,
           );
 
+          return jam;
+        });
+        setPatchTrigger((patchTrigger) => !patchTrigger);
+      })
+      .catch(() => console.error('Bad request'));
+  };
+
+  const patchJamRequest = (body) => {
+    const { jamId, ...updateFields } = body;
+    fetch('/api/jam', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(() => {
+        setJam((jam) => {
+          jam = merge(jam, updateFields);
           return jam;
         });
         setPatchTrigger((patchTrigger) => !patchTrigger);
@@ -163,12 +182,13 @@ const Jam = () => {
                 size="md"
                 colorScheme="green"
                 isChecked={published}
-                onChange={() =>
-                  setPublished((published) => {
-                    // SET JAM TO OPEN/CLOSED HERE
-                    return !published;
-                  })
-                }
+                onChange={(e) => {
+                  patchJamRequest({
+                    isOpen: e.target.checked,
+                    jamId: jam.key,
+                  });
+                  setPublished(e.target.checked);
+                }}
               ></Switch>
               {published ? (
                 <Badge colorScheme="green">Open</Badge>
@@ -197,7 +217,7 @@ const Jam = () => {
                       statement={statement}
                       buttonText="Reject"
                       onClick={() =>
-                        patchRequest({
+                        patchStatementRequest({
                           jamId: jam.key,
                           statementId: statement.key,
                           state: -1,
@@ -213,7 +233,7 @@ const Jam = () => {
                       statement={statement}
                       buttonText="Approve"
                       onClick={() =>
-                        patchRequest({
+                        patchStatementRequest({
                           jamId: jam.key,
                           statementId: statement.key,
                           state: 1,
@@ -227,7 +247,7 @@ const Jam = () => {
                     <ModeratorNewStatementCard
                       key={index}
                       statement={statement}
-                      patchRequest={patchRequest}
+                      patchRequest={patchStatementRequest}
                       jamId={jam.key}
                     />
                   ))}
