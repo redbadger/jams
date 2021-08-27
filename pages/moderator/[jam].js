@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   GridItem,
+  Heading,
   Stack,
   Switch,
   Tab,
@@ -12,10 +13,48 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
+import { ArrowBackIcon, ChatIcon, LockIcon } from '@chakra-ui/icons';
 import Layout from 'components/Layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+
+const QuestionCard = ({ question, buttonText }) => {
+  return (
+    <Box
+      border="1px"
+      p={5}
+      borderRadius="md"
+      borderColor="gray.200"
+      my={4}
+      backgroundColor="white"
+    >
+      <Text pb={5}>{question.text}</Text>
+
+      {question.isUserSubmitted ? (
+        <Text color="gray.600">
+          <ChatIcon></ChatIcon> Participant submitted{' '}
+          {new Date(
+            question.createdAt?._seconds * 1000,
+          ).toUTCString()}
+        </Text>
+      ) : (
+        <Text color="gray.600">
+          <LockIcon></LockIcon> Moderator submitted{' '}
+          {new Date(
+            question.createdAt?._seconds * 1000,
+          ).toUTCString()}
+        </Text>
+      )}
+
+      <Stack justify="flex-end" direction="row">
+        <Button onClick={() => invertEditable()} variant="outline">
+          {buttonText}
+        </Button>
+      </Stack>
+    </Box>
+  );
+};
 
 const Jam = () => {
   const router = useRouter();
@@ -69,10 +108,17 @@ const Jam = () => {
 
   return (
     <Box>
+      <Link href="/moderator" passHref>
+        <Text color="gray.700">
+          <ArrowBackIcon /> Back to overview
+        </Text>
+      </Link>
       <Layout py={14}>
         <GridItem colSpan={6}>
           <Stack direction="column" spacing={5}>
-            <Text fontSize="xl">{jam.name}</Text>
+            <Heading as="h1" size="lg">
+              {jam.name}
+            </Heading>
             <Link href={`${location}/jams/${jam.urlPath}`} passHref>
               {`${location}/jams/${jam.urlPath}`}
             </Link>
@@ -117,6 +163,9 @@ const Jam = () => {
               )}
             </Stack>
             <Text fontSize="md">{jam.description}</Text>
+            <Text fontSize="sm" color="gray.600">
+              {new Date(jam.createdAt?._seconds * 1000).toUTCString()}
+            </Text>
             <Button w="150px" colorScheme="blue">
               Download CSV
             </Button>
@@ -129,17 +178,26 @@ const Jam = () => {
               <TabPanels>
                 <TabPanel>
                   {approvedQuestions.map((question) => (
-                    <Text>{question.text}</Text>
+                    <QuestionCard
+                      question={question}
+                      buttonText="Reject"
+                    />
                   ))}
                 </TabPanel>
                 <TabPanel>
                   {rejectedQuestions.map((question) => (
-                    <Text>{question.text}</Text>
+                    <QuestionCard
+                      question={question}
+                      buttonText="Approve"
+                    />
                   ))}
                 </TabPanel>
                 <TabPanel>
                   {newQuestions.map((question) => (
-                    <Text>{question.text}</Text>
+                    <QuestionCard
+                      question={question}
+                      buttonText="Approve"
+                    />
                   ))}
                 </TabPanel>
               </TabPanels>
