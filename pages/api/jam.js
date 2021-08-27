@@ -64,9 +64,10 @@ export default async function handler(req, res) {
     method,
   } = req;
 
-  // TODO add 'protect admin' to the POST route.
   if (method == 'POST') {
     try {
+      const token = await ensureAdmin(req, res);
+
       const { name, description, statements } = req.body;
       if (statements.length === 0) {
         res.status(400).end('No statements found');
