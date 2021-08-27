@@ -6,6 +6,7 @@ import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
 import AddNewStatement from '../../components/AddNewStatement';
 import Layout from 'components/Layout';
+import DefaultErrorPage from 'next/error';
 import {
   Center,
   Heading,
@@ -51,6 +52,7 @@ const Jam = () => {
   const [isDone, setIsDone] = useState(false);
   const [participantId, setParticipantId] = useState();
   const [cookies, setCookies] = useCookies();
+  const [error, setError] = useState();
 
   const ids = {
     participantId: participantId,
@@ -86,9 +88,22 @@ const Jam = () => {
 
   const loadJam = () => {
     fetch(`/api/jam?jamUrlPath=${encodeURIComponent(jamUrlPath)}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error('404');
+        }
+      })
       .then((json) => {
         setJam(json);
+      })
+      .catch((e) => {
+        if (e.message === '404') {
+          setError(404);
+        } else {
+          setError(500);
+        }
       });
   };
 
@@ -122,6 +137,8 @@ const Jam = () => {
         console.error('Error saving participant: ', error),
       );
   };
+
+  if (error) return <DefaultErrorPage statusCode={error} />;
 
   return (
     <Box>
