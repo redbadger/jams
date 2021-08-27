@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ChatIcon, LockIcon } from '@chakra-ui/icons';
 import Layout from 'components/Layout';
+import AdminHeader from 'components/AdminHeader';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -163,6 +164,7 @@ const Jam = () => {
 
   return (
     <Box>
+      <AdminHeader />
       <Link href="/moderator" passHref>
         <Text color="gray.700">
           <ArrowBackIcon /> Back to overview
