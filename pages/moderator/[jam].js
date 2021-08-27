@@ -109,9 +109,27 @@ const Jam = () => {
                 <Tab>New</Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>a</TabPanel>
-                <TabPanel>b</TabPanel>
-                <TabPanel>c</TabPanel>
+                <TabPanel>
+                  {jam.questions
+                    .filter((question) => question.state === 1)
+                    .map((question) => (
+                      <p>{question.text}</p>
+                    ))}
+                </TabPanel>
+                <TabPanel>
+                  {jam.questions
+                    .filter((question) => question.state === -1)
+                    .map((question) => (
+                      <p>{question.text}</p>
+                    ))}
+                </TabPanel>
+                <TabPanel>
+                  {jam.questions
+                    .filter((question) => question.state === 0)
+                    .map((question) => (
+                      <p>{question.text}</p>
+                    ))}
+                </TabPanel>
               </TabPanels>
             </Tabs>
           </Stack>
