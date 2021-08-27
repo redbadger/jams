@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import merge from 'lodash.merge';
+import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 
 const LiveStatementCard = ({ statement, buttonText, onClick }) => {
   return (
@@ -61,79 +62,6 @@ const LiveStatementCard = ({ statement, buttonText, onClick }) => {
       </Flex>
     </Box>
   );
-};
-
-const NewStatementCard = ({ statement, jamId, patchStatement }) => {
-  const [isEditable, setIsEditable] = useState(false);
-
-  const invertEditable = () => {
-    setIsEditable((isEditable) => !isEditable);
-  };
-
-  if (isEditable) {
-    <Box
-      border="1px"
-      p={5}
-      borderRadius="md"
-      borderColor="gray.200"
-      my={4}
-      backgroundColor="white"
-    ></Box>;
-  } else {
-    return (
-      <Box
-        border="1px"
-        p={5}
-        borderRadius="md"
-        borderColor="gray.200"
-        my={4}
-        backgroundColor="white"
-      >
-        <Text pb={5}>{statement.text}</Text>
-
-        <Flex>
-          <Box>
-            <Text color="gray.600">
-              <ChatIcon></ChatIcon> Participant submitted{' '}
-              {new Date(
-                statement.createdAt?._seconds * 1000,
-              ).toUTCString()}
-            </Text>
-          </Box>
-
-          <Spacer />
-
-          <Stack direction="row" spacing={2}>
-            <Button variant="outline">Edit</Button>
-            <Button
-              onClick={() =>
-                patchStatement({
-                  state: -1,
-                  jamId: jamId,
-                  statementId: statement.key,
-                })
-              }
-              colorScheme="blue"
-            >
-              Reject
-            </Button>
-            <Button
-              onClick={() =>
-                patchStatement({
-                  state: 1,
-                  jamId: jamId,
-                  statementId: statement.key,
-                })
-              }
-              colorScheme="blue"
-            >
-              Approve
-            </Button>
-          </Stack>
-        </Flex>
-      </Box>
-    );
-  }
 };
 
 const Jam = () => {
@@ -187,7 +115,7 @@ const Jam = () => {
       });
   };
 
-  const patchStatement = (body) => {
+  const patchRequest = (body) => {
     const { jamId, statementId, ...updateFields } = body;
     fetch('/api/statement', {
       method: 'PATCH',
@@ -269,7 +197,7 @@ const Jam = () => {
                       statement={statement}
                       buttonText="Reject"
                       onClick={() =>
-                        patchStatement({
+                        patchRequest({
                           jamId: jam.key,
                           statementId: statement.key,
                           state: -1,
@@ -285,7 +213,7 @@ const Jam = () => {
                       statement={statement}
                       buttonText="Approve"
                       onClick={() =>
-                        patchStatement({
+                        patchRequest({
                           jamId: jam.key,
                           statementId: statement.key,
                           state: 1,
@@ -296,10 +224,10 @@ const Jam = () => {
                 </TabPanel>
                 <TabPanel>
                   {newStatements.map((statement, index) => (
-                    <NewStatementCard
+                    <ModeratorNewStatementCard
                       key={index}
                       statement={statement}
-                      patchStatement={patchStatement}
+                      patchRequest={patchRequest}
                       jamId={jam.key}
                     />
                   ))}
