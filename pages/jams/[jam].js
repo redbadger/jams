@@ -34,7 +34,7 @@ function JamHeader({ title, description, participantId }) {
             {title || 'Loading...'}
           </Heading>
           <Text color={'gray.400'} mt={4}>
-            {description || "Won't take long."}
+            {description}&nbsp;
           </Text>
         </GridItem>
       </Layout>
