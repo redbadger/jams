@@ -9,12 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
+import ComponentSwitcher from './ComponentSwitcher';
 
 const ModeratorEditStatementCard = ({
   statement,
   jamId,
   patchRequest,
-  invertEditable,
+  invertComponent,
 }) => {
   const [editedStatement, setEditedStatement] = useState(
     statement.text,
@@ -41,7 +42,7 @@ const ModeratorEditStatementCard = ({
         mb={4}
       ></Textarea>
       <Stack justify="flex-end" direction="row" spacing={2}>
-        <Button onClick={() => invertEditable()} variant="outline">
+        <Button onClick={() => invertComponent()} variant="outline">
           Cancel
         </Button>
         <Button
@@ -51,7 +52,7 @@ const ModeratorEditStatementCard = ({
               jamId: jamId,
               statementId: statement.key,
             });
-            invertEditable();
+            invertComponent();
           }}
           colorScheme="blue"
         >
@@ -66,7 +67,7 @@ const ModeratorDecisionStatementCard = ({
   statement,
   jamId,
   patchRequest,
-  invertEditable,
+  invertComponent,
 }) => {
   return (
     <Box
@@ -92,7 +93,7 @@ const ModeratorDecisionStatementCard = ({
         <Spacer />
 
         <Stack direction="row" spacing={2}>
-          <Button onClick={() => invertEditable()} variant="outline">
+          <Button onClick={() => invertComponent()} variant="outline">
             Edit
           </Button>
           <Button
@@ -130,31 +131,24 @@ const ModeratorNewStatementCard = ({
   jamId,
   patchRequest,
 }) => {
-  const [isEditable, setIsEditable] = useState(false);
-
-  const invertEditable = () => {
-    setIsEditable((isEditable) => !isEditable);
-  };
-
-  if (isEditable) {
-    return (
-      <ModeratorEditStatementCard
-        statement={statement}
-        jamId={jamId}
-        patchRequest={patchRequest}
-        invertEditable={invertEditable}
-      />
-    );
-  } else {
-    return (
-      <ModeratorDecisionStatementCard
-        statement={statement}
-        jamId={jamId}
-        patchRequest={patchRequest}
-        invertEditable={invertEditable}
-      />
-    );
-  }
+  return (
+    <ComponentSwitcher
+      primaryComponent={
+        <ModeratorDecisionStatementCard
+          statement={statement}
+          jamId={jamId}
+          patchRequest={patchRequest}
+        />
+      }
+      secondaryComponent={
+        <ModeratorEditStatementCard
+          statement={statement}
+          jamId={jamId}
+          patchRequest={patchRequest}
+        />
+      }
+    />
+  );
 };
 
 export default ModeratorNewStatementCard;
