@@ -1,11 +1,12 @@
 import { Text, Button, Textarea, Stack, Box } from '@chakra-ui/react';
 import { useState } from 'react';
+import ComponentSwitcher from './ComponentSwitcher';
 
 const EditableStatement = ({
   children,
   index,
   onSave,
-  invertEditable,
+  invertComponent,
 }) => {
   const [statement, setStatement] = useState(children);
 
@@ -24,13 +25,13 @@ const EditableStatement = ({
         borderRadius="none"
       />
       <Stack justify="flex-end" direction="row" spacing={2}>
-        <Button onClick={() => invertEditable()} variant="outline">
+        <Button onClick={() => invertComponent()} variant="outline">
           Cancel
         </Button>
         <Button
           onClick={() => {
             onSave(index, statement);
-            invertEditable();
+            invertComponent();
           }}
           variant="outline"
         >
@@ -45,7 +46,7 @@ const VisibleOnlyStatement = ({
   children,
   index,
   onDelete,
-  invertEditable,
+  invertComponent,
 }) => {
   return (
     <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
@@ -55,7 +56,7 @@ const VisibleOnlyStatement = ({
         <Button onClick={() => onDelete(index)} variant="outline">
           Delete
         </Button>
-        <Button onClick={() => invertEditable()} variant="outline">
+        <Button onClick={() => invertComponent()} variant="outline">
           Edit
         </Button>
       </Stack>
@@ -64,33 +65,23 @@ const VisibleOnlyStatement = ({
 };
 
 function ProposedStatementCard(props) {
-  const [isEditable, setIsEditable] = useState(false);
-
-  const invertEditable = () => {
-    setIsEditable((isEditable) => !isEditable);
-  };
-
-  if (isEditable) {
-    return (
-      <EditableStatement
-        index={props.index}
-        onSave={props.onSave}
-        invertEditable={invertEditable}
-      >
-        {props.children}
-      </EditableStatement>
-    );
-  } else {
-    return (
-      <VisibleOnlyStatement
-        index={props.index}
-        onDelete={props.onDelete}
-        invertEditable={invertEditable}
-      >
-        {props.children}
-      </VisibleOnlyStatement>
-    );
-  }
+  return (
+    <ComponentSwitcher
+      primaryComponent={
+        <VisibleOnlyStatement
+          index={props.index}
+          onDelete={props.onDelete}
+        >
+          {props.children}
+        </VisibleOnlyStatement>
+      }
+      secondaryComponent={
+        <EditableStatement index={props.index} onSave={props.onSave}>
+          {props.children}
+        </EditableStatement>
+      }
+    />
+  );
 }
 
 export default ProposedStatementCard;
