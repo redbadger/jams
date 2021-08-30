@@ -32,7 +32,7 @@ function Moderator() {
   };
 
   const convertDate = (date) => {
-    return moment(date * 1000).format('DD MMM hh:mm');
+    return moment(date * 1000).format('DD MMM hh:mm A');
   };
 
   const timeSince = (date) => {
@@ -53,20 +53,12 @@ function Moderator() {
       <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
         <Wrap spacing="10px">
           <WrapItem>
-            <Heading
-              as="h2"
-              size="lg"
-              fontWeight={400}
-              ml="20px"
-              mb="20px"
-            >
+            <Heading size="lg" m="25px" fontWeight="400">
               Jams overview
             </Heading>
           </WrapItem>
           <WrapItem>
-            <Button ml="20px" mb="20px">
-              Create a new Jam
-            </Button>
+            <Button m="20px">Create a new Jam</Button>
           </WrapItem>
         </Wrap>
         <HStack spacing="5">

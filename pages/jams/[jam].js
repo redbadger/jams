@@ -2,18 +2,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import moment from 'moment';
 import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
 import AddNewStatement from '../../components/AddNewStatement';
-import Layout from 'components/Layout';
+import Layout from '../../components/Layout';
 import DefaultErrorPage from 'next/error';
-import {
-  Center,
-  Heading,
-  Text,
-  GridItem,
-  HStack,
-} from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { Heading, Text, GridItem, HStack } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
   return (
@@ -160,6 +156,9 @@ const Jam = () => {
 
   if (error) return <DefaultErrorPage statusCode={error} />;
 
+  // TODO: replace with proper error page when those are done
+  if (jam && !jam.isOpen) return <Text>Jam is no longer active</Text>;
+
   return (
     <Box>
       <Head>
@@ -180,7 +179,23 @@ const Jam = () => {
               : 'All done'}
           </Heading>
         </GridItem>
-
+        {question
+          ? question.isUserSubmitted && (
+              <GridItem colSpan={4}>
+                <HStack>
+                  <InfoOutlineIcon />
+                  <Text fontSize="xs">
+                    <strong>Participant</strong> submitted{' '}
+                    {moment(
+                      question.createdAt?._seconds * 1000,
+                    ).format('DD MMM hh:mm A')}
+                  </Text>
+                </HStack>
+                <br />
+              </GridItem>
+            )
+          : ''}
+        <br />
         {!isDone && (
           <GridItem colSpan={6}>
             <Text pb={4} color={'gray.600'}>
@@ -209,7 +224,6 @@ const Jam = () => {
             </Stack>
           </GridItem>
         )}
-
         <GridItem colSpan={6}>
           <Text as="h5" fontWeight={600} mt={8} pb={4}>
             Add a new statement to this survey:
