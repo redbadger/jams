@@ -177,6 +177,12 @@ const Jam = () => {
       />
       <Layout py={14}>
         <GridItem colSpan={6}>
+          {question && (
+            <Text color="gray.400">
+              {question.meta.numVotes + 1} /{' '}
+              {question.meta.numQuestions}
+            </Text>
+          )}
           <Heading as="h1" size="xl" fontWeight={500} mb={8}>
             {!isDone
               ? question
