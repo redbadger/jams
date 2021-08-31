@@ -26,13 +26,7 @@ const overviewCard = ({
     >
       <Stack>
         <Link href={`moderator/${jamUrl}`}>
-          <Heading
-            fontSize={'18px'}
-            lineHeight={'26px'}
-            fontWeight={'700'}
-            fontFamily={'body'}
-            mb={2}
-          >
+          <Heading fontSize="lg" mb={2}>
             {jamName}
           </Heading>
         </Link>
