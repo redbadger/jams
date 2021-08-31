@@ -84,5 +84,6 @@ function Moderator() {
     </>
   );
 }
+
 Moderator.auth = true;
 export default Moderator;
