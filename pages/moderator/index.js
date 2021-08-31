@@ -12,9 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
-import AdminHeader from 'components/AdminHeader';
-import Layout from 'components/Layout';
-import { convertDate, timeSince } from '../../utils/date';
+import AdminHeader from '@/components/AdminHeader';
+import Layout from '@/components/Layout';
+import router from 'next/router';
+import { convertDate, timeSince } from '@/utils/date';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -35,17 +36,18 @@ function Moderator() {
   return (
     <>
       <AdminHeader />
-      <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
-        <Wrap spacing="10px">
-          <WrapItem>
-            <Heading size="lg" m="25px" fontWeight="400">
-              Jams overview
-            </Heading>
-          </WrapItem>
-          <WrapItem>
-            <Button m="20px">Create a new Jam</Button>
-          </WrapItem>
-        </Wrap>
+      <Container maxW="100%" p="6">
+        <HStack spacing="5" mb="8">
+          <Heading as="h2" size="lg">
+            Jams overview
+          </Heading>
+          <Button
+            colorScheme="blue"
+            onClick={() => router.push('/moderator/create-jam')}
+          >
+            Create a new Jam
+          </Button>
+        </HStack>
         <HStack spacing="5">
           <Layout>
             {jams ? (

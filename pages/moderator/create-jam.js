@@ -1,8 +1,9 @@
 import {
   Heading,
   VStack,
-  Container,
+  Link,
   Input,
+  GridItem,
   Text,
   Textarea,
   Button,
@@ -12,12 +13,14 @@ import {
   UnorderedList,
 } from '@chakra-ui/react';
 
+import AdminLayout from '@/components/AdminLayout';
 import { useEffect, useState } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
 import ModalCreateJam from '../../components/ModalCreateJam';
 import ModalDiscardJam from '../../components/ModalDiscardJam';
 import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
+import AdminHeader from '@/components/AdminHeader';
 
 function Moderator() {
   const [title, setTitle] = useState();
@@ -113,80 +116,90 @@ function Moderator() {
 
   return (
     <>
-      <Container>
-        <VStack align="start" spacing={5}>
-          <Text fontSize="xl">Create a new Jam</Text>
+      <AdminLayout>
+        <GridItem colSpan="4" colStart="2">
+          <VStack align="start" spacing={5}>
+            <Heading as="h2" size="lg">
+              Create a new Jam
+            </Heading>
 
-          <Heading size="md">Title</Heading>
-          <Text fontSize="sm" color="gray.500">
-            The title cannot be edited after the Jam is published
-          </Text>
-          <Input
-            placeholder="title"
-            size="md"
-            onChange={handleTitleChange}
-            borderRadius="none"
-          />
-
-          <Heading size="md">Description</Heading>
-          <Text fontSize="xs" color="gray.500">
-            The description cannot be edited after the Jam is
-            published
-          </Text>
-          <Textarea
-            placeholder="description"
-            size="md"
-            onChange={handleDescriptionChange}
-            borderRadius="none"
-          />
-
-          <Heading size="md">Statements</Heading>
-          <VStack spacing={1} align="start" w="100%">
-            <UnorderedList size="sm" color="gray.500">
-              <ListItem>
-                Statements should be easy for everyone to understand
-              </ListItem>
-              <ListItem>
-                Keep them clear and under 140 characters
-              </ListItem>
-              <ListItem>
-                Each one should be unique and raise a different point
-              </ListItem>
-            </UnorderedList>
-            {allStatements.map((statement, index) => (
-              <ProposedStatementCard
-                key={index}
-                index={index}
-                onDelete={handleDeleteProposedStatement}
-                onSave={handleEditExistingStatement}
-              >
-                {statement}
-              </ProposedStatementCard>
-            ))}
-          </VStack>
-          <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
-            <Textarea
-              placeholder="statements"
+            <Heading size="md">Title</Heading>
+            <Text fontSize="sm" color="gray.500">
+              The title cannot be edited after the Jam is published
+            </Text>
+            <Input
+              placeholder="title"
               size="md"
-              value={currentStatement}
-              onChange={handleStatementChange}
-              mb={2}
+              onChange={handleTitleChange}
               borderRadius="none"
             />
 
-            <Stack justify="flex-end" direction="row" spacing={2}>
-              <Button onClick={() => handleSave()}>Save</Button>
-            </Stack>
-          </Box>
-        </VStack>
+            <Heading size="md">Description</Heading>
+            <Text fontSize="xs" color="gray.500">
+              The description cannot be edited after the Jam is
+              published
+            </Text>
+            <Textarea
+              placeholder="description"
+              size="md"
+              onChange={handleDescriptionChange}
+              borderRadius="none"
+            />
 
-        <Stack justify="flex-end" direction="row" spacing={2} mt={2}>
-          <Button onClick={cancelModalOnOpen} variant="outline">
-            Cancel
-          </Button>
-          <Button onClick={() => createJam()}>Publish</Button>
-        </Stack>
-      </Container>
+            <Heading size="md">Statements</Heading>
+            <VStack spacing={1} align="start" w="100%">
+              <UnorderedList size="sm" color="gray.500">
+                <ListItem>
+                  Statements should be easy for everyone to understand
+                </ListItem>
+                <ListItem>
+                  Keep them clear and under 140 characters
+                </ListItem>
+                <ListItem>
+                  Each one should be unique and raise a different
+                  point
+                </ListItem>
+              </UnorderedList>
+              {allStatements.map((statement, index) => (
+                <ProposedStatementCard
+                  key={index}
+                  index={index}
+                  onDelete={handleDeleteProposedStatement}
+                  onSave={handleEditExistingStatement}
+                >
+                  {statement}
+                </ProposedStatementCard>
+              ))}
+            </VStack>
+            <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+              <Textarea
+                placeholder="statements"
+                size="md"
+                value={currentStatement}
+                onChange={handleStatementChange}
+                mb={2}
+                borderRadius="none"
+              />
+
+              <Stack justify="flex-end" direction="row" spacing={2}>
+                <Button onClick={() => handleSave()}>Save</Button>
+              </Stack>
+            </Box>
+          </VStack>
+
+          <Stack
+            justify="flex-end"
+            direction="row"
+            spacing={2}
+            mt={2}
+          >
+            <Button onClick={cancelModalOnOpen} variant="outline">
+              Cancel
+            </Button>
+            <Button onClick={() => createJam()}>Publish</Button>
+          </Stack>
+        </GridItem>
+      </AdminLayout>
 
       <ModalCreateJam
         successModalIsOpen={successModalIsOpen}
