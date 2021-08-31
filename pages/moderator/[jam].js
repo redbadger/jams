@@ -341,4 +341,5 @@ const Jam = () => {
   );
 };
 
+Jam.auth = true;
 export default Jam;
