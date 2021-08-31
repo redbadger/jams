@@ -72,7 +72,7 @@ function Moderator() {
                     color="blue.500"
                     size="xl"
                   />
-                  <Text ml="10" fontSize="18px">
+                  <Text m="16" fontSize="2xl" color="gray.400">
                     Loading jams...
                   </Text>
                 </Center>
