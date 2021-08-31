@@ -11,6 +11,7 @@ import {
 import { ChatIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import ComponentSwitcher from './ComponentSwitcher';
+import { convertDate } from '../utils/date';
 
 const ModeratorEditStatementCard = ({
   statement,
@@ -85,9 +86,7 @@ const ModeratorDecisionStatementCard = ({
         <Box>
           <Text fontSize="sm" color="gray.600">
             <ChatIcon></ChatIcon> Participant submitted{' '}
-            {new Date(
-              statement.createdAt?._seconds * 1000,
-            ).toUTCString()}
+            {convertDate(statement.createdAt?._seconds * 1000)}
           </Text>
         </Box>
 
