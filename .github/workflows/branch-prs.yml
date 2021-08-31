@@ -37,6 +37,14 @@ jobs:
         with:
           node-version: 14.x
 
+      - name: Builds the expected branch deployment URL
+        id: branch-url
+        run: |
+          # we might have to do some char replacement, but this will work
+          # with our current branch name convention I think
+          URL="${{ github.head_ref}}--elated-austin-ae1db6.netlify.app"
+          echo "::set-output name=BRANCH_URL::$URL"
+
       - name: Create .env file
         uses: SpicyPizza/create-envfile@v1
         with:
@@ -44,7 +52,7 @@ jobs:
           envkey_AUTH0_ISSUER_BASE_URL: ${{ secrets.AUTH0_ISSUER_BASE_URL }}
           envkey_AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
           envkey_AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          envkey_NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          envkey_NEXTAUTH_URL: ${{ steps.branch-url.outputs.BRANCH_URL }}
           file_name: '.env'
 
       - name: Add Firebase secret
@@ -58,9 +66,6 @@ jobs:
         run: |
           npm install -g yarn
           yarn install
-
-      # - name: 🧹 Run lint
-      #   run: npm run lint
 
       - name: 🐛 Run tests
         run: yarn test

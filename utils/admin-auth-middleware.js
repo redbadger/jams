@@ -6,6 +6,12 @@ const client = jwksClient({
   jwksUri: 'https://rb-jams-dev.eu.auth0.com/.well-known/jwks.json',
 });
 
+const cookieSuffix = 'next-auth.session-token';
+const cookieName =
+  process.env.NODE_ENV === 'production'
+    ? `__Secure-${cookieSuffix}`
+    : cookieSuffix;
+
 function getKey(header, callback) {
   client.getSigningKey(header.kid, function (err, key) {
     var signingKey = key.publicKey || key.rsaPublicKey;
@@ -15,14 +21,14 @@ function getKey(header, callback) {
 
 export default function ensureAdmin(req, res) {
   return new Promise((resolve, reject) => {
-    let cookies = new Cookies(req, res);
-    let token = cookies.get('next-auth.session-token');
+    const cookies = new Cookies(req, res);
+    const token = cookies.get(cookieName);
 
     if (!token) return reject({ message: 'No session found' });
 
-    let decodedToken = jwt.decode(token);
+    const decodedToken = jwt.decode(token);
 
-    let accessToken = decodedToken.accessToken;
+    const accessToken = decodedToken.accessToken;
 
     jwt.verify(
       accessToken,
