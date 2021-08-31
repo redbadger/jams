@@ -24,6 +24,7 @@ import Link from 'next/link';
 import merge from 'lodash.merge';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
+import { convertDate } from '../../utils/date';
 
 const LiveStatementCard = ({ statement, buttonText, onClick }) => {
   return (
@@ -42,16 +43,12 @@ const LiveStatementCard = ({ statement, buttonText, onClick }) => {
           {statement.isUserSubmitted ? (
             <Text color="gray.600">
               <ChatIcon /> Participant submitted{' '}
-              {new Date(
-                statement.createdAt?._seconds * 1000,
-              ).toUTCString()}
+              {convertDate(statement.createdAt?._seconds)}
             </Text>
           ) : (
             <Text color="gray.600">
               <LockIcon /> Moderator submitted{' '}
-              {new Date(
-                statement.createdAt?._seconds * 1000,
-              ).toUTCString()}
+              {convertDate(statement.createdAt?._seconds)}
             </Text>
           )}
         </Box>
@@ -236,7 +233,7 @@ const Jam = () => {
             </Stack>
             <Text fontSize="md">{jam.description}</Text>
             <Text fontSize="sm" color="gray.600">
-              {new Date(jam.createdAt?._seconds * 1000).toUTCString()}
+              {convertDate(jam.createdAt?._seconds)}
             </Text>
             <Button w="150px" colorScheme="blue">
               Download CSV
