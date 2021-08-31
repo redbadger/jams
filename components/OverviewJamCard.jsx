@@ -23,6 +23,7 @@ const overviewCard = ({
       overflow={'hidden'}
       border="1px"
       borderColor="#8D8D8D"
+      minH="160px"
     >
       <Stack>
         <Link href={`moderator/${jamUrl}`}>

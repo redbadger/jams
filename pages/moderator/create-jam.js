@@ -118,12 +118,14 @@ function Moderator() {
     <>
       <AdminLayout>
         <GridItem colSpan="4" colStart="2">
-          <VStack align="start" spacing={5}>
+          <VStack align="start" spacing={4}>
             <Heading as="h2" size="lg" mb="8">
               Create a new Jam
             </Heading>
 
-            <Heading size="md">Title</Heading>
+            <Heading size="md" pt="4">
+              Title
+            </Heading>
             <Text color="gray.600">
               The title cannot be edited after the Jam is published
             </Text>
@@ -134,7 +136,9 @@ function Moderator() {
               borderRadius="none"
             />
 
-            <Heading size="md">Description</Heading>
+            <Heading size="md" pt="4">
+              Description
+            </Heading>
             <Text color="gray.600">
               The description cannot be edited after the Jam is
               published
@@ -146,9 +150,17 @@ function Moderator() {
               borderRadius="none"
             />
 
-            <Heading size="md">Statements</Heading>
-            <VStack spacing={1} align="start" w="100%">
-              <UnorderedList size="sm" color="gray.500">
+            <Heading size="md" pt="4">
+              Statements
+            </Heading>
+            <VStack spacing={0} align="start" w="100%">
+              <UnorderedList
+                size="sm"
+                color="gray.500"
+                styleType="none"
+                p="0"
+                m="0"
+              >
                 <ListItem>
                   Statements should be easy for everyone to understand
                 </ListItem>
@@ -171,9 +183,17 @@ function Moderator() {
                 </ProposedStatementCard>
               ))}
             </VStack>
-            <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+            <Box
+              w="100%"
+              border="1px"
+              borderColor="gray.200"
+              bg="white"
+              p={3}
+              borderRadius="md"
+              mb={3}
+            >
               <Textarea
-                placeholder="statements"
+                placeholder="Add a new statement"
                 size="md"
                 value={currentStatement}
                 onChange={handleStatementChange}
@@ -182,7 +202,12 @@ function Moderator() {
               />
 
               <Stack justify="flex-end" direction="row" spacing={2}>
-                <Button onClick={() => handleSave()}>Save</Button>
+                <Button
+                  onClick={() => handleSave()}
+                  colorScheme="blue"
+                >
+                  Save
+                </Button>
               </Stack>
             </Box>
           </VStack>
@@ -191,12 +216,14 @@ function Moderator() {
             justify="flex-end"
             direction="row"
             spacing={2}
-            mt={2}
+            mt={6}
           >
             <Button onClick={cancelModalOnOpen} variant="outline">
               Cancel
             </Button>
-            <Button onClick={() => createJam()}>Publish</Button>
+            <Button onClick={() => createJam()} colorScheme="blue">
+              Publish
+            </Button>
           </Stack>
         </GridItem>
       </AdminLayout>
