@@ -19,7 +19,7 @@ function getJamByUrlPath(jamUrlPath) {
     });
 }
 
-function createJam({ name, description, statements }) {
+function createJam({ name, description, statements, adminId }) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
   const batch = db.batch();
@@ -29,12 +29,12 @@ function createJam({ name, description, statements }) {
   const jamId = jamsRef.doc();
 
   batch.set(jamId, {
-    // adminId: '',
-    name: name,
+    adminId,
+    name,
+    description,
+    urlPath: randomString,
     createdAt: fire.firestore.Timestamp.now(),
     isOpen: true,
-    description: description,
-    urlPath: randomString,
   });
 
   statements.forEach((statement) => {
@@ -82,14 +82,11 @@ export default async function handler(req, res) {
         name: name,
         description: description,
         statements: statements,
+        adminId: token.sub,
       })
         .then((jam) => {
-          res.status(200).json({
-            ok: 'true',
-            userId: token.sub,
-          });
           res.setHeader('Content-Type', 'application/json');
-          res.json(jam.data());
+          res.status(200).json(jam.data());
         })
         .catch((error) => {
           console.error('Error writing document: ', error);
