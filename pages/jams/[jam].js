@@ -17,6 +17,7 @@ import {
   HStack,
   Center,
   Spinner,
+  Progress,
 } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
@@ -121,7 +122,9 @@ const Jam = () => {
       .then((response) => response.json())
       .then((question) => {
         const keys = Object.keys(question);
+        // TODO maybe indicate this differently
         if (!keys.length) {
+          setQuestion();
           setIsDone(true);
           return;
         }
@@ -165,7 +168,7 @@ const Jam = () => {
   if (error) return <FourOhFour />;
   if (jam && !jam.isOpen) return <JamClosed />;
 
-  return jam ? (
+  return jam && (question || isDone) ? (
     <Box>
       <Head>
         <title>Jams - participate in a jam</title>
@@ -175,6 +178,15 @@ const Jam = () => {
         description={jam && jam.description}
         participantId={participantId}
       />
+      {question && (
+        <Progress
+          h="0.5"
+          value={
+            (question.meta.numVotes / question.meta.numQuestions) *
+            100
+          }
+        />
+      )}
       <Layout py={14}>
         <GridItem colSpan={6}>
           {question && (
@@ -184,29 +196,23 @@ const Jam = () => {
             </Text>
           )}
           <Heading as="h1" size="xl" fontWeight={500} mb={8}>
-            {!isDone
-              ? question
-                ? question.text
-                : 'Loading...'
-              : 'All done'}
+            {!isDone ? question.text : 'All done'}
           </Heading>
         </GridItem>
-        {question
-          ? question.isUserSubmitted && (
-              <GridItem colSpan={4}>
-                <HStack>
-                  <InfoOutlineIcon />
-                  <Text fontSize="xs">
-                    <strong>Participant</strong> submitted{' '}
-                    {moment(
-                      question.createdAt?._seconds * 1000,
-                    ).format('DD MMM hh:mm A')}
-                  </Text>
-                </HStack>
-                <br />
-              </GridItem>
-            )
-          : ''}
+        {question && question.isUserSubmitted && (
+          <GridItem colSpan={4}>
+            <HStack>
+              <InfoOutlineIcon />
+              <Text fontSize="xs">
+                <strong>Participant</strong> submitted{' '}
+                {moment(question.createdAt?._seconds * 1000).format(
+                  'DD MMM hh:mm A',
+                )}
+              </Text>
+            </HStack>
+            <br />
+          </GridItem>
+        )}
         <br />
         {!isDone && (
           <GridItem colSpan={6}>
@@ -253,7 +259,7 @@ const Jam = () => {
         color="blue.500"
         size="xl"
       />
-      <Text m="20" fontSize="20px">
+      <Text m="16" fontSize="2xl" color="gray.400">
         Loading...
       </Text>
     </Center>
