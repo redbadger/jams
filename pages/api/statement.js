@@ -1,9 +1,17 @@
 import fire from '../../config/firebaseAdminConfig';
 
 const handlePost = (req, res) => {
-  const { jamId, statement } = req.body;
+  let { jamId, statement, state, isUserSubmitted } = req.body;
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
+
+  if (state == null) {
+    state = 0;
+  }
+
+  if (isUserSubmitted == null) {
+    isUserSubmitted = true;
+  }
 
   return new Promise(() => {
     jamsRef
@@ -12,8 +20,8 @@ const handlePost = (req, res) => {
       .add({
         text: statement,
         createdAt: fire.firestore.Timestamp.now(),
-        isUserSubmitted: true,
-        state: 0,
+        isUserSubmitted: isUserSubmitted,
+        state: state,
         numAgrees: 0,
         numDisagrees: 0,
         numSkipped: 0,

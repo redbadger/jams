@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import merge from 'lodash.merge';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
+import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 
 const LiveStatementCard = ({ statement, buttonText, onClick }) => {
   return (
@@ -74,7 +75,7 @@ const Jam = () => {
   const [approvedStatements, setApprovedStatements] = useState([]);
   const [rejectedStatements, setRejectedStatements] = useState([]);
   const [newStatements, setNewStatements] = useState([]);
-  const [patchSuccess, setPatchTrigger] = useState();
+  const [updateSuccess, setUpdateTrigger] = useState();
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -101,7 +102,7 @@ const Jam = () => {
     setNewStatements(
       jam.statements.filter((statement) => statement.state === 0),
     );
-  }, [jam, patchSuccess]);
+  }, [jam, updateSuccess]);
 
   const loadJam = () => {
     fetch(
@@ -114,6 +115,32 @@ const Jam = () => {
         setJam(jam);
         setPublished(jam.isOpen);
       });
+  };
+
+  const postStatementRequest = (body) => {
+    const { statement, jamId } = body;
+    const extraFields = { isUserSubmitted: false, state: 1 };
+
+    fetch('/api/statement', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        merge({ statement: statement, jamId: jamId }, extraFields),
+      ),
+    })
+      .then(() => {
+        setJam((jam) => {
+          jam.statements.push(
+            merge({ text: statement, jamId: jamId }, extraFields),
+          );
+
+          return jam;
+        });
+        setUpdateTrigger((updateTrigger) => !updateTrigger);
+      })
+      .catch(() => console.error('Bad request'));
   };
 
   const patchStatementRequest = (body) => {
@@ -138,7 +165,7 @@ const Jam = () => {
 
           return jam;
         });
-        setPatchTrigger((patchTrigger) => !patchTrigger);
+        setUpdateTrigger((updateTrigger) => !updateTrigger);
       })
       .catch(() => console.error('Bad request'));
   };
@@ -157,7 +184,7 @@ const Jam = () => {
           jam = merge(jam, updateFields);
           return jam;
         });
-        setPatchTrigger((patchTrigger) => !patchTrigger);
+        setUpdateTrigger((updateTrigger) => !updateTrigger);
       })
       .catch(() => console.error('Bad request'));
   };
@@ -227,6 +254,10 @@ const Jam = () => {
                       }
                     />
                   ))}
+                  <ModeratorAddNewStatement
+                    jamId={jam.key}
+                    postRequest={postStatementRequest}
+                  />
                 </TabPanel>
                 <TabPanel>
                   {rejectedStatements.map((statement, index) => (
