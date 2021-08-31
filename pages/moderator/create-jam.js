@@ -119,28 +119,28 @@ function Moderator() {
       <AdminLayout>
         <GridItem colSpan="4" colStart="2">
           <VStack align="start" spacing={5}>
-            <Heading as="h2" size="lg">
+            <Heading as="h2" size="lg" mb="8">
               Create a new Jam
             </Heading>
 
             <Heading size="md">Title</Heading>
-            <Text fontSize="sm" color="gray.500">
+            <Text color="gray.600">
               The title cannot be edited after the Jam is published
             </Text>
             <Input
-              placeholder="title"
+              placeholder="Jam title"
               size="md"
               onChange={handleTitleChange}
               borderRadius="none"
             />
 
             <Heading size="md">Description</Heading>
-            <Text fontSize="xs" color="gray.500">
+            <Text color="gray.600">
               The description cannot be edited after the Jam is
               published
             </Text>
             <Textarea
-              placeholder="description"
+              placeholder="Jam description (optional)"
               size="md"
               onChange={handleDescriptionChange}
               borderRadius="none"
