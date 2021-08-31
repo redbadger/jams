@@ -18,13 +18,18 @@ import {
   Center,
   Spinner,
   Progress,
+  Link,
 } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
   return (
     <Box as="header" py={4} pb={0} bg={'white'}>
       <HStack px={4}>
-        <Box w={'50%'}>Jammy jams</Box>
+        <Box w={'50%'}>
+          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+            Jams
+          </Heading>
+        </Box>
         <Box
           w={'50%'}
           align={'right'}

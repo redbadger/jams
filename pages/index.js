@@ -15,7 +15,11 @@ function HomeHeader({ session }) {
   return (
     <Box as="header" p={4} bg={'white'}>
       <HStack>
-        <Box w={'50%'}>Jammy jams</Box>
+        <Box w={'50%'}>
+          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+            Jams
+          </Heading>
+        </Box>
         <Box w={'50%'} align={'right'}>
           {!session ? (
             <>
