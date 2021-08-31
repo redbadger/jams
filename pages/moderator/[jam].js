@@ -40,12 +40,12 @@ const LiveStatementCard = ({ statement, buttonText, onClick }) => {
       <Flex>
         <Box>
           {statement.isUserSubmitted ? (
-            <Text color="gray.600">
+            <Text fontSize="sm" color="gray.600">
               <ChatIcon /> Participant submitted{' '}
               {convertDate(statement.createdAt?._seconds)}
             </Text>
           ) : (
-            <Text color="gray.600">
+            <Text fontSize="sm" color="gray.600">
               <LockIcon /> Moderator submitted{' '}
               {convertDate(statement.createdAt?._seconds)}
             </Text>
