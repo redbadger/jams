@@ -7,8 +7,6 @@ import {
   HStack,
   Spinner,
   Text,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';

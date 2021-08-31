@@ -270,9 +270,13 @@ const Jam = () => {
               }}
             ></Switch>
             {published ? (
-              <Badge colorScheme="green">Open</Badge>
+              <Badge p="1" colorScheme="green">
+                Open
+              </Badge>
             ) : (
-              <Badge colorScheme="gray">Closed</Badge>
+              <Badge pt="1" colorScheme="gray">
+                Closed
+              </Badge>
             )}
           </Stack>
           <Text fontSize="md">{jam.description}</Text>
