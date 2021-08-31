@@ -63,7 +63,7 @@ function Moderator() {
                 );
               })
             ) : (
-              <GridItem colSpan="4">
+              <GridItem colSpan="6">
                 <Center mt="30vh">
                   <Spinner
                     thickness="4px"

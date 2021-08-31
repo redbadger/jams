@@ -67,9 +67,13 @@ export default function Home() {
             <Heading as="h1" size="4xl">
               Welcome to Jams!
             </Heading>
-            <Link href="/moderator">
-              Click here for the Admin Dashboard
-            </Link>
+            {session && (
+              <Box mt="4">
+                <Link href="/moderator">
+                  Click here for the Admin Dashboard
+                </Link>
+              </Box>
+            )}
           </Box>
         </GridItem>
       </Layout>

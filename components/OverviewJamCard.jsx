@@ -28,7 +28,7 @@ const overviewCard = ({
     >
       <Flex direction="column" align="flex-start" minH="120px">
         <Link href={`moderator/${jamUrl}`}>
-          <Heading fontSize="lg" mb={2}>
+          <Heading as="h4" fontSize="lg" mb={2}>
             {jamName}
           </Heading>
         </Link>

@@ -41,7 +41,7 @@ function JamHeader({ title, description, participantId }) {
       </HStack>
       <Layout>
         <GridItem colSpan={6} py={8}>
-          <Heading as="h2" size="lg" fontWeight={400}>
+          <Heading as="h2" size="lg">
             {title || 'Loading...'}
           </Heading>
           <Text color={'gray.600'} mt={4}>
@@ -200,7 +200,7 @@ const Jam = () => {
               {question.meta.numQuestions}
             </Text>
           )}
-          <Heading as="h1" size="xl" fontWeight={500} mb={8}>
+          <Heading as="h1" size="xl" mb={8}>
             {!isDone ? question.text : 'All done'}
           </Heading>
         </GridItem>
