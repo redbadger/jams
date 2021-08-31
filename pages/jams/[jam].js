@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie';
 import moment from 'moment';
 import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
-import AddNewStatement from '../../components/AddNewStatement';
+import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatement';
 import Layout from '../../components/Layout';
 import DefaultErrorPage from 'next/error';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
@@ -228,7 +228,7 @@ const Jam = () => {
           <Text as="h5" fontWeight={600} mt={8} pb={4}>
             Add a new statement to this survey:
           </Text>
-          <AddNewStatement jamId={jam ? jam.key : null} />
+          <ParticipantAddNewStatement jamId={jam ? jam.key : null} />
         </GridItem>
       </Layout>
     </Box>
