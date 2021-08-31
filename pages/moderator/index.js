@@ -53,17 +53,13 @@ function Moderator() {
             {jams ? (
               jams.map((jam, i) => {
                 return (
-                  <GridItem
-                    key={i}
-                    colSpan={{ sm: 1, md: 2 }}
-                  >
+                  <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
                     <OverviewJamCard
                       jamUrl={jam.urlPath}
                       isOpen={jam.isOpen}
                       jamName={jam.name}
                       openFor={timeSince(jam.createdAt._seconds)}
                       createdAt={convertDate(jam.createdAt._seconds)}
-                      minH="160px"
                     />
                   </GridItem>
                 );

@@ -16,7 +16,15 @@ const EditableStatement = ({
   };
 
   return (
-    <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+    <Box
+      w="100%"
+      border="1px"
+      borderColor="gray.200"
+      bg="white"
+      p={4}
+      borderRadius="md"
+      mb={4}
+    >
       <Textarea
         size="md"
         defaultValue={children}
@@ -34,6 +42,7 @@ const EditableStatement = ({
             invertComponent();
           }}
           variant="outline"
+          colorScheme="blue"
         >
           Save
         </Button>
@@ -49,7 +58,13 @@ const VisibleOnlyStatement = ({
   invertComponent,
 }) => {
   return (
-    <Box w="100%" border="1px" p={3} borderRadius="md" mb={3}>
+    <Box
+      w="100%"
+      border="1px"
+      borderColor="gray.200"
+      p={4}
+      borderRadius="md"
+    >
       <Text>{children}</Text>
 
       <Stack justify="flex-end" direction="row" spacing={2}>

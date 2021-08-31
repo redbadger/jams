@@ -119,7 +119,7 @@ function Moderator() {
       <AdminLayout>
         <GridItem colSpan="4" colStart="2">
           <VStack align="start" spacing={4}>
-            <Heading as="h2" size="lg" mb="8">
+            <Heading as="h2" size="lg" mb="4">
               Create a new Jam
             </Heading>
 
@@ -153,7 +153,7 @@ function Moderator() {
             <Heading size="md" pt="4">
               Statements
             </Heading>
-            <VStack spacing={0} align="start" w="100%">
+            <VStack spacing={4} align="start" w="100%">
               <UnorderedList
                 size="sm"
                 color="gray.500"
@@ -188,9 +188,9 @@ function Moderator() {
               border="1px"
               borderColor="gray.200"
               bg="white"
-              p={3}
+              p={4}
               borderRadius="md"
-              mb={3}
+              mb={4}
             >
               <Textarea
                 placeholder="Add a new statement"
