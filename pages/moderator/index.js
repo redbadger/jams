@@ -9,11 +9,11 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import moment from 'moment';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
 import AdminHeader from 'components/AdminHeader';
 import Layout from 'components/Layout';
+import { convertDate, timeSince } from '../../utils/date';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -29,22 +29,6 @@ function Moderator() {
       .then((jam) => {
         setJams(jam);
       });
-  };
-
-  const convertDate = (date) => {
-    return moment(date * 1000).format('DD MMM hh:mm A');
-  };
-
-  const timeSince = (date) => {
-    const openedAt = moment(new Date(date * 1000));
-    const now = moment();
-
-    const hours = now.diff(openedAt, 'hours');
-    const minutes = now.diff(openedAt, 'minutes') - hours * 60;
-
-    return hours > 48
-      ? Math.floor(hours / 24) + ' days'
-      : hours + ':' + minutes;
   };
 
   return (
