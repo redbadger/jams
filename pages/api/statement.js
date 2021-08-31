@@ -26,8 +26,8 @@ const handlePost = (req, res) => {
         numDisagrees: 0,
         numSkipped: 0,
       })
-      .then(() => {
-        res.status(201).end();
+      .then((doc) => {
+        res.status(201).json({ key: doc.id });
       })
       .catch((error) => {
         console.error('Error writing document: ', error);

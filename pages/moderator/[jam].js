@@ -130,10 +130,19 @@ const Jam = () => {
         merge({ statement: statement, jamId: jamId }, extraFields),
       ),
     })
-      .then(() => {
+      .then((response) => response.json())
+      .then((json) => {
         setJam((jam) => {
           jam.statements.push(
-            merge({ text: statement, jamId: jamId }, extraFields),
+            merge(
+              {
+                text: statement,
+                jamId: jamId,
+                createdAt: { _seconds: new Date().getTime() / 1000 },
+                key: json.key,
+              },
+              extraFields,
+            ),
           );
 
           return jam;
