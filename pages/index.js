@@ -19,9 +19,7 @@ function HomeHeader({ session }) {
         <Box w={'50%'} align={'right'}>
           {!session ? (
             <>
-              <Button variant="outline" onClick={() => signIn()}>
-                Sign in
-              </Button>
+              <Button onClick={() => signIn()}>Sign in</Button>
             </>
           ) : (
             <>
@@ -33,9 +31,7 @@ function HomeHeader({ session }) {
               >
                 {session.user.email}
               </Text>
-              <Button variant="outline" onClick={() => signOut()}>
-                Sign out
-              </Button>
+              <Button onClick={() => signOut()}>Sign out</Button>
             </>
           )}
         </Box>
@@ -63,7 +59,7 @@ export default function Home() {
             <Heading as="h1" size="4xl">
               Welcome to Jams!
             </Heading>
-            <Link href="/moderator">
+            <Link href="/dashboard">
               Click here for the Admin Dashboard
             </Link>
           </Box>
