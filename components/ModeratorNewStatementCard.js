@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  HStack,
   Spacer,
   Stack,
   Text,
@@ -92,7 +93,7 @@ const ModeratorDecisionStatementCard = ({
 
         <Spacer />
 
-        <Stack direction="row" spacing={2}>
+        <HStack spacing={2}>
           <Button onClick={() => invertComponent()} variant="outline">
             Edit
           </Button>
@@ -120,7 +121,7 @@ const ModeratorDecisionStatementCard = ({
           >
             Approve
           </Button>
-        </Stack>
+        </HStack>
       </Flex>
     </Box>
   );

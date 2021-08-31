@@ -40,14 +40,14 @@ const LiveStatementCard = ({ statement, buttonText, onClick }) => {
         <Box>
           {statement.isUserSubmitted ? (
             <Text color="gray.600">
-              <ChatIcon></ChatIcon> Participant submitted{' '}
+              <ChatIcon /> Participant submitted{' '}
               {new Date(
                 statement.createdAt?._seconds * 1000,
               ).toUTCString()}
             </Text>
           ) : (
             <Text color="gray.600">
-              <LockIcon></LockIcon> Moderator submitted{' '}
+              <LockIcon /> Moderator submitted{' '}
               {new Date(
                 statement.createdAt?._seconds * 1000,
               ).toUTCString()}
