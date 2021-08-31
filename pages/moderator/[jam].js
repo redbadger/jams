@@ -15,7 +15,12 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import { ArrowBackIcon, ChatIcon, LockIcon } from '@chakra-ui/icons';
+import {
+  CheckIcon,
+  ChatIcon,
+  LockIcon,
+  CloseIcon,
+} from '@chakra-ui/icons';
 import AdminLayout from 'components/AdminLayout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -25,7 +30,42 @@ import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCar
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 import { convertDate } from '../../utils/date';
 
-const LiveStatementCard = ({ statement, buttonText, onClick }) => {
+const ApprovedStatementCard = ({ statement, onClick }) => {
+  return (
+    <LiveStatementCard
+      statement={statement}
+      buttonText="Reject"
+      stateChangeText={
+        <>
+          <CheckIcon /> Approved
+        </>
+      }
+      onClick={onClick}
+    />
+  );
+};
+
+const RejectedStatementCard = ({ statement, onClick }) => {
+  return (
+    <LiveStatementCard
+      statement={statement}
+      buttonText="Approve"
+      stateChangeText={
+        <>
+          <CloseIcon /> Rejected
+        </>
+      }
+      onClick={onClick}
+    />
+  );
+};
+
+const LiveStatementCard = ({
+  statement,
+  buttonText,
+  stateChangeText,
+  onClick,
+}) => {
   return (
     <Box
       border="1px"
@@ -43,11 +83,17 @@ const LiveStatementCard = ({ statement, buttonText, onClick }) => {
             <Text fontSize="sm" color="gray.600">
               <ChatIcon /> Participant submitted{' '}
               {convertDate(statement.createdAt?._seconds)}
+              <br />
+              {stateChangeText}{' '}
+              {convertDate(statement.stateChangeTime?._seconds)}
             </Text>
           ) : (
             <Text fontSize="sm" color="gray.600">
               <LockIcon /> Moderator submitted{' '}
               {convertDate(statement.createdAt?._seconds)}
+              <br />
+              {stateChangeText}{' '}
+              {convertDate(statement.stateChangeTime?._seconds)}
             </Text>
           )}
         </Box>
@@ -159,6 +205,12 @@ const Jam = () => {
     })
       .then(() => {
         setJam((jam) => {
+          if ('state' in updateFields) {
+            updateFields['stateChangeTime'] = {
+              _seconds: new Date().getTime() / 1000,
+            };
+          }
+
           var statementIndex = jam.statements.findIndex(
             (s) => s.key == statementId,
           );
@@ -239,10 +291,9 @@ const Jam = () => {
             <TabPanels>
               <TabPanel>
                 {approvedStatements.map((statement, index) => (
-                  <LiveStatementCard
+                  <ApprovedStatementCard
                     key={index}
                     statement={statement}
-                    buttonText="Reject"
                     onClick={() =>
                       patchStatementRequest({
                         jamId: jam.key,
@@ -259,10 +310,9 @@ const Jam = () => {
               </TabPanel>
               <TabPanel>
                 {rejectedStatements.map((statement, index) => (
-                  <LiveStatementCard
+                  <RejectedStatementCard
                     key={index}
                     statement={statement}
-                    buttonText="Approve"
                     onClick={() =>
                       patchStatementRequest({
                         jamId: jam.key,
