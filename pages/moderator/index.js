@@ -1,9 +1,10 @@
 import {
+  Button,
+  Center,
   Container,
+  GridItem,
   Heading,
   HStack,
-  Button,
-  GridItem,
   Spinner,
   Text,
   Wrap,
@@ -62,16 +63,20 @@ function Moderator() {
                 );
               })
             ) : (
-              <Container p="10px">
-                <Spinner
-                  thickness="4px"
-                  speed="0.65s"
-                  emptyColor="gray.200"
-                  color="blue.500"
-                  size="xl"
-                />
-                <Text fontSize="18px">Loading jams...</Text>
-              </Container>
+              <GridItem colSpan="4">
+                <Center mt="30vh">
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
+                  />
+                  <Text ml="10" fontSize="18px">
+                    Loading jams...
+                  </Text>
+                </Center>
+              </GridItem>
             )}
           </Layout>
         </HStack>
