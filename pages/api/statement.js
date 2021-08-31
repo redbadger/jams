@@ -1,12 +1,16 @@
 import fire from '../../config/firebaseAdminConfig';
+import merge from 'lodash.merge';
 
 const handlePost = (req, res) => {
   let { jamId, statement, state, isUserSubmitted } = req.body;
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
+  let stateChangeTime = null;
   if (state == null) {
     state = 0;
+  } else {
+    stateChangeTime = fire.firestore.Timestamp.now();
   }
 
   if (isUserSubmitted == null) {
@@ -25,6 +29,7 @@ const handlePost = (req, res) => {
         numAgrees: 0,
         numDisagrees: 0,
         numSkipped: 0,
+        stateChangeTime: stateChangeTime,
       })
       .then((doc) => {
         res.status(201).json({ key: doc.id });
@@ -36,9 +41,15 @@ const handlePost = (req, res) => {
 };
 
 const handlePatch = (req, res) => {
-  const { jamId, statementId, ...body } = req.body;
+  var { jamId, statementId, ...body } = req.body;
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
+
+  if ('state' in req.body) {
+    body = merge(body, {
+      stateChangeTime: fire.firestore.Timestamp.now(),
+    });
+  }
 
   return new Promise(() => {
     jamsRef
