@@ -16,8 +16,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ArrowBackIcon, ChatIcon, LockIcon } from '@chakra-ui/icons';
-import Layout from 'components/Layout';
-import AdminHeader from 'components/AdminHeader';
+import AdminLayout from 'components/AdminLayout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -196,107 +195,99 @@ const Jam = () => {
   };
 
   return (
-    <Box>
-      <AdminHeader />
-      <Link href="/moderator" passHref>
-        <Text color="gray.700">
-          <ArrowBackIcon /> Back to overview
-        </Text>
-      </Link>
-      <Layout py={14}>
-        <GridItem colSpan={6}>
-          <Stack direction="column" spacing={5}>
-            <Heading as="h1" size="lg">
-              {jam.name}
-            </Heading>
-            <Link href={`${location}/jams/${jam.urlPath}`} passHref>
-              {`${location}/jams/${jam.urlPath}`}
-            </Link>
-            <Stack direction="row" spacing={5}>
-              <Switch
-                size="md"
-                colorScheme="green"
-                isChecked={published}
-                onChange={(e) => {
-                  patchJamRequest({
-                    isOpen: e.target.checked,
-                    jamId: jam.key,
-                  });
-                  setPublished(e.target.checked);
-                }}
-              ></Switch>
-              {published ? (
-                <Badge colorScheme="green">Open</Badge>
-              ) : (
-                <Badge colorScheme="gray">Closed</Badge>
-              )}
-            </Stack>
-            <Text fontSize="md">{jam.description}</Text>
-            <Text fontSize="sm" color="gray.600">
-              {convertDate(jam.createdAt?._seconds)}
-            </Text>
-            <Button w="150px" colorScheme="blue">
-              Download CSV
-            </Button>
-            <Tabs>
-              <TabList>
-                <Tab>Approved {approvedStatements.length}</Tab>
-                <Tab>Rejected {rejectedStatements.length}</Tab>
-                <Tab>New {newStatements.length}</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  {approvedStatements.map((statement, index) => (
-                    <LiveStatementCard
-                      key={index}
-                      statement={statement}
-                      buttonText="Reject"
-                      onClick={() =>
-                        patchStatementRequest({
-                          jamId: jam.key,
-                          statementId: statement.key,
-                          state: -1,
-                        })
-                      }
-                    />
-                  ))}
-                  <ModeratorAddNewStatement
-                    jamId={jam.key}
-                    postRequest={postStatementRequest}
-                  />
-                </TabPanel>
-                <TabPanel>
-                  {rejectedStatements.map((statement, index) => (
-                    <LiveStatementCard
-                      key={index}
-                      statement={statement}
-                      buttonText="Approve"
-                      onClick={() =>
-                        patchStatementRequest({
-                          jamId: jam.key,
-                          statementId: statement.key,
-                          state: 1,
-                        })
-                      }
-                    />
-                  ))}
-                </TabPanel>
-                <TabPanel>
-                  {newStatements.map((statement, index) => (
-                    <ModeratorNewStatementCard
-                      key={index}
-                      statement={statement}
-                      patchRequest={patchStatementRequest}
-                      jamId={jam.key}
-                    />
-                  ))}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+    <AdminLayout>
+      <GridItem colSpan={6}>
+        <Stack direction="column" spacing={5}>
+          <Heading as="h1" size="lg">
+            {jam.name}
+          </Heading>
+          <Link href={`${location}/jams/${jam.urlPath}`} passHref>
+            {`${location}/jams/${jam.urlPath}`}
+          </Link>
+          <Stack direction="row" spacing={5}>
+            <Switch
+              size="md"
+              colorScheme="green"
+              isChecked={published}
+              onChange={(e) => {
+                patchJamRequest({
+                  isOpen: e.target.checked,
+                  jamId: jam.key,
+                });
+                setPublished(e.target.checked);
+              }}
+            ></Switch>
+            {published ? (
+              <Badge colorScheme="green">Open</Badge>
+            ) : (
+              <Badge colorScheme="gray">Closed</Badge>
+            )}
           </Stack>
-        </GridItem>
-      </Layout>
-    </Box>
+          <Text fontSize="md">{jam.description}</Text>
+          <Text fontSize="sm" color="gray.600">
+            {convertDate(jam.createdAt?._seconds)}
+          </Text>
+          <Stack direction="row">
+            <Button colorScheme="blue">Download CSV</Button>
+          </Stack>
+          <Tabs>
+            <TabList>
+              <Tab>Approved {approvedStatements.length}</Tab>
+              <Tab>Rejected {rejectedStatements.length}</Tab>
+              <Tab>New {newStatements.length}</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                {approvedStatements.map((statement, index) => (
+                  <LiveStatementCard
+                    key={index}
+                    statement={statement}
+                    buttonText="Reject"
+                    onClick={() =>
+                      patchStatementRequest({
+                        jamId: jam.key,
+                        statementId: statement.key,
+                        state: -1,
+                      })
+                    }
+                  />
+                ))}
+                <ModeratorAddNewStatement
+                  jamId={jam.key}
+                  postRequest={postStatementRequest}
+                />
+              </TabPanel>
+              <TabPanel>
+                {rejectedStatements.map((statement, index) => (
+                  <LiveStatementCard
+                    key={index}
+                    statement={statement}
+                    buttonText="Approve"
+                    onClick={() =>
+                      patchStatementRequest({
+                        jamId: jam.key,
+                        statementId: statement.key,
+                        state: 1,
+                      })
+                    }
+                  />
+                ))}
+              </TabPanel>
+              <TabPanel>
+                {newStatements.map((statement, index) => (
+                  <ModeratorNewStatementCard
+                    key={index}
+                    statement={statement}
+                    patchRequest={patchStatementRequest}
+                    jamId={jam.key}
+                  />
+                ))}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Stack>
+      </GridItem>
+    </AdminLayout>
   );
 };
 
