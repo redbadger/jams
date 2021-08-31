@@ -1,7 +1,12 @@
-import { Link, Container, Text } from '@chakra-ui/react';
+import {
+  Link as ChakraLink,
+  Container,
+  Text,
+} from '@chakra-ui/react';
 import Layout from './Layout';
 import AdminHeader from './AdminHeader';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import Link from 'next/link';
 
 export default function AdminLayout({ children }) {
   return (
@@ -9,9 +14,9 @@ export default function AdminLayout({ children }) {
       <AdminHeader />
       <Container maxW="100%" p="6">
         <Link href="/moderator" passHref>
-          <Text color="gray.700">
+          <ChakraLink color="gray.700">
             <ArrowBackIcon /> Back to overview
-          </Text>
+          </ChakraLink>
         </Link>
         <Layout py={6}>{children}</Layout>
       </Container>

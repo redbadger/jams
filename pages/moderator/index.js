@@ -15,7 +15,7 @@ import OverviewJamCard from '@/components/OverviewJamCard';
 import AdminHeader from '@/components/AdminHeader';
 import Layout from '@/components/Layout';
 import router from 'next/router';
-import { convertDate, timeSince } from '@/utils/date';
+import { convertDate, timeSince } from '../../utils/date';
 
 function Moderator() {
   const [jams, setJams] = useState();
