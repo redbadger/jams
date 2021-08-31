@@ -7,9 +7,17 @@ import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
 import AddNewStatement from '../../components/AddNewStatement';
 import Layout from '../../components/Layout';
-import DefaultErrorPage from 'next/error';
+import JamClosed from '../../components/JamClosed';
+import FourOhFour from 'pages/404';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-import { Heading, Text, GridItem, HStack } from '@chakra-ui/react';
+import {
+  Heading,
+  Text,
+  GridItem,
+  HStack,
+  Center,
+  Spinner,
+} from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
   return (
@@ -154,12 +162,10 @@ const Jam = () => {
       });
   };
 
-  if (error) return <DefaultErrorPage statusCode={error} />;
+  if (error) return <FourOhFour />;
+  if (jam && !jam.isOpen) return <JamClosed />;
 
-  // TODO: replace with proper error page when those are done
-  if (jam && !jam.isOpen) return <Text>Jam is no longer active</Text>;
-
-  return (
+  return jam ? (
     <Box>
       <Head>
         <title>Jams - participate in a jam</title>
@@ -232,6 +238,19 @@ const Jam = () => {
         </GridItem>
       </Layout>
     </Box>
+  ) : (
+    <Center mt="30vh">
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+      />
+      <Text m="20" fontSize="20px">
+        Loading...
+      </Text>
+    </Center>
   );
 };
 

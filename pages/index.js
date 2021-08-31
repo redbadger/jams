@@ -59,7 +59,7 @@ export default function Home() {
             <Heading as="h1" size="4xl">
               Welcome to Jams!
             </Heading>
-            <Link href="/dashboard">
+            <Link href="/moderator">
               Click here for the Admin Dashboard
             </Link>
           </Box>
