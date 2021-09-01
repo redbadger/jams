@@ -83,8 +83,8 @@ const ModeratorDecisionStatementCard = ({
       <Text pb={5}>{statement.text}</Text>
 
       <Flex>
-        <Box>
-          <Text fontSize="sm" color="gray.600">
+        <Box pt="4">
+          <Text fontSize="xs" color="gray.600">
             <ChatIcon></ChatIcon> Participant submitted{' '}
             {convertDate(statement.submittedAt?._seconds * 1000)}
           </Text>
