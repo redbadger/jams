@@ -1,5 +1,5 @@
 import fire from '../../config/firebaseAdminConfig';
-const ObjectsToCsv = require('objects-to-csv');
+import ObjectsToCsv from 'objects-to-csv';
 
 function buildVotesArray(querySnapshot) {
   let collection = [];
