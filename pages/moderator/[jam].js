@@ -1,5 +1,6 @@
 import {
   Badge,
+  HStack,
   Box,
   Button,
   Flex,
@@ -78,26 +79,44 @@ const LiveStatementCard = ({
       my={4}
       backgroundColor="white"
     >
-      <Text pb={5}>{statement.text}</Text>
+      <Text>{statement.text}</Text>
+
+      <HStack spacing="4" mb="8">
+        <Text as="span" fontSize="sm" color="gray.600">
+          Agree: {statement.numAgrees || 0}
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          Disagree: {statement.numDisagrees || 0}
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          Pass: {statement.numSkipped || 0}
+        </Text>
+      </HStack>
 
       <Flex>
         <Box>
           {statement.isUserSubmitted ? (
-            <Text fontSize="sm" color="gray.600">
-              <ChatIcon /> Participant submitted{' '}
-              {convertDate(statement.submittedAt?._seconds)}
-              <br />
-              {stateChangeText}{' '}
-              {convertDate(statement.stateChangeTime?._seconds)}
-            </Text>
+            <>
+              <Text fontSize="xs" color="gray.600">
+                <ChatIcon /> Participant submitted{' '}
+                {convertDate(statement.submittedAt?._seconds)}
+              </Text>
+              <Text fontSize="xs" color="gray.600">
+                {stateChangeText}{' '}
+                {convertDate(statement.stateChangeTime?._seconds)}
+              </Text>
+            </>
           ) : (
-            <Text fontSize="sm" color="gray.600">
-              <LockIcon /> Moderator submitted{' '}
-              {convertDate(statement.submittedAt?._seconds)}
-              <br />
-              {stateChangeText}{' '}
-              {convertDate(statement.stateChangeTime?._seconds)}
-            </Text>
+            <>
+              <Text fontSize="xs" color="gray.600">
+                <LockIcon /> Moderator submitted{' '}
+                {convertDate(statement.submittedAt?._seconds)}
+              </Text>
+              <Text fontSize="xs" color="gray.600">
+                {stateChangeText}{' '}
+                {convertDate(statement.stateChangeTime?._seconds)}
+              </Text>
+            </>
           )}
         </Box>
 
