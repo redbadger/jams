@@ -4,13 +4,6 @@ const ObjectsToCsv = require('objects-to-csv');
 const db = fire.firestore();
 const jamsRef = db.collection('jams');
 
-// Sample data - two columns, three rows:
-const data = [
-  { code: 'CA', name: 'California' },
-  { code: 'TX', name: 'Texas' },
-  { code: 'NY', name: 'New York' },
-];
-
 function getAllStatements(jamId) {
   return jamsRef
     .doc(jamId)
@@ -24,12 +17,10 @@ function getAllStatements(jamId) {
         statement.key = doc.id;
         allStatements.push(statement);
       });
-      // console.log(allStatements[0]);
       return allStatements;
     });
 }
 
-// If you use "await", code must be inside an asynchronous function:
 export default async function handler(req, res) {
   const {
     query: { jamId },
@@ -47,8 +38,11 @@ export default async function handler(req, res) {
   console.log(`csv length: ${csv.data.length}`);
   console.log(await csv.toString());
 
-  res.setHeader('Content-Type', 'application/json');
-  // res.setHeader('Content-Disposition', 'jamscsv.html');
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader(
+    'Content-Disposition',
+    'attachment; filename=JamsCSV.text',
+  );
   res.status(200);
-  res.json(csv);
+  res.send(await csv.toString());
 }

@@ -7,23 +7,7 @@ function CSVObject() {
 
   const handleCsv = () => {
     console.log(`Calling the api with this jamId: ${jamId}`);
-
-    return fetch(`/api/exporting/data-csv?jamId=${jamId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-          // return response.json();
-        } else {
-          throw new Error('404');
-        }
-      })
-      .then((responseData) => {
-        setExportData(responseData);
-        console.log(responseData);
-      })
-      .catch((error) =>
-        console.error('Error getting data from csv: ', error),
-      );
+    window.location = `/api/exporting/data-csv?jamId=${jamId}`;
   };
 
   return (
