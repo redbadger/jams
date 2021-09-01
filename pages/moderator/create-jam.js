@@ -1,7 +1,6 @@
 import {
   Heading,
   VStack,
-  Link,
   Input,
   GridItem,
   Text,
@@ -20,15 +19,13 @@ import ModalCreateJam from '../../components/ModalCreateJam';
 import ModalDiscardJam from '../../components/ModalDiscardJam';
 import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
-import AdminHeader from '@/components/AdminHeader';
 
 function Moderator() {
   const [title, setTitle] = useState();
   const [allStatements, setAllStatements] = useState([]);
   const [currentStatement, setCurrentStatement] = useState('');
-  const [description, setDescriptionValue] = useState();
+  const [description, setDescriptionValue] = useState('');
   const [statementSubmitted, setStatementSubmitted] = useState(false);
-  const [jamSubmitted, setJamSubmitted] = useState(false);
   const [jamUrlPath, setJamUrlPath] = useState();
   const {
     isOpen: successModalIsOpen,
@@ -56,10 +53,8 @@ function Moderator() {
     })
       .then((response) => response.json())
       .then((jamData) => {
-        console.log(jamData);
         setJamUrlPath(jamData.urlPath);
         successModalOnOpen();
-        console.log(`status code: ${statementSubmitted}`);
       })
       .catch((error) => {
         console.error('Error saving statement: ', error);

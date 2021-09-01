@@ -20,6 +20,7 @@ export default function handler(req, res) {
     const questionsPromise = jamsRef
       .doc(jamId)
       .collection('statements')
+      .where('state', '==', 1)
       .get()
       .then((query) => {
         const questions = {};
@@ -45,7 +46,7 @@ export default function handler(req, res) {
       ([questions, votes]) => {
         const unansweredQs = pickBy(
           questions,
-          (value, key) => !votes.includes(key),
+          (_value, key) => !votes.includes(key),
         );
 
         const keys = Object.keys(unansweredQs);

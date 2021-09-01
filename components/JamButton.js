@@ -1,5 +1,3 @@
-import { merge } from 'lodash';
-
 import { Button } from '@chakra-ui/react';
 
 export default function JamButton({
