@@ -120,6 +120,7 @@ const Jam = () => {
   const [newStatements, setNewStatements] = useState([]);
   const [updateSuccess, setUpdateTrigger] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
+  const [participantsCount, setParticipantsCount] = useState(0);
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -146,6 +147,12 @@ const Jam = () => {
     setNewStatements(
       jam.statements.filter((statement) => statement.state === 0),
     );
+  }, [jam, updateSuccess]);
+
+  useEffect(() => {
+    if (!jam.statements) {
+      return;
+    }
 
     setTotalVotes(
       jam.statements.reduce((acc, statement) => {
@@ -156,7 +163,15 @@ const Jam = () => {
         );
       }, 0),
     );
-  }, [jam, updateSuccess]);
+
+    fetch(
+      `/api/jam-participants?jamId=${encodeURIComponent(jam.key)}`,
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setParticipantsCount(json.count);
+      });
+  }, [jam]);
 
   const loadJam = () => {
     fetch(
@@ -300,6 +315,7 @@ const Jam = () => {
             <Text fontSize="sm" color="gray.600">
               Total votes: {totalVotes}
               <br />
+              Participants votes: {participantsCount}
             </Text>
           </Grid>
           <Stack direction="row">
