@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { Container, Heading, Button } from '@chakra-ui/react';
 
 function CSVObject() {
-  const [exportData, setExportData] = useState();
   const jamId = '8vXobX0QDTo7cliXVtx5';
 
   const handleCsv = () => {
