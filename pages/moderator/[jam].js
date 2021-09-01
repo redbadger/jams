@@ -152,8 +152,7 @@ const Jam = () => {
         return (
           acc +
           (statement.numAgrees || 0) +
-          (statement.numDisagrees || 0) +
-          (statement.numSkipped || 0)
+          (statement.numDisagrees || 0)
         );
       }, 0),
     );
