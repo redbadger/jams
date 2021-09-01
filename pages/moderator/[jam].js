@@ -82,7 +82,7 @@ const LiveStatementCard = ({
           {statement.isUserSubmitted ? (
             <Text fontSize="sm" color="gray.600">
               <ChatIcon /> Participant submitted{' '}
-              {convertDate(statement.createdAt?._seconds)}
+              {convertDate(statement.submittedAt?._seconds)}
               <br />
               {stateChangeText}{' '}
               {convertDate(statement.stateChangeTime?._seconds)}
@@ -90,7 +90,7 @@ const LiveStatementCard = ({
           ) : (
             <Text fontSize="sm" color="gray.600">
               <LockIcon /> Moderator submitted{' '}
-              {convertDate(statement.createdAt?._seconds)}
+              {convertDate(statement.submittedAt?._seconds)}
               <br />
               {stateChangeText}{' '}
               {convertDate(statement.stateChangeTime?._seconds)}
@@ -180,7 +180,6 @@ const Jam = () => {
               {
                 text: statement,
                 jamId: jamId,
-                createdAt: { _seconds: new Date().getTime() / 1000 },
                 key: json.key,
               },
               extraFields,
