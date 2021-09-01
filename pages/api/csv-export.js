@@ -21,7 +21,6 @@ export default async function handler(req, res) {
     return;
   }
 
-  // TODO red from query param
   const jamId = req.query.jamId;
 
   if (!jamId) {
@@ -54,23 +53,29 @@ export default async function handler(req, res) {
     });
 
   const votesRef = db.collectionGroup('votes');
+
+  // array with the votes and participantIds in
   const votes = await votesRef
     .where('jamId', '==', jamId)
     .get()
     .then(buildVotesArray);
 
   const participants = votes.reduce((acc, vote) => {
+    // statement deleted or no longer approved
     if (!(vote.statementId in statements)) return acc;
 
     if (!(vote.participantId in acc)) {
+      // add participant id as a column
       acc[vote.participantId] = { id: vote.participantId };
     }
 
+    // prefixing question text with Q_
     acc[vote.participantId][`Q_${statements[vote.statementId]}`] =
       vote.vote;
 
     return acc;
   }, {});
 
+  // only sending the array (values), not the object
   res.status(200).send(Object.values(participants));
 }
