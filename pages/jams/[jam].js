@@ -183,15 +183,15 @@ const Jam = () => {
         description={jam && jam.description}
         participantId={participantId}
       />
-      {question && (
-        <Progress
-          h="0.5"
-          value={
-            (question.meta.numVotes / question.meta.numQuestions) *
-            100
-          }
-        />
-      )}
+      <Progress
+        h="0.5"
+        value={
+          question
+            ? (question.meta.numVotes / question.meta.numQuestions) *
+              100
+            : 100
+        }
+      />
       <Layout py={14}>
         <GridItem colSpan={6}>
           {question && (
@@ -203,6 +203,12 @@ const Jam = () => {
           <Heading as="h1" size="xl" mb={4}>
             {!isDone ? question.text : 'All done'}
           </Heading>
+          {isDone && (
+            <Text color="gray.600">
+              Thanks for completing this Jam. Check back later for new
+              user submitted statements!
+            </Text>
+          )}
         </GridItem>
         <GridItem colSpan={4}>
           <HStack pb="8">
