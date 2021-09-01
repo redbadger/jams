@@ -1,5 +1,6 @@
 import {
   Badge,
+  HStack,
   Box,
   Button,
   Flex,
@@ -77,46 +78,44 @@ const LiveStatementCard = ({
       my={4}
       backgroundColor="white"
     >
-      <Text mb="4">{statement.text}</Text>
+      <Text>{statement.text}</Text>
 
-      <Box my="4">
+      <HStack spacing="4" mb="8">
         <Text as="span" fontSize="sm" color="gray.600">
-          {statement.numAgrees || 0} agreed
+          Agree: {statement.numAgrees || 0}
         </Text>
         <Text as="span" fontSize="sm" color="gray.600">
-          {' '}
-          -{' '}
+          Disagree: {statement.numDisagrees || 0}
         </Text>
         <Text as="span" fontSize="sm" color="gray.600">
-          {statement.numDisagrees || 0} disagreed
+          Pass: {statement.numSkipped || 0}
         </Text>
-        <Text as="span" fontSize="sm" color="gray.600">
-          {' '}
-          -{' '}
-        </Text>
-        <Text as="span" fontSize="sm" color="gray.600">
-          {statement.numSkipped || 0} skipped
-        </Text>
-      </Box>
+      </HStack>
 
       <Flex>
         <Box>
           {statement.isUserSubmitted ? (
-            <Text fontSize="sm" color="gray.600">
-              <ChatIcon /> Participant submitted{' '}
-              {convertDate(statement.submittedAt?._seconds)}
-              <br />
-              {stateChangeText}{' '}
-              {convertDate(statement.stateChangeTime?._seconds)}
-            </Text>
+            <>
+              <Text fontSize="sm" color="gray.600">
+                <ChatIcon /> Participant submitted{' '}
+                {convertDate(statement.submittedAt?._seconds)}
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                {stateChangeText}{' '}
+                {convertDate(statement.stateChangeTime?._seconds)}
+              </Text>
+            </>
           ) : (
-            <Text fontSize="sm" color="gray.600">
-              <LockIcon /> Moderator submitted{' '}
-              {convertDate(statement.submittedAt?._seconds)}
-              <br />
-              {stateChangeText}{' '}
-              {convertDate(statement.stateChangeTime?._seconds)}
-            </Text>
+            <>
+              <Text fontSize="sm" color="gray.600">
+                <LockIcon /> Moderator submitted{' '}
+                {convertDate(statement.submittedAt?._seconds)}
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                {stateChangeText}{' '}
+                {convertDate(statement.stateChangeTime?._seconds)}
+              </Text>
+            </>
           )}
         </Box>
 
