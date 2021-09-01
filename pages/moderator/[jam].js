@@ -246,6 +246,10 @@ const Jam = () => {
       .catch(() => console.error('Bad request'));
   };
 
+  const handleDownload = (jamId) => {
+    window.location = `/api/exporting/data-csv?jamId=${jamId}`;
+  };
+
   return (
     <AdminLayout>
       <GridItem colSpan={6}>
@@ -284,7 +288,12 @@ const Jam = () => {
             {convertDate(jam.createdAt?._seconds)}
           </Text>
           <Stack direction="row">
-            <Button colorScheme="blue">Download CSV</Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => handleDownload(jam.key)}
+            >
+              Download CSV
+            </Button>
           </Stack>
           <Tabs>
             <TabList>
