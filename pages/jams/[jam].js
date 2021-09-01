@@ -7,6 +7,7 @@ import { Box, Stack } from '@chakra-ui/layout';
 import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatement';
 import Layout from '../../components/Layout';
 import JamClosed from '../../components/JamClosed';
+import LoadingState from '@/components/LoadingState';
 import FourOhFour from 'pages/404';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { convertDate } from '../../utils/date';
@@ -15,10 +16,7 @@ import {
   Text,
   GridItem,
   HStack,
-  Center,
-  Spinner,
   Progress,
-  Link,
 } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
@@ -262,18 +260,9 @@ const Jam = () => {
       </Layout>
     </Box>
   ) : (
-    <Center mt="30vh">
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
-      <Text m="16" fontSize="2xl" color="gray.400">
-        Loading...
-      </Text>
-    </Center>
+    <GridItem colSpan="4">
+      <LoadingState>Loading jam...</LoadingState>
+    </GridItem>
   );
 };
 

@@ -13,8 +13,7 @@
  - text: String
  - numAgrees: number
  - numDisagrees: number
- - approvedAt: timestamp
- - rejectedAt: timestamp
+ - stateChangeTime: timestamp
  - submittedAt: timestamp
 
 ## Participant collection

@@ -69,7 +69,7 @@ function createJam({ name, description, statements, adminId }) {
       isUserSubmitted: false,
       numAgrees: 0,
       numDisagrees: 0,
-      approvedAt: fire.firestore.Timestamp.now(),
+      stateChangeTime: fire.firestore.Timestamp.now(),
       submittedAt: fire.firestore.Timestamp.now(),
     });
   });

@@ -5,6 +5,7 @@ import { CookiesProvider } from 'react-cookie';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'next-auth/client';
 import { useSession, signIn } from 'next-auth/client';
+import LoadingState from '@/components/LoadingState';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -36,7 +37,7 @@ function Auth({ children }) {
     return children;
   }
 
-  return <div>Loading...</div>;
+  return <LoadingState>Loading...</LoadingState>;
 }
 
 export default MyApp;

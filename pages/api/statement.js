@@ -23,7 +23,7 @@ const handlePost = (req, res) => {
       .collection('statements')
       .add({
         text: statement,
-        createdAt: fire.firestore.Timestamp.now(),
+        submittedAt: fire.firestore.Timestamp.now(),
         isUserSubmitted: isUserSubmitted,
         state: state,
         numAgrees: 0,
