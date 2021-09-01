@@ -320,7 +320,7 @@ const Jam = () => {
             <Text fontSize="sm" color="gray.600">
               Total votes: {totalVotes}
               <br />
-              Participants votes: {participantsCount}
+              Participants voted: {participantsCount}
             </Text>
           </Grid>
           <Stack direction="row">
