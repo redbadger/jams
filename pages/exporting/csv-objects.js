@@ -11,7 +11,6 @@ function CSVObject() {
     return fetch(`/api/exporting/data-csv?jamId=${jamId}`)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.headers);
           return response.text();
           // return response.json();
         } else {
