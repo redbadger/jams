@@ -86,7 +86,7 @@ const ModeratorDecisionStatementCard = ({
         <Box>
           <Text fontSize="sm" color="gray.600">
             <ChatIcon></ChatIcon> Participant submitted{' '}
-            {convertDate(statement.createdAt?._seconds * 1000)}
+            {convertDate(statement.submittedAt?._seconds * 1000)}
           </Text>
         </Box>
 
