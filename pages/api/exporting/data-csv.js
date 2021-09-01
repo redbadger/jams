@@ -1,5 +1,4 @@
 import fire from '../../../config/firebaseAdminConfig';
-import { convertDate, timeSince } from '../../../utils/date';
 
 const ObjectsToCsv = require('objects-to-csv');
 const db = fire.firestore();
