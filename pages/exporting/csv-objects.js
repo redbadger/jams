@@ -3,21 +3,24 @@ import { Container, Heading, Button } from '@chakra-ui/react';
 
 function CSVObject() {
   const [exportData, setExportData] = useState();
+  const jamId = '8vXobX0QDTo7cliXVtx5';
 
   const handleCsv = () => {
-    console.log('Calling the api function...');
+    console.log(`Calling the api with this jamId: ${jamId}`);
 
-    return fetch('/api/exporting/data-csv')
+    return fetch(`/api/exporting/data-csv?jamId=${jamId}`)
       .then((response) => {
         if (response.status === 200) {
-          return response.json();
+          console.log(response.headers);
+          return response.text();
+          // return response.json();
         } else {
           throw new Error('404');
         }
       })
-      .then((json) => {
-        setExportData(json);
-        console.log(json);
+      .then((responseData) => {
+        setExportData(responseData);
+        console.log(responseData);
       })
       .catch((error) =>
         console.error('Error getting data from csv: ', error),
