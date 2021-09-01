@@ -206,7 +206,7 @@ const Jam = () => {
           {isDone && (
             <Text color="gray.600">
               Thanks for completing this Jam. Check back later for new
-              user submitted statements!
+              statements!
             </Text>
           )}
         </GridItem>
