@@ -77,7 +77,27 @@ const LiveStatementCard = ({
       my={4}
       backgroundColor="white"
     >
-      <Text pb={5}>{statement.text}</Text>
+      <Text mb="4">{statement.text}</Text>
+
+      <Box my="4">
+        <Text as="span" fontSize="sm" color="gray.600">
+          {statement.numAgrees || 0} agreed
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          {' '}
+          -{' '}
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          {statement.numDisagrees || 0} disagreed
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          {' '}
+          -{' '}
+        </Text>
+        <Text as="span" fontSize="sm" color="gray.600">
+          {statement.numSkipped || 0} skipped
+        </Text>
+      </Box>
 
       <Flex>
         <Box>
