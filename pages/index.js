@@ -15,7 +15,11 @@ function HomeHeader({ session }) {
   return (
     <Box as="header" p={4} bg={'white'}>
       <HStack>
-        <Box w={'50%'}>Jammy jams</Box>
+        <Box w={'50%'}>
+          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+            Jams
+          </Heading>
+        </Box>
         <Box w={'50%'} align={'right'}>
           {!session ? (
             <>
@@ -63,9 +67,13 @@ export default function Home() {
             <Heading as="h1" size="4xl">
               Welcome to Jams!
             </Heading>
-            <Link href="/moderator">
-              Click here for the Admin Dashboard
-            </Link>
+            {session && (
+              <Box mt="4">
+                <Link href="/moderator">
+                  Click here for the Admin Dashboard
+                </Link>
+              </Box>
+            )}
           </Box>
         </GridItem>
       </Layout>

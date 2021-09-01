@@ -250,7 +250,7 @@ const Jam = () => {
     <AdminLayout>
       <GridItem colSpan={6}>
         <Stack direction="column" spacing={5}>
-          <Heading as="h1" size="lg">
+          <Heading as="h2" size="lg">
             {jam.name}
           </Heading>
           <Link href={`${location}/jams/${jam.urlPath}`} passHref>

@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import moment from 'moment';
 import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
 import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatement';
@@ -10,6 +9,7 @@ import Layout from '../../components/Layout';
 import JamClosed from '../../components/JamClosed';
 import FourOhFour from 'pages/404';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { convertDate } from '../../utils/date';
 import {
   Heading,
   Text,
@@ -17,13 +17,19 @@ import {
   HStack,
   Center,
   Spinner,
+  Progress,
+  Link,
 } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
   return (
     <Box as="header" py={4} pb={0} bg={'white'}>
       <HStack px={4}>
-        <Box w={'50%'}>Jammy jams</Box>
+        <Box w={'50%'}>
+          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+            Jams
+          </Heading>
+        </Box>
         <Box
           w={'50%'}
           align={'right'}
@@ -35,7 +41,7 @@ function JamHeader({ title, description, participantId }) {
       </HStack>
       <Layout>
         <GridItem colSpan={6} py={8}>
-          <Heading as="h2" size="lg" fontWeight={400}>
+          <Heading as="h2" size="lg">
             {title || 'Loading...'}
           </Heading>
           <Text color={'gray.600'} mt={4}>
@@ -121,7 +127,9 @@ const Jam = () => {
       .then((response) => response.json())
       .then((question) => {
         const keys = Object.keys(question);
+        // TODO maybe indicate this differently
         if (!keys.length) {
+          setQuestion();
           setIsDone(true);
           return;
         }
@@ -165,7 +173,7 @@ const Jam = () => {
   if (error) return <FourOhFour />;
   if (jam && !jam.isOpen) return <JamClosed />;
 
-  return jam ? (
+  return jam && (question || isDone) ? (
     <Box>
       <Head>
         <title>Jams - participate in a jam</title>
@@ -175,33 +183,48 @@ const Jam = () => {
         description={jam && jam.description}
         participantId={participantId}
       />
+      <Progress
+        h="0.5"
+        value={
+          question
+            ? (question.meta.numVotes / question.meta.numQuestions) *
+              100
+            : 100
+        }
+      />
       <Layout py={14}>
         <GridItem colSpan={6}>
-          <Heading as="h1" size="xl" fontWeight={500} mb={8}>
-            {!isDone
-              ? question
-                ? question.text
-                : 'Loading...'
-              : 'All done'}
+          {question && (
+            <Text color="gray.400">
+              {question.meta.numVotes + 1} /{' '}
+              {question.meta.numQuestions}
+            </Text>
+          )}
+          <Heading as="h1" size="xl" mb={4}>
+            {!isDone ? question.text : 'All done'}
           </Heading>
+          {isDone && (
+            <Text color="gray.600">
+              Thanks for completing this Jam. Check back later for new
+              statements!
+            </Text>
+          )}
         </GridItem>
-        {question
-          ? question.isUserSubmitted && (
-              <GridItem colSpan={4}>
-                <HStack>
-                  <InfoOutlineIcon />
-                  <Text fontSize="xs">
-                    <strong>Participant</strong> submitted{' '}
-                    {moment(
-                      question.createdAt?._seconds * 1000,
-                    ).format('DD MMM hh:mm A')}
-                  </Text>
-                </HStack>
-                <br />
-              </GridItem>
-            )
-          : ''}
-        <br />
+        <GridItem colSpan={4}>
+          <HStack pb="8">
+            {question && question.isUserSubmitted ? (
+              <>
+                <InfoOutlineIcon />
+                <Text fontSize="xs" color="gray.600">
+                  <strong>Participant</strong> submitted{' '}
+                  {convertDate(question.createdAt?._seconds)}
+                </Text>
+              </>
+            ) : (
+              <Box h="18px" />
+            )}
+          </HStack>
+        </GridItem>
         {!isDone && (
           <GridItem colSpan={6}>
             <Text pb={4} color={'gray.600'}>
@@ -247,7 +270,7 @@ const Jam = () => {
         color="blue.500"
         size="xl"
       />
-      <Text m="20" fontSize="20px">
+      <Text m="16" fontSize="2xl" color="gray.400">
         Loading...
       </Text>
     </Center>
