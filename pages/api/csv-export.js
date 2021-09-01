@@ -22,7 +22,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  const jamId = req.query.jamId;
+  const {
+    query: { jamId, jamName, jamStamp },
+  } = req;
 
   if (!jamId) {
     res
@@ -80,7 +82,7 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader(
     'Content-Disposition',
-    `attachment; filename=JamsCSV-${jamId}.csv`,
+    `attachment; filename=${jamName}_${jamStamp}.csv`,
   );
   res.status(200);
   res.send(await csv.toString(true, true));

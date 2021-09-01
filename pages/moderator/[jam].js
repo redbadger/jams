@@ -31,6 +31,7 @@ import LoadingState from '@/components/LoadingState';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 import { convertDate, timeSince } from '../../utils/date';
+import _ from 'lodash';
 
 const ApprovedStatementCard = ({ statement, onClick }) => {
   return (
@@ -279,8 +280,14 @@ const Jam = () => {
       .catch(() => console.error('Bad request'));
   };
 
-  const handleDownload = (jamId) => {
-    window.location = `/api/csv-export?jamId=${jamId}`;
+  const handleDownload = (jamId, name) => {
+    const dateTimeStampDownload =
+      _.snakeCase(new Date().toLocaleDateString()) +
+      '_' +
+      _.snakeCase(new Date().toLocaleTimeString());
+    const jamName = _.truncate(_.snakeCase(name), { length: 30 });
+
+    window.location = `/api/csv-export?jamId=${jamId}&jamName=${jamName}&jamStamp=${dateTimeStampDownload}`;
   };
 
   return (
@@ -332,7 +339,7 @@ const Jam = () => {
             <Stack direction="row">
               <Button
                 colorScheme="blue"
-                onClick={() => handleDownload(jam.key)}
+                onClick={() => handleDownload(jam.key, jam.name)}
               >
                 Download CSV
               </Button>
