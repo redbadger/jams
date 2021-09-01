@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
   GridItem,
   Heading,
   Spacer,
@@ -28,7 +29,7 @@ import Link from 'next/link';
 import merge from 'lodash.merge';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
-import { convertDate } from '../../utils/date';
+import { convertDate, timeSince } from '../../utils/date';
 
 const ApprovedStatementCard = ({ statement, onClick }) => {
   return (
@@ -118,6 +119,8 @@ const Jam = () => {
   const [rejectedStatements, setRejectedStatements] = useState([]);
   const [newStatements, setNewStatements] = useState([]);
   const [updateSuccess, setUpdateTrigger] = useState();
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [participantsCount, setParticipantsCount] = useState(0);
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -145,6 +148,30 @@ const Jam = () => {
       jam.statements.filter((statement) => statement.state === 0),
     );
   }, [jam, updateSuccess]);
+
+  useEffect(() => {
+    if (!jam.statements) {
+      return;
+    }
+
+    setTotalVotes(
+      jam.statements.reduce((acc, statement) => {
+        return (
+          acc +
+          (statement.numAgrees || 0) +
+          (statement.numDisagrees || 0)
+        );
+      }, 0),
+    );
+
+    fetch(
+      `/api/jam-participants?jamId=${encodeURIComponent(jam.key)}`,
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setParticipantsCount(json.count);
+      });
+  }, [jam]);
 
   const loadJam = () => {
     fetch(
@@ -285,9 +312,17 @@ const Jam = () => {
             )}
           </Stack>
           <Text fontSize="md">{jam.description}</Text>
-          <Text fontSize="sm" color="gray.600">
-            {convertDate(jam.createdAt?._seconds)}
-          </Text>
+          <Grid templateColumns="repeat(2, 1fr)">
+            <Text fontSize="sm" color="gray.600">
+              Open for {timeSince(jam.createdAt?._seconds)} <br />
+              Created: {convertDate(jam.createdAt?._seconds)}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              Total votes: {totalVotes}
+              <br />
+              Participants votes: {participantsCount}
+            </Text>
+          </Grid>
           <Stack direction="row">
             <Button colorScheme="blue">Download CSV</Button>
           </Stack>
