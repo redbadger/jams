@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import merge from 'lodash.merge';
+import LoadingState from '@/components/LoadingState';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 import { convertDate, timeSince } from '../../utils/date';
@@ -280,107 +281,113 @@ const Jam = () => {
 
   return (
     <AdminLayout>
-      <GridItem colSpan={6}>
-        <Stack direction="column" spacing={5}>
-          <Heading as="h2" size="lg">
-            {jam.name}
-          </Heading>
-          <Link href={`${location}/jams/${jam.urlPath}`} passHref>
-            {`${location}/jams/${jam.urlPath}`}
-          </Link>
-          <Stack direction="row" spacing={5}>
-            <Switch
-              size="md"
-              colorScheme="green"
-              isChecked={published}
-              onChange={(e) => {
-                patchJamRequest({
-                  isOpen: e.target.checked,
-                  jamId: jam.key,
-                });
-                setPublished(e.target.checked);
-              }}
-            ></Switch>
-            {published ? (
-              <Badge p="1" colorScheme="green">
-                Open
-              </Badge>
-            ) : (
-              <Badge pt="1" colorScheme="gray">
-                Closed
-              </Badge>
-            )}
-          </Stack>
-          <Text fontSize="md">{jam.description}</Text>
-          <Grid templateColumns="repeat(2, 1fr)">
-            <Text fontSize="sm" color="gray.600">
-              Open for {timeSince(jam.createdAt?._seconds)} <br />
-              Created: {convertDate(jam.createdAt?._seconds)}
-            </Text>
-            <Text fontSize="sm" color="gray.600">
-              Total votes: {totalVotes}
-              <br />
-              Participants voted: {participantsCount}
-            </Text>
-          </Grid>
-          <Stack direction="row">
-            <Button colorScheme="blue">Download CSV</Button>
-          </Stack>
-          <Tabs>
-            <TabList>
-              <Tab>Approved {approvedStatements.length}</Tab>
-              <Tab>Rejected {rejectedStatements.length}</Tab>
-              <Tab>New {newStatements.length}</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                {approvedStatements.map((statement, index) => (
-                  <ApprovedStatementCard
-                    key={index}
-                    statement={statement}
-                    onClick={() =>
-                      patchStatementRequest({
-                        jamId: jam.key,
-                        statementId: statement.key,
-                        state: -1,
-                      })
-                    }
-                  />
-                ))}
-                <ModeratorAddNewStatement
-                  jamId={jam.key}
-                  postRequest={postStatementRequest}
-                />
-              </TabPanel>
-              <TabPanel>
-                {rejectedStatements.map((statement, index) => (
-                  <RejectedStatementCard
-                    key={index}
-                    statement={statement}
-                    onClick={() =>
-                      patchStatementRequest({
-                        jamId: jam.key,
-                        statementId: statement.key,
-                        state: 1,
-                      })
-                    }
-                  />
-                ))}
-              </TabPanel>
-              <TabPanel>
-                {newStatements.map((statement, index) => (
-                  <ModeratorNewStatementCard
-                    key={index}
-                    statement={statement}
-                    patchRequest={patchStatementRequest}
+      {jam ? (
+        <GridItem colSpan={6}>
+          <Stack direction="column" spacing={5}>
+            <Heading as="h2" size="lg">
+              {jam.name}
+            </Heading>
+            <Link href={`${location}/jams/${jam.urlPath}`} passHref>
+              {`${location}/jams/${jam.urlPath}`}
+            </Link>
+            <Stack direction="row" spacing={5}>
+              <Switch
+                size="md"
+                colorScheme="green"
+                isChecked={published}
+                onChange={(e) => {
+                  patchJamRequest({
+                    isOpen: e.target.checked,
+                    jamId: jam.key,
+                  });
+                  setPublished(e.target.checked);
+                }}
+              ></Switch>
+              {published ? (
+                <Badge p="1" colorScheme="green">
+                  Open
+                </Badge>
+              ) : (
+                <Badge pt="1" colorScheme="gray">
+                  Closed
+                </Badge>
+              )}
+            </Stack>
+            <Text fontSize="md">{jam.description}</Text>
+            <Grid templateColumns="repeat(2, 1fr)">
+              <Text fontSize="sm" color="gray.600">
+                Open for {timeSince(jam.createdAt?._seconds)} <br />
+                Created: {convertDate(jam.createdAt?._seconds)}
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                Total votes: {totalVotes}
+                <br />
+                Participants voted: {participantsCount}
+              </Text>
+            </Grid>
+            <Stack direction="row">
+              <Button colorScheme="blue">Download CSV</Button>
+            </Stack>
+            <Tabs>
+              <TabList>
+                <Tab>Approved {approvedStatements.length}</Tab>
+                <Tab>Rejected {rejectedStatements.length}</Tab>
+                <Tab>New {newStatements.length}</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  {approvedStatements.map((statement, index) => (
+                    <ApprovedStatementCard
+                      key={index}
+                      statement={statement}
+                      onClick={() =>
+                        patchStatementRequest({
+                          jamId: jam.key,
+                          statementId: statement.key,
+                          state: -1,
+                        })
+                      }
+                    />
+                  ))}
+                  <ModeratorAddNewStatement
                     jamId={jam.key}
+                    postRequest={postStatementRequest}
                   />
-                ))}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Stack>
-      </GridItem>
+                </TabPanel>
+                <TabPanel>
+                  {rejectedStatements.map((statement, index) => (
+                    <RejectedStatementCard
+                      key={index}
+                      statement={statement}
+                      onClick={() =>
+                        patchStatementRequest({
+                          jamId: jam.key,
+                          statementId: statement.key,
+                          state: 1,
+                        })
+                      }
+                    />
+                  ))}
+                </TabPanel>
+                <TabPanel>
+                  {newStatements.map((statement, index) => (
+                    <ModeratorNewStatementCard
+                      key={index}
+                      statement={statement}
+                      patchRequest={patchStatementRequest}
+                      jamId={jam.key}
+                    />
+                  ))}
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Stack>
+        </GridItem>
+      ) : (
+        <GridItem colSpan="4">
+          <LoadingState>Loading jam...</LoadingState>
+        </GridItem>
+      )}
     </AdminLayout>
   );
 };

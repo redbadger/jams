@@ -17,6 +17,14 @@ export default function handler(req, res) {
     Skip: 0,
   };
 
+  const FIELDS = {
+    Agree: 'numAgrees',
+    Disagree: 'numDisagrees',
+    Skip: 'numSkipped',
+  };
+
+  const voteIncrement = fire.firestore.FieldValue.increment(1);
+
   if (!(vote in STATES)) {
     res.status(400).send({ message: 'Vote not recognised.' });
   } else {
@@ -29,6 +37,18 @@ export default function handler(req, res) {
           statementId: statementId,
           vote: STATES[vote],
           createdAt: fire.firestore.Timestamp.now(),
+        })
+        .then(() => {
+          return db
+            .collection('jams')
+            .doc(jamId)
+            .collection('statements')
+            .doc(statementId)
+            .update({ [FIELDS[vote].toString()]: voteIncrement })
+            .then(() => res.status(201).end())
+            .catch((error) => {
+              console.error('Error writing document: ', error);
+            });
         })
         .then(() => res.status(201).end())
         .catch((error) => {

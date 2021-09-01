@@ -1,17 +1,15 @@
 import {
   Button,
-  Center,
   Container,
   GridItem,
   Heading,
   HStack,
-  Spinner,
-  Text,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
 import AdminHeader from '@/components/AdminHeader';
 import Layout from '@/components/Layout';
+import LoadingState from '@/components/LoadingState';
 import router from 'next/router';
 import { convertDate, timeSince } from '../../utils/date';
 
@@ -63,19 +61,8 @@ function Moderator() {
                 );
               })
             ) : (
-              <GridItem colSpan="6">
-                <Center mt="30vh">
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="xl"
-                  />
-                  <Text m="16" fontSize="2xl" color="gray.400">
-                    Loading jams...
-                  </Text>
-                </Center>
+              <GridItem colSpan="4">
+                <LoadingState>Loading jams...</LoadingState>
               </GridItem>
             )}
           </Layout>
