@@ -96,22 +96,22 @@ const LiveStatementCard = ({
         <Box>
           {statement.isUserSubmitted ? (
             <>
-              <Text fontSize="sm" color="gray.600">
+              <Text fontSize="xs" color="gray.600">
                 <ChatIcon /> Participant submitted{' '}
                 {convertDate(statement.submittedAt?._seconds)}
               </Text>
-              <Text fontSize="sm" color="gray.600">
+              <Text fontSize="xs" color="gray.600">
                 {stateChangeText}{' '}
                 {convertDate(statement.stateChangeTime?._seconds)}
               </Text>
             </>
           ) : (
             <>
-              <Text fontSize="sm" color="gray.600">
+              <Text fontSize="xs" color="gray.600">
                 <LockIcon /> Moderator submitted{' '}
                 {convertDate(statement.submittedAt?._seconds)}
               </Text>
-              <Text fontSize="sm" color="gray.600">
+              <Text fontSize="xs" color="gray.600">
                 {stateChangeText}{' '}
                 {convertDate(statement.stateChangeTime?._seconds)}
               </Text>
