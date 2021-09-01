@@ -1,11 +1,11 @@
 import fire from '../../config/firebaseAdminConfig';
 import ensureAdmin from 'utils/admin-auth-middleware';
 
-function getJamByUrlPath(jamUrlPath) {
+async function getJamByUrlPath(jamUrlPath, includeStatements) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  return jamsRef
+  const finalJam = await jamsRef
     .where('urlPath', '==', jamUrlPath)
     .get()
     .then((querySnapshot) => {
@@ -17,6 +17,26 @@ function getJamByUrlPath(jamUrlPath) {
       });
       return jams[0];
     });
+
+  if (!includeStatements) {
+    return finalJam;
+  }
+
+  finalJam.statements = await jamsRef
+    .doc(finalJam.key)
+    .collection('statements')
+    .get()
+    .then((query) => {
+      const statements = [];
+      query.forEach((doc) => {
+        const statement = doc.data();
+        statement.key = doc.id;
+        statements.push(statement);
+      });
+      return statements;
+    });
+
+  return finalJam;
 }
 
 function createJam({ name, description, statements, adminId }) {
@@ -59,9 +79,27 @@ function createJam({ name, description, statements, adminId }) {
   });
 }
 
+function patchJam(req, res) {
+  const { jamId, ...body } = req.body;
+  const db = fire.firestore();
+  const jamsRef = db.collection('jams');
+
+  return new Promise(() => {
+    jamsRef
+      .doc(jamId)
+      .update(body)
+      .then(() => {
+        res.status(200).end();
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
 export default async function handler(req, res) {
   const {
-    query: { jamUrlPath },
+    query: { jamUrlPath, includeStatements },
     method,
   } = req;
 
@@ -96,14 +134,18 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error });
     }
   } else if (method === 'GET') {
-    return getJamByUrlPath(jamUrlPath).then((jam) => {
-      if (jam) {
-        res.status(200);
-        res.setHeader('Content-Type', 'application/json');
-        res.json(jam);
-      } else {
-        res.status(404).end();
-      }
-    });
+    return getJamByUrlPath(jamUrlPath, includeStatements).then(
+      (jam) => {
+        if (jam) {
+          res.status(200);
+          res.setHeader('Content-Type', 'application/json');
+          res.json(jam);
+        } else {
+          res.status(404).end();
+        }
+      },
+    );
+  } else if (method === 'PATCH') {
+    return patchJam(req, res);
   }
 }

@@ -12,7 +12,7 @@ import {
 import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
 
-export default function AddNewStatement({ jamId }) {
+export default function ParticipantAddNewStatement({ jamId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [statement, setStatement] = useState();
   const [submitted, setSubmitted] = useState(false);

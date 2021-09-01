@@ -1,7 +1,9 @@
 import {
   Box,
   Heading,
+  Spacer,
   Text,
+  Flex,
   Stack,
   Tag,
   Link,
@@ -24,30 +26,23 @@ const overviewCard = ({
       border="1px"
       borderColor="#8D8D8D"
     >
-      <Stack>
-        <Link href={`jams/${jamUrl}/edit`}>
-          <Heading
-            fontSize={'18px'}
-            lineHeight={'26px'}
-            fontWeight={'700'}
-            fontFamily={'body'}
-            mb={2}
-          >
+      <Flex direction="column" align="flex-start" minH="120px">
+        <Link href={`moderator/${jamUrl}`}>
+          <Heading as="h4" fontSize="lg" mb={2}>
             {jamName}
           </Heading>
         </Link>
-      </Stack>
-      <Tag
-        color={isOpen ? '#00681D' : '#535353'}
-        border="1px"
-        borderColor={isOpen ? '#00681D' : '#8D8D8D'}
-        rounded="16px"
-        size="sm"
-        bg={isOpen ? '#EEFFF3' : '#F5F5F5'}
-      >
-        {isOpen ? 'Open' : 'Closed'}
-      </Tag>
-      <Stack mt={2} direction={'row'} spacing={4} align={'center'}>
+        <Tag
+          color={isOpen ? '#00681D' : '#535353'}
+          border="1px"
+          borderColor={isOpen ? '#00681D' : '#8D8D8D'}
+          rounded="16px"
+          size="sm"
+          bg={isOpen ? '#EEFFF3' : '#F5F5F5'}
+        >
+          {isOpen ? 'Open' : 'Closed'}
+        </Tag>
+        <Spacer />
         <Stack direction={'column'} spacing={0} fontSize={'sm'}>
           <Text color="#535353" fontSize="12px">
             Open for {openFor}
@@ -56,7 +51,7 @@ const overviewCard = ({
             Created: {createdAt}
           </Text>
         </Stack>
-      </Stack>
+      </Flex>
     </Box>
   );
 };

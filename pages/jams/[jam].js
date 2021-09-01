@@ -4,22 +4,32 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
-import AddNewStatement from '../../components/AddNewStatement';
-import Layout from 'components/Layout';
-import DefaultErrorPage from 'next/error';
+import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatement';
+import Layout from '../../components/Layout';
+import JamClosed from '../../components/JamClosed';
+import FourOhFour from 'pages/404';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { convertDate } from '../../utils/date';
 import {
-  Center,
   Heading,
   Text,
   GridItem,
   HStack,
+  Center,
+  Spinner,
+  Progress,
+  Link,
 } from '@chakra-ui/react';
 
 function JamHeader({ title, description, participantId }) {
   return (
     <Box as="header" py={4} pb={0} bg={'white'}>
       <HStack px={4}>
-        <Box w={'50%'}>Jammy jams</Box>
+        <Box w={'50%'}>
+          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+            Jams
+          </Heading>
+        </Box>
         <Box
           w={'50%'}
           align={'right'}
@@ -31,7 +41,7 @@ function JamHeader({ title, description, participantId }) {
       </HStack>
       <Layout>
         <GridItem colSpan={6} py={8}>
-          <Heading as="h2" size="lg" fontWeight={400}>
+          <Heading as="h2" size="lg">
             {title || 'Loading...'}
           </Heading>
           <Text color={'gray.600'} mt={4}>
@@ -117,7 +127,9 @@ const Jam = () => {
       .then((response) => response.json())
       .then((question) => {
         const keys = Object.keys(question);
+        // TODO maybe indicate this differently
         if (!keys.length) {
+          setQuestion();
           setIsDone(true);
           return;
         }
@@ -158,9 +170,10 @@ const Jam = () => {
       });
   };
 
-  if (error) return <DefaultErrorPage statusCode={error} />;
+  if (error) return <FourOhFour />;
+  if (jam && !jam.isOpen) return <JamClosed />;
 
-  return (
+  return jam && (question || isDone) ? (
     <Box>
       <Head>
         <title>Jams - participate in a jam</title>
@@ -170,17 +183,48 @@ const Jam = () => {
         description={jam && jam.description}
         participantId={participantId}
       />
+      <Progress
+        h="0.5"
+        value={
+          question
+            ? (question.meta.numVotes / question.meta.numQuestions) *
+              100
+            : 100
+        }
+      />
       <Layout py={14}>
         <GridItem colSpan={6}>
-          <Heading as="h1" size="xl" fontWeight={500} mb={8}>
-            {!isDone
-              ? question
-                ? question.text
-                : 'Loading...'
-              : 'All done'}
+          {question && (
+            <Text color="gray.400">
+              {question.meta.numVotes + 1} /{' '}
+              {question.meta.numQuestions}
+            </Text>
+          )}
+          <Heading as="h1" size="xl" mb={4}>
+            {!isDone ? question.text : 'All done'}
           </Heading>
+          {isDone && (
+            <Text color="gray.600">
+              Thanks for completing this Jam. Check back later for new
+              statements!
+            </Text>
+          )}
         </GridItem>
-
+        <GridItem colSpan={4}>
+          <HStack pb="8">
+            {question && question.isUserSubmitted ? (
+              <>
+                <InfoOutlineIcon />
+                <Text fontSize="xs" color="gray.600">
+                  <strong>Participant</strong> submitted{' '}
+                  {convertDate(question.createdAt?._seconds)}
+                </Text>
+              </>
+            ) : (
+              <Box h="18px" />
+            )}
+          </HStack>
+        </GridItem>
         {!isDone && (
           <GridItem colSpan={6}>
             <Text pb={4} color={'gray.600'}>
@@ -209,15 +253,27 @@ const Jam = () => {
             </Stack>
           </GridItem>
         )}
-
         <GridItem colSpan={6}>
           <Text as="h5" fontWeight={600} mt={8} pb={4}>
             Add a new statement to this survey:
           </Text>
-          <AddNewStatement jamId={jam ? jam.key : null} />
+          <ParticipantAddNewStatement jamId={jam ? jam.key : null} />
         </GridItem>
       </Layout>
     </Box>
+  ) : (
+    <Center mt="30vh">
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="blue.500"
+        size="xl"
+      />
+      <Text m="16" fontSize="2xl" color="gray.400">
+        Loading...
+      </Text>
+    </Center>
   );
 };
 

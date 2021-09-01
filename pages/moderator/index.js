@@ -1,19 +1,19 @@
 import {
+  Button,
+  Center,
   Container,
+  GridItem,
   Heading,
   HStack,
-  Button,
-  GridItem,
   Spinner,
   Text,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
-import moment from 'moment';
 import { useState, useEffect } from 'react';
 import OverviewJamCard from '@/components/OverviewJamCard';
-import AdminHeader from 'components/AdminHeader';
-import Layout from 'components/Layout';
+import AdminHeader from '@/components/AdminHeader';
+import Layout from '@/components/Layout';
+import router from 'next/router';
+import { convertDate, timeSince } from '../../utils/date';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -31,44 +31,21 @@ function Moderator() {
       });
   };
 
-  const convertDate = (date) => {
-    return moment(date * 1000).format('DD MMM hh:mm');
-  };
-
-  const timeSince = (date) => {
-    const openedAt = moment(new Date(date * 1000));
-    const now = moment();
-
-    const hours = now.diff(openedAt, 'hours');
-    const minutes = now.diff(openedAt, 'minutes') - hours * 60;
-
-    return hours > 48
-      ? Math.floor(hours / 24) + ' days'
-      : hours + ':' + minutes;
-  };
-
   return (
     <>
       <AdminHeader />
-      <Container maxW="100%" h="100vh" p="6" bgColor="#F5F5F5">
-        <Wrap spacing="10px">
-          <WrapItem>
-            <Heading
-              as="h2"
-              size="lg"
-              fontWeight={400}
-              ml="20px"
-              mb="20px"
-            >
-              Jams overview
-            </Heading>
-          </WrapItem>
-          <WrapItem>
-            <Button ml="20px" mb="20px">
-              Create a new Jam
-            </Button>
-          </WrapItem>
-        </Wrap>
+      <Container maxW="100%" p="6">
+        <HStack spacing="5" mb="8">
+          <Heading as="h2" size="lg">
+            Jams overview
+          </Heading>
+          <Button
+            colorScheme="blue"
+            onClick={() => router.push('/moderator/create-jam')}
+          >
+            Create a new Jam
+          </Button>
+        </HStack>
         <HStack spacing="5">
           <Layout>
             {jams ? (
@@ -86,16 +63,20 @@ function Moderator() {
                 );
               })
             ) : (
-              <Container p="10px">
-                <Spinner
-                  thickness="4px"
-                  speed="0.65s"
-                  emptyColor="gray.200"
-                  color="blue.500"
-                  size="xl"
-                />
-                <Text fontSize="18px">Loading jams...</Text>
-              </Container>
+              <GridItem colSpan="6">
+                <Center mt="30vh">
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="blue.500"
+                    size="xl"
+                  />
+                  <Text m="16" fontSize="2xl" color="gray.400">
+                    Loading jams...
+                  </Text>
+                </Center>
+              </GridItem>
             )}
           </Layout>
         </HStack>
@@ -104,4 +85,5 @@ function Moderator() {
   );
 }
 
+Moderator.auth = true;
 export default Moderator;
