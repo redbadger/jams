@@ -43,9 +43,7 @@ export default async function handler(req, res) {
       let statements = {};
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.state === 1) {
-          statements[doc.id] = data.text;
-        }
+        statements[doc.id] = data.text;
       });
 
       // this is a map {id: text} for all the approved statements
