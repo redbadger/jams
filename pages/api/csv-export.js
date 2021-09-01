@@ -1,4 +1,5 @@
 import fire from '../../config/firebaseAdminConfig';
+const ObjectsToCsv = require('objects-to-csv');
 
 function buildVotesArray(querySnapshot) {
   let collection = [];
@@ -68,12 +69,19 @@ export default async function handler(req, res) {
     }
 
     // prefixing question text with Q_
-    acc[vote.participantId][`Q_${statements[vote.statementId]}`] =
+    acc[vote.participantId][`q_${statements[vote.statementId]}`] =
       vote.vote;
 
     return acc;
   }, {});
 
-  // only sending the array (values), not the object
-  res.status(200).send(Object.values(participants));
+  const csv = await new ObjectsToCsv(Object.values(participants));
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename=JamsCSV-${jamId}.csv`,
+  );
+  res.status(200);
+  res.send(await csv.toString(true, true));
 }

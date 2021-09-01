@@ -280,7 +280,7 @@ const Jam = () => {
   };
 
   const handleDownload = (jamId) => {
-    window.location = `/api/exporting/data-csv?jamId=${jamId}`;
+    window.location = `/api/csv-export?jamId=${jamId}`;
   };
 
   return (
@@ -330,7 +330,12 @@ const Jam = () => {
               </Text>
             </Grid>
             <Stack direction="row">
-              <Button colorScheme="blue">Download CSV</Button>
+              <Button
+                colorScheme="blue"
+                onClick={() => handleDownload(jam.key)}
+              >
+                Download CSV
+              </Button>
             </Stack>
             <Tabs>
               <TabList>
