@@ -181,6 +181,12 @@ const Jam = () => {
                 text: statement,
                 jamId: jamId,
                 key: json.key,
+                submittedAt: {
+                  _seconds: new Date().getTime() / 1000,
+                },
+                stateChangeTime: {
+                  _seconds: new Date().getTime() / 1000,
+                },
               },
               extraFields,
             ),
