@@ -22,7 +22,14 @@ export default async function handler(req, res) {
   }
 
   // TODO red from query param
-  const jamId = '6y4qC5HoThwkMKJiBrLn';
+  const jamId = req.query.jamId;
+
+  if (!jamId) {
+    res
+      .status(400)
+      .json({ error: 'Required jamId query parameter missing.' });
+    return;
+  }
 
   const db = fire.firestore();
   const statementsRef = db
@@ -34,14 +41,15 @@ export default async function handler(req, res) {
     .where('state', '==', 1)
     .get()
     .then((querySnapshot) => {
-      let statements = [];
+      let statements = {};
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        statements.push({
-          id: doc.id,
-          text: data.text,
-        });
+        if (data.state === 1) {
+          statements[doc.id] = data.text;
+        }
       });
+
+      // this is a map {id: text} for all the approved statements
       return statements;
     });
 
@@ -51,20 +59,18 @@ export default async function handler(req, res) {
     .get()
     .then(buildVotesArray);
 
-  res.status(200).send(votes[0]);
-}
+  const participants = votes.reduce((acc, vote) => {
+    if (!(vote.statementId in statements)) return acc;
 
-/*
-[
-  {
-    participantId: id,
-    statementId2: vote,
-    statementId3: vote,
-  },
-  {
-    participantId2: id,
-    statementId: vote,
-    statementId2: vote,
-  },
-];
-*/
+    if (!(vote.participantId in acc)) {
+      acc[vote.participantId] = { id: vote.participantId };
+    }
+
+    acc[vote.participantId][`Q_${statements[vote.statementId]}`] =
+      vote.vote;
+
+    return acc;
+  }, {});
+
+  res.status(200).send(Object.values(participants));
+}
