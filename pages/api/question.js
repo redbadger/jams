@@ -63,6 +63,7 @@ export default function handler(req, res) {
             key: randomKey,
             jamId: jamId,
             createdAt: randomQ.createdAt,
+            isUserSubmitted: randomQ.isUserSubmitted,
             meta: {
               numQuestions: Object.keys(questions).length,
               // this is only votes for currently approved questions

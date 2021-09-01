@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import moment from 'moment';
 import JamButton from '../../components/JamButton';
 import { Box, Stack } from '@chakra-ui/layout';
 import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatement';
@@ -10,6 +9,7 @@ import Layout from '../../components/Layout';
 import JamClosed from '../../components/JamClosed';
 import FourOhFour from 'pages/404';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { convertDate } from '../../utils/date';
 import {
   Heading,
   Text,
@@ -200,25 +200,25 @@ const Jam = () => {
               {question.meta.numQuestions}
             </Text>
           )}
-          <Heading as="h1" size="xl" mb={8}>
+          <Heading as="h1" size="xl" mb={4}>
             {!isDone ? question.text : 'All done'}
           </Heading>
         </GridItem>
-        {question && question.isUserSubmitted && (
-          <GridItem colSpan={4}>
-            <HStack>
-              <InfoOutlineIcon />
-              <Text fontSize="xs">
-                <strong>Participant</strong> submitted{' '}
-                {moment(question.createdAt?._seconds * 1000).format(
-                  'DD MMM hh:mm A',
-                )}
-              </Text>
-            </HStack>
-            <br />
-          </GridItem>
-        )}
-        <br />
+        <GridItem colSpan={4}>
+          <HStack pb="8">
+            {question && question.isUserSubmitted ? (
+              <>
+                <InfoOutlineIcon />
+                <Text fontSize="xs" color="gray.600">
+                  <strong>Participant</strong> submitted{' '}
+                  {convertDate(question.createdAt?._seconds)}
+                </Text>
+              </>
+            ) : (
+              <Box h="18px" />
+            )}
+          </HStack>
+        </GridItem>
         {!isDone && (
           <GridItem colSpan={6}>
             <Text pb={4} color={'gray.600'}>
