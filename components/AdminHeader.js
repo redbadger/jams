@@ -1,8 +1,17 @@
 import React from 'react';
-import { signOut } from 'next-auth/client';
-import { Box, Heading, Flex, Button, Link } from '@chakra-ui/react';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import {
+  Box,
+  Heading,
+  Flex,
+  Button,
+  Link,
+  Text,
+} from '@chakra-ui/react';
 
 const AdminHeader = () => {
+  const [session] = useSession();
+
   return (
     <Flex
       as="nav"
@@ -19,9 +28,27 @@ const AdminHeader = () => {
       </Flex>
 
       <Box display={{ base: 'block' }}>
-        <Button variant="outline" onClick={() => signOut()}>
-          Sign out
-        </Button>
+        {!session ? (
+          <>
+            <Button variant="outline" onClick={() => signIn()}>
+              Sign in
+            </Button>
+          </>
+        ) : (
+          <>
+            <Text
+              d={'inline-block'}
+              color={'gray.400'}
+              px={2}
+              fontSize={'sm'}
+            >
+              {session.user.email}
+            </Text>
+            <Button variant="outline" onClick={() => signOut()}>
+              Sign out
+            </Button>
+          </>
+        )}
       </Box>
     </Flex>
   );
