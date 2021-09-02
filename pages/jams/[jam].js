@@ -8,7 +8,7 @@ import ParticipantAddNewStatement from '../../components/ParticipantAddNewStatem
 import Layout from '../../components/Layout';
 import JamClosed from '../../components/JamClosed';
 import LoadingState from '@/components/LoadingState';
-import FourOhFour from 'pages/404';
+import FourOhFour from '../../components/404';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { convertDate } from '../../utils/date';
 import {
