@@ -23,19 +23,20 @@ async function getJamData(jamId) {
     .doc(jamId)
     .get()
     .then((doc) => {
-      console.log(doc.data());
       return doc.data();
     });
 }
 
 function createTitleFile(title) {
+  const putATimeStampOn = new Date();
   const jamName = _.truncate(_.snakeCase(title), { length: 30 });
-  const exportTime =
-    _.snakeCase(new Date().toLocaleDateString()) +
-    '_' +
-    _.snakeCase(new Date().toLocaleTimeString());
+  const timeStamp = _.snakeCase(
+    putATimeStampOn.toLocaleDateString() +
+      '_' +
+      _.snakeCase(putATimeStampOn.toLocaleTimeString()),
+  );
 
-  return jamName + '_' + exportTime;
+  return jamName + '_' + timeStamp;
 }
 
 export default async function handler(req, res) {

@@ -299,16 +299,8 @@ const Jam = () => {
       .catch(() => console.error('Bad request'));
   };
 
-  const handleDownload = (jamId, name) => {
-    const dateTimeStampDownload =
-      _.snakeCase(new Date().toLocaleDateString()) +
-      '_' +
-      _.snakeCase(new Date().toLocaleTimeString());
-    const jamName = _.truncate(_.snakeCase(name), { length: 30 });
-
+  const handleDownload = (jamId) => {
     window.location = `/api/csv-export?jamId=${jamId}`;
-
-    // window.location = `/api/csv-export?jamId=${jamId}&jamName=${jamName}&jamStamp=${dateTimeStampDownload}`;
   };
 
   return (
