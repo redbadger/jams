@@ -30,13 +30,11 @@ export default async function handler(req, res) {
         res.setHeader('Content-Type', 'application/json');
         res.json(jams);
       })
-      .catch((error) => {
-        console.error('Error retriving documents: ', error);
+      .catch((_) => {
         res.status(500);
         res.end();
       });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error });
   }
 }
