@@ -306,7 +306,9 @@ const Jam = () => {
       _.snakeCase(new Date().toLocaleTimeString());
     const jamName = _.truncate(_.snakeCase(name), { length: 30 });
 
-    window.location = `/api/csv-export?jamId=${jamId}&jamName=${jamName}&jamStamp=${dateTimeStampDownload}`;
+    window.location = `/api/csv-export?jamId=${jamId}`;
+
+    // window.location = `/api/csv-export?jamId=${jamId}&jamName=${jamName}&jamStamp=${dateTimeStampDownload}`;
   };
 
   return (

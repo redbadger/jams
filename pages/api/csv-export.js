@@ -1,5 +1,6 @@
 import fire from '../../config/firebaseAdminConfig';
 import ObjectsToCsv from 'objects-to-csv';
+import _ from 'lodash';
 
 function buildVotesArray(querySnapshot) {
   let collection = [];
@@ -15,6 +16,28 @@ function buildVotesArray(querySnapshot) {
   return collection;
 }
 
+async function getJamData(jamId) {
+  const db = fire.firestore();
+  return db
+    .collection('jams')
+    .doc(jamId)
+    .get()
+    .then((doc) => {
+      console.log(doc.data());
+      return doc.data();
+    });
+}
+
+function createTitleFile(title) {
+  const jamName = _.truncate(_.snakeCase(title), { length: 30 });
+  const exportTime =
+    _.snakeCase(new Date().toLocaleDateString()) +
+    '_' +
+    _.snakeCase(new Date().toLocaleTimeString());
+
+  return jamName + '_' + exportTime;
+}
+
 export default async function handler(req, res) {
   if (!['GET'].includes(req.method)) {
     res.setHeader('Allow', ['GET']);
@@ -23,7 +46,7 @@ export default async function handler(req, res) {
   }
 
   const {
-    query: { jamId, jamName, jamStamp },
+    query: { jamId },
   } = req;
 
   if (!jamId) {
@@ -32,8 +55,11 @@ export default async function handler(req, res) {
       .json({ error: 'Required jamId query parameter missing.' });
     return;
   }
-
   const db = fire.firestore();
+  // Create a title & timestamp for exported file
+  const jamDoc = await getJamData(jamId);
+  const exportTitle = createTitleFile(jamDoc.name);
+
   const statementsRef = db
     .collection('jams')
     .doc(jamId)
@@ -82,7 +108,7 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader(
     'Content-Disposition',
-    `attachment; filename=${jamName}_${jamStamp}.csv`,
+    `attachment; filename=${exportTitle}.csv`,
   );
   res.status(200);
   res.send(await csv.toString(true, true));
