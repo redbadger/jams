@@ -1,6 +1,6 @@
 import fire from '../../config/firebaseAdminConfig';
 import ObjectsToCsv from 'objects-to-csv';
-import _ from 'lodash';
+import { truncate, snakeCase } from 'lodash';
 
 function buildVotesArray(querySnapshot) {
   let collection = [];
@@ -29,11 +29,11 @@ async function getJamData(jamId) {
 
 function createTitleFile(title) {
   const putATimeStampOn = new Date();
-  const jamName = _.truncate(_.snakeCase(title), { length: 30 });
-  const timeStamp = _.snakeCase(
+  const jamName = truncate(snakeCase(title), { length: 30 });
+  const timeStamp = snakeCase(
     putATimeStampOn.toLocaleDateString() +
       '_' +
-      _.snakeCase(putATimeStampOn.toLocaleTimeString()),
+      snakeCase(putATimeStampOn.toLocaleTimeString()),
   );
 
   return jamName + '_' + timeStamp;
