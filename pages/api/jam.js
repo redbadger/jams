@@ -94,6 +94,7 @@ function createJam({ name, description, statements, adminId }) {
 
 async function patchJam(req, res) {
   const { jamId, ...body } = req.body;
+  const fourOhThree = '403';
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
@@ -107,7 +108,7 @@ async function patchJam(req, res) {
         .then((doc) => {
           const data = doc.data();
           if (data.adminId != token.sub) {
-            throw new Error('403');
+            throw new Error(fourOhThree);
           }
           jamsRef
             .doc(jamId)
@@ -117,7 +118,7 @@ async function patchJam(req, res) {
             });
         })
         .catch((e) => {
-          if (e.message === '403') {
+          if (e.message === fourOhThree) {
             res.status(403).end();
           }
         });
