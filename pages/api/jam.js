@@ -92,22 +92,39 @@ function createJam({ name, description, statements, adminId }) {
   });
 }
 
-function patchJam(req, res) {
+async function patchJam(req, res) {
   const { jamId, ...body } = req.body;
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  return new Promise(() => {
-    jamsRef
-      .doc(jamId)
-      .update(body)
-      .then(() => {
-        res.status(200).end();
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
-  });
+  try {
+    const token = await ensureAdmin(req, res);
+
+    return new Promise(() => {
+      jamsRef
+        .doc(jamId)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          if (data.adminId != token.sub) {
+            throw new Error('403');
+          }
+          jamsRef
+            .doc(jamId)
+            .update(body)
+            .then(() => {
+              res.status(200).end();
+            });
+        })
+        .catch((e) => {
+          if (e.message === '403') {
+            res.status(403).end();
+          }
+        });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 }
 
 export default async function handler(req, res) {
@@ -162,6 +179,6 @@ export default async function handler(req, res) {
       }
     });
   } else if (method === 'PATCH') {
-    return patchJam(req, res);
+    return await patchJam(req, res);
   }
 }
