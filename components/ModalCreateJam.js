@@ -32,9 +32,9 @@ function ModalCreateJam({
           Everyone with the below link will now be able to participate
           in your Jam. You can toggle your Jam to closed at any time.
           <Box mt={5}>
-            <Link href={`${location}/jams/${jamUrlPath}`} passHref>
+            <ChakraLink href={`${location}/jams/${jamUrlPath}`}>
               {`${location}/jams/${jamUrlPath}`}
-            </Link>
+            </ChakraLink>
           </Box>
         </ModalBody>
         <ModalFooter>

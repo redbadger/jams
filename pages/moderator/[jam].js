@@ -11,6 +11,7 @@ import {
   Stack,
   Switch,
   Tab,
+  Link,
   TabList,
   TabPanel,
   TabPanels,
@@ -26,7 +27,6 @@ import {
 import AdminLayout from 'components/AdminLayout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import merge from 'lodash.merge';
 import LoadingState from '@/components/LoadingState';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
@@ -325,7 +325,7 @@ const Jam = () => {
             <Heading as="h2" size="lg">
               {jam.name}
             </Heading>
-            <Link href={`${location}/jams/${jam.urlPath}`} passHref>
+            <Link href={`${location}/jams/${jam.urlPath}`}>
               {`${location}/jams/${jam.urlPath}`}
             </Link>
             <Stack direction="row" spacing={5}>
