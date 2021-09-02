@@ -1,24 +1,37 @@
 import fire from '../../config/firebaseAdminConfig';
 import ensureAdmin from 'utils/admin-auth-middleware';
 
-async function getJamByUrlPath(jamUrlPath, includeStatements) {
+async function getJamByUrlPath(
+  jamUrlPath,
+  includeStatements,
+  req,
+  res,
+) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  const finalJam = await jamsRef
-    .where('urlPath', '==', jamUrlPath)
-    .get()
-    .then((querySnapshot) => {
-      let jams = [];
-      querySnapshot.forEach((doc) => {
-        const jam = doc.data();
-        jam.key = doc.id;
-        jams.push(jam);
-      });
-      return jams[0];
-    });
+  var queryPath = jamsRef.where('urlPath', '==', jamUrlPath);
 
-  if (!includeStatements) {
+  var token;
+  try {
+    token = await ensureAdmin(req, res);
+  } catch (e) {}
+
+  if (token) {
+    queryPath = queryPath.where('adminId', '==', token.sub);
+  }
+
+  const finalJam = await queryPath.get().then((querySnapshot) => {
+    let jams = [];
+    querySnapshot.forEach((doc) => {
+      const jam = doc.data();
+      jam.key = doc.id;
+      jams.push(jam);
+    });
+    return jams[0];
+  });
+
+  if (!includeStatements || !finalJam) {
     return finalJam;
   }
 
@@ -134,17 +147,20 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error });
     }
   } else if (method === 'GET') {
-    return getJamByUrlPath(jamUrlPath, includeStatements).then(
-      (jam) => {
-        if (jam) {
-          res.status(200);
-          res.setHeader('Content-Type', 'application/json');
-          res.json(jam);
-        } else {
-          res.status(404).end();
-        }
-      },
-    );
+    return getJamByUrlPath(
+      jamUrlPath,
+      includeStatements,
+      req,
+      res,
+    ).then((jam) => {
+      if (jam) {
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(jam);
+      } else {
+        res.status(404).end();
+      }
+    });
   } else if (method === 'PATCH') {
     return patchJam(req, res);
   }
