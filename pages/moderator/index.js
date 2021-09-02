@@ -1,5 +1,6 @@
 import {
   Button,
+  Text,
   Container,
   GridItem,
   Heading,
@@ -46,7 +47,25 @@ function Moderator() {
         </HStack>
         <HStack spacing="5">
           <Layout>
-            {jams ? (
+            {!jams && (
+              <GridItem colSpan="6">
+                <LoadingState>Loading jams...</LoadingState>
+              </GridItem>
+            )}
+            {jams && !jams.length && (
+              <GridItem colSpan="6">
+                <Text
+                  fontSize="xl"
+                  color="gray.400"
+                  textAlign="center"
+                  my="8"
+                >
+                  No jams found. Create one using the button above!
+                </Text>
+              </GridItem>
+            )}
+            {jams &&
+              jams.length &&
               jams.map((jam, i) => {
                 return (
                   <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
@@ -59,12 +78,7 @@ function Moderator() {
                     />
                   </GridItem>
                 );
-              })
-            ) : (
-              <GridItem colSpan="4">
-                <LoadingState>Loading jams...</LoadingState>
-              </GridItem>
-            )}
+              })}
           </Layout>
         </HStack>
       </Container>
