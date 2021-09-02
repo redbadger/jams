@@ -1,24 +1,36 @@
 import fire from '../../config/firebaseAdminConfig';
 import ensureAdmin from 'utils/admin-auth-middleware';
 
-async function getJamByUrlPath(jamUrlPath, includeStatements) {
+async function getJamByUrlPath(
+  jamUrlPath,
+  includeStatements,
+  req,
+  res,
+) {
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  const finalJam = await jamsRef
-    .where('urlPath', '==', jamUrlPath)
-    .get()
-    .then((querySnapshot) => {
-      let jams = [];
-      querySnapshot.forEach((doc) => {
-        const jam = doc.data();
-        jam.key = doc.id;
-        jams.push(jam);
-      });
-      return jams[0];
-    });
+  var queryPath = jamsRef.where('urlPath', '==', jamUrlPath);
 
-  if (!includeStatements) {
+  var token;
+  try {
+    token = await ensureAdmin(req, res);
+    queryPath = queryPath.where('adminId', '==', token.sub);
+  } catch (e) {
+    // No session here so no change to queryPath needed
+  }
+
+  const finalJam = await queryPath.get().then((querySnapshot) => {
+    let jams = [];
+    querySnapshot.forEach((doc) => {
+      const jam = doc.data();
+      jam.key = doc.id;
+      jams.push(jam);
+    });
+    return jams[0];
+  });
+
+  if (!includeStatements || !finalJam) {
     return finalJam;
   }
 
@@ -79,22 +91,40 @@ function createJam({ name, description, statements, adminId }) {
   });
 }
 
-function patchJam(req, res) {
+async function patchJam(req, res) {
   const { jamId, ...body } = req.body;
+  const fourOhThree = '403';
   const db = fire.firestore();
   const jamsRef = db.collection('jams');
 
-  return new Promise(() => {
-    jamsRef
-      .doc(jamId)
-      .update(body)
-      .then(() => {
-        res.status(200).end();
-      })
-      .catch((error) => {
-        console.error('Error writing document: ', error);
-      });
-  });
+  try {
+    const token = await ensureAdmin(req, res);
+
+    return new Promise(() => {
+      jamsRef
+        .doc(jamId)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          if (data.adminId != token.sub) {
+            throw new Error(fourOhThree);
+          }
+          jamsRef
+            .doc(jamId)
+            .update(body)
+            .then(() => {
+              res.status(200).end();
+            });
+        })
+        .catch((e) => {
+          if (e.message === fourOhThree) {
+            res.status(403).end();
+          }
+        });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 }
 
 export default async function handler(req, res) {
@@ -134,18 +164,21 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error });
     }
   } else if (method === 'GET') {
-    return getJamByUrlPath(jamUrlPath, includeStatements).then(
-      (jam) => {
-        if (jam) {
-          res.status(200);
-          res.setHeader('Content-Type', 'application/json');
-          res.json(jam);
-        } else {
-          res.status(404).end();
-        }
-      },
-    );
+    return getJamByUrlPath(
+      jamUrlPath,
+      includeStatements,
+      req,
+      res,
+    ).then((jam) => {
+      if (jam) {
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(jam);
+      } else {
+        res.status(404).end();
+      }
+    });
   } else if (method === 'PATCH') {
-    return patchJam(req, res);
+    return await patchJam(req, res);
   }
 }

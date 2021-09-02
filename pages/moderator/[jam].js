@@ -32,7 +32,7 @@ import LoadingState from '@/components/LoadingState';
 import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCard';
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 import { convertDate, timeSince } from '../../utils/date';
-import _ from 'lodash';
+import FourOhThree from '../../components/403';
 
 const ApprovedStatementCard = ({ statement, onClick }) => {
   return (
@@ -142,6 +142,7 @@ const Jam = () => {
   const [updateSuccess, setUpdateTrigger] = useState();
   const [totalVotes, setTotalVotes] = useState(0);
   const [participantsCount, setParticipantsCount] = useState(0);
+  const [error, setError] = useState();
 
   useEffect(() => {
     setLocation(window.location.origin);
@@ -195,15 +196,30 @@ const Jam = () => {
   }, [jam]);
 
   const loadJam = () => {
+    const fourOhThree = '403';
+
     fetch(
       `/api/jam?jamUrlPath=${encodeURIComponent(
         jamUrlPath,
       )}&includeStatements=true`,
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(fourOhThree);
+        }
+      })
       .then((jam) => {
         setJam(jam);
         setPublished(jam.isOpen);
+      })
+      .catch((e) => {
+        if (e.message === fourOhThree) {
+          setError(403);
+        } else {
+          setError(500);
+        }
       });
   };
 
@@ -302,6 +318,7 @@ const Jam = () => {
   const handleDownload = (jamId) => {
     window.location = `/api/csv-export?jamId=${jamId}`;
   };
+  if (error == 403) return <FourOhThree />;
 
   return (
     <AdminLayout>

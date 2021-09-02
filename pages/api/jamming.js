@@ -1,4 +1,5 @@
 import fire from '../../config/firebaseAdminConfig';
+import ensureAdmin from 'utils/admin-auth-middleware';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -8,26 +9,32 @@ export default async function handler(req, res) {
     return;
   }
 
-  const db = fire.firestore();
-  const jamsRef = db.collection('jams');
+  try {
+    const token = await ensureAdmin(req, res);
 
-  await jamsRef
-    .get()
-    .then((querySnapshot) => {
-      var jams = [];
-      querySnapshot.forEach((doc) => {
-        const jam = doc.data();
-        jam.key = doc.id;
+    const db = fire.firestore();
+    const jamsRef = db.collection('jams');
 
-        jams.push(jam);
+    await jamsRef
+      .where('adminId', '==', token.sub)
+      .get()
+      .then((querySnapshot) => {
+        var jams = [];
+        querySnapshot.forEach((doc) => {
+          const jam = doc.data();
+          jam.key = doc.id;
+
+          jams.push(jam);
+        });
+        res.status(200);
+        res.setHeader('Content-Type', 'application/json');
+        res.json(jams);
+      })
+      .catch((_) => {
+        res.status(500);
+        res.end();
       });
-      res.status(200);
-      res.setHeader('Content-Type', 'application/json');
-      res.json(jams);
-    })
-    .catch((error) => {
-      console.error('Error retriving documents: ', error);
-      res.status(500);
-      res.end();
-    });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
 }
