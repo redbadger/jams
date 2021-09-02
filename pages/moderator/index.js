@@ -52,7 +52,7 @@ function Moderator() {
                 <LoadingState>Loading jams...</LoadingState>
               </GridItem>
             )}
-            {jams && !jams.length && (
+            {jams && !jams.length ? (
               <GridItem colSpan="6">
                 <Text
                   fontSize="xl"
@@ -63,22 +63,26 @@ function Moderator() {
                   No jams found. Create one using the button above!
                 </Text>
               </GridItem>
+            ) : (
+              ''
             )}
-            {jams &&
-              jams.length &&
-              jams.map((jam, i) => {
-                return (
-                  <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
-                    <OverviewJamCard
-                      jamUrl={jam.urlPath}
-                      isOpen={jam.isOpen}
-                      jamName={jam.name}
-                      openFor={timeSince(jam.createdAt._seconds)}
-                      createdAt={convertDate(jam.createdAt._seconds)}
-                    />
-                  </GridItem>
-                );
-              })}
+            {jams && jams.length
+              ? jams.map((jam, i) => {
+                  return (
+                    <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
+                      <OverviewJamCard
+                        jamUrl={jam.urlPath}
+                        isOpen={jam.isOpen}
+                        jamName={jam.name}
+                        openFor={timeSince(jam.createdAt._seconds)}
+                        createdAt={convertDate(
+                          jam.createdAt._seconds,
+                        )}
+                      />
+                    </GridItem>
+                  );
+                })
+              : ''}
           </Layout>
         </HStack>
       </Container>
