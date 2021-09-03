@@ -1,5 +1,5 @@
 import { Text, Button, Textarea, Stack, Box } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ComponentSwitcher from './ComponentSwitcher';
 import { MAX_STATMENT_LENGTH } from './constants';
 
@@ -10,11 +10,16 @@ const EditableStatement = ({
   invertComponent,
 }) => {
   const [statement, setStatement] = useState(children);
+  const textAreaRef = useRef(null);
 
   const handleStatementChange = (e) => {
     let statementValue = e.target.value;
     setStatement(statementValue);
   };
+
+  useEffect(() => {
+    textAreaRef.current.focus();
+  }, [textAreaRef]);
 
   return (
     <Box
@@ -33,6 +38,7 @@ const EditableStatement = ({
         mb={2}
         borderRadius="none"
         maxlength={MAX_STATMENT_LENGTH}
+        ref={textAreaRef}
       />
       <Stack justify="flex-end" direction="row" spacing={2}>
         <Button onClick={() => invertComponent()} variant="outline">
