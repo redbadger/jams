@@ -19,6 +19,7 @@ import ModalCreateJam from '../../components/ModalCreateJam';
 import ModalDiscardJam from '../../components/ModalDiscardJam';
 import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
+import { MAX_STATMENT_LENGTH } from '../../components/constants';
 
 function Moderator() {
   const [title, setTitle] = useState();
@@ -194,6 +195,7 @@ function Moderator() {
                 onChange={handleStatementChange}
                 mb={2}
                 borderRadius="none"
+                maxLength={MAX_STATMENT_LENGTH}
               />
 
               <Stack justify="flex-end" direction="row" spacing={2}>

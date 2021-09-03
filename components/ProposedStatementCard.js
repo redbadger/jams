@@ -1,6 +1,7 @@
 import { Text, Button, Textarea, Stack, Box } from '@chakra-ui/react';
 import { useState } from 'react';
 import ComponentSwitcher from './ComponentSwitcher';
+import { MAX_STATMENT_LENGTH } from './constants';
 
 const EditableStatement = ({
   children,
@@ -31,6 +32,7 @@ const EditableStatement = ({
         onChange={handleStatementChange}
         mb={2}
         borderRadius="none"
+        maxlength={MAX_STATMENT_LENGTH}
       />
       <Stack justify="flex-end" direction="row" spacing={2}>
         <Button onClick={() => invertComponent()} variant="outline">
