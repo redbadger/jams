@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
+import { MAX_STATEMENT_LENGTH } from './constants';
 
 export default function ParticipantAddNewStatement({ jamId }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -63,6 +64,7 @@ export default function ParticipantAddNewStatement({ jamId }) {
                   placeholder="Please enter your statement here"
                   value={statement}
                   onChange={handleInputChange}
+                  maxLength={MAX_STATEMENT_LENGTH}
                 />
               </ModalBody>
               <ModalFooter>

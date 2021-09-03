@@ -1,0 +1,1 @@
+export const MAX_STATEMENT_LENGTH = 140;
