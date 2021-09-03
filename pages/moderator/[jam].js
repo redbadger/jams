@@ -324,6 +324,9 @@ const Jam = () => {
       .catch(() => console.error('Bad request'));
   };
 
+  const handleDownload = (jamId) => {
+    window.location = `/api/csv-export?jamId=${jamId}`;
+  };
   if (error == 403) return <FourOhThree />;
 
   return (
@@ -373,7 +376,12 @@ const Jam = () => {
               </Text>
             </Grid>
             <Stack direction="row">
-              <Button colorScheme="blue">Download CSV</Button>
+              <Button
+                colorScheme="blue"
+                onClick={() => handleDownload(jam.key, jam.name)}
+              >
+                Download CSV
+              </Button>
             </Stack>
             <Tabs>
               <TabList>

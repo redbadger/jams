@@ -1,4 +1,6 @@
 import fire from '../../config/firebaseAdminConfig';
+import ObjectsToCsv from 'objects-to-csv';
+import { truncate, snakeCase } from 'lodash';
 
 function buildVotesArray(querySnapshot) {
   let collection = [];
@@ -14,6 +16,29 @@ function buildVotesArray(querySnapshot) {
   return collection;
 }
 
+async function getJamData(jamId) {
+  const db = fire.firestore();
+  return db
+    .collection('jams')
+    .doc(jamId)
+    .get()
+    .then((doc) => {
+      return doc.data();
+    });
+}
+
+function createTitleFile(title) {
+  const putATimeStampOn = new Date();
+  const jamName = truncate(snakeCase(title), { length: 30 });
+  const timeStamp = snakeCase(
+    putATimeStampOn.toLocaleDateString() +
+      '_' +
+      snakeCase(putATimeStampOn.toLocaleTimeString()),
+  );
+
+  return jamName + '_' + timeStamp;
+}
+
 export default async function handler(req, res) {
   if (!['GET'].includes(req.method)) {
     res.setHeader('Allow', ['GET']);
@@ -21,7 +46,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  const jamId = req.query.jamId;
+  const {
+    query: { jamId },
+  } = req;
 
   if (!jamId) {
     res
@@ -29,8 +56,11 @@ export default async function handler(req, res) {
       .json({ error: 'Required jamId query parameter missing.' });
     return;
   }
-
   const db = fire.firestore();
+  // Create a title & timestamp for exported file
+  const jamDoc = await getJamData(jamId);
+  const exportTitle = createTitleFile(jamDoc.name);
+
   const statementsRef = db
     .collection('jams')
     .doc(jamId)
@@ -68,12 +98,19 @@ export default async function handler(req, res) {
     }
 
     // prefixing question text with Q_
-    acc[vote.participantId][`Q_${statements[vote.statementId]}`] =
+    acc[vote.participantId][`q_${statements[vote.statementId]}`] =
       vote.vote;
 
     return acc;
   }, {});
 
-  // only sending the array (values), not the object
-  res.status(200).send(Object.values(participants));
+  const csv = await new ObjectsToCsv(Object.values(participants));
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename=${exportTitle}.csv`,
+  );
+  res.status(200);
+  res.send(await csv.toString(true, true));
 }
