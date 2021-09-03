@@ -1,1 +1,1 @@
-export const MAX_STATMENT_LENGTH = 140;
+export const MAX_STATEMENT_LENGTH = 140;

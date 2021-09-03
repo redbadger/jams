@@ -1,7 +1,7 @@
 import { Text, Button, Textarea, Stack, Box } from '@chakra-ui/react';
 import { useState, useRef, useEffect } from 'react';
 import ComponentSwitcher from './ComponentSwitcher';
-import { MAX_STATMENT_LENGTH } from './constants';
+import { MAX_STATEMENT_LENGTH } from './constants';
 
 const EditableStatement = ({
   children,
@@ -37,7 +37,7 @@ const EditableStatement = ({
         onChange={handleStatementChange}
         mb={2}
         borderRadius="none"
-        maxlength={MAX_STATMENT_LENGTH}
+        maxlength={MAX_STATEMENT_LENGTH}
         ref={textAreaRef}
       />
       <Stack justify="flex-end" direction="row" spacing={2}>
