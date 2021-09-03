@@ -13,6 +13,7 @@ import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import router from 'next/router';
 import { convertDate, timeSince } from '../../utils/date';
+import EmptyState from '@/components/EmptyState';
 
 function Moderator() {
   const [jams, setJams] = useState();
@@ -54,14 +55,9 @@ function Moderator() {
             )}
             {jams && !jams.length ? (
               <GridItem colSpan="6">
-                <Text
-                  fontSize="xl"
-                  color="gray.400"
-                  textAlign="center"
-                  my="8"
-                >
+                <EmptyState>
                   No jams found. Create one using the button above!
-                </Text>
+                </EmptyState>
               </GridItem>
             ) : (
               ''

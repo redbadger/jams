@@ -33,6 +33,7 @@ import ModeratorNewStatementCard from '../../components/ModeratorNewStatementCar
 import ModeratorAddNewStatement from '../../components/ModeratorAddNewStatement';
 import { convertDate, timeSince } from '../../utils/date';
 import FourOhThree from '../../components/403';
+import EmptyState from '@/components/EmptyState';
 
 const ApprovedStatementCard = ({ statement, onClick }) => {
   return (
@@ -62,6 +63,14 @@ const RejectedStatementCard = ({ statement, onClick }) => {
       onClick={onClick}
     />
   );
+};
+
+const StatementList = ({ list, render, type }) => {
+  if (!list.length) {
+    return <EmptyState>No {type} statements yet.</EmptyState>;
+  } else {
+    return render(list);
+  }
 };
 
 const LiveStatementCard = ({
@@ -374,48 +383,66 @@ const Jam = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {approvedStatements.map((statement, index) => (
-                    <ApprovedStatementCard
-                      key={index}
-                      statement={statement}
-                      onClick={() =>
-                        patchStatementRequest({
-                          jamId: jam.key,
-                          statementId: statement.key,
-                          state: -1,
-                        })
-                      }
-                    />
-                  ))}
+                  <StatementList
+                    list={approvedStatements}
+                    type="approved"
+                    render={(list) =>
+                      list.map((statement, index) => (
+                        <ApprovedStatementCard
+                          key={index}
+                          statement={statement}
+                          onClick={() =>
+                            patchStatementRequest({
+                              jamId: jam.key,
+                              statementId: statement.key,
+                              state: -1,
+                            })
+                          }
+                        />
+                      ))
+                    }
+                  ></StatementList>
                   <ModeratorAddNewStatement
                     jamId={jam.key}
                     postRequest={postStatementRequest}
                   />
                 </TabPanel>
                 <TabPanel>
-                  {rejectedStatements.map((statement, index) => (
-                    <RejectedStatementCard
-                      key={index}
-                      statement={statement}
-                      onClick={() =>
-                        patchStatementRequest({
-                          jamId: jam.key,
-                          statementId: statement.key,
-                          state: 1,
-                        })
-                      }
-                    />
-                  ))}
+                  <StatementList
+                    type="rejected"
+                    list={rejectedStatements}
+                    render={(list) =>
+                      list.map((statement, index) => (
+                        <RejectedStatementCard
+                          key={index}
+                          statement={statement}
+                          onClick={() =>
+                            patchStatementRequest({
+                              jamId: jam.key,
+                              statementId: statement.key,
+                              state: 1,
+                            })
+                          }
+                        />
+                      ))
+                    }
+                  ></StatementList>
                 </TabPanel>
                 <TabPanel>
-                  {newStatements.map((statement, index) => (
-                    <ModeratorNewStatementCard
-                      key={index}
-                      statement={statement}
-                      patchRequest={patchStatementRequest}
-                      jamId={jam.key}
-                    />
-                  ))}
+                  <StatementList
+                    type="new"
+                    list={newStatements}
+                    render={(list) =>
+                      list.map((statement, index) => (
+                        <ModeratorNewStatementCard
+                          key={index}
+                          statement={statement}
+                          patchRequest={patchStatementRequest}
+                          jamId={jam.key}
+                        />
+                      ))
+                    }
+                  ></StatementList>
                 </TabPanel>
               </TabPanels>
             </Tabs>
