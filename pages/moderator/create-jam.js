@@ -139,6 +139,7 @@ function Moderator() {
               onChange={handleTitleChange}
               borderRadius="none"
               ref={titleElRef}
+              backgroundColor="white"
             />
 
             <Heading size="md" pt="4">
@@ -153,6 +154,7 @@ function Moderator() {
               size="md"
               onChange={handleDescriptionChange}
               borderRadius="none"
+              backgroundColor="white"
             />
 
             <Heading size="md" pt="4">
@@ -224,7 +226,11 @@ function Moderator() {
             spacing={2}
             mt={6}
           >
-            <Button onClick={cancelModalOnOpen} variant="outline">
+            <Button
+              onClick={cancelModalOnOpen}
+              variant="outline"
+              colorScheme="blue"
+            >
               Cancel
             </Button>
             <Button onClick={() => createJam()} colorScheme="blue">
