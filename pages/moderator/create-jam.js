@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 import AdminLayout from '@/components/AdminLayout';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ProposedStatementCard from '../../components/ProposedStatementCard';
 import ModalCreateJam from '../../components/ModalCreateJam';
 import ModalDiscardJam from '../../components/ModalDiscardJam';
@@ -37,6 +37,8 @@ function Moderator() {
     onOpen: cancelModalOnOpen,
     onClose: cancelModalOnClose,
   } = useDisclosure();
+  const titleElRef = useRef(null);
+  const newStatementElRef = useRef(null);
 
   // Call API to upload new statement into firestore
   const createJam = () => {
@@ -72,6 +74,10 @@ function Moderator() {
   };
 
   useEffect(() => {
+    titleElRef.current.focus();
+  }, [titleElRef]);
+
+  useEffect(() => {
     if (!statementSubmitted) {
       return;
     }
@@ -83,6 +89,9 @@ function Moderator() {
     setCurrentStatement('');
 
     setStatementSubmitted(false);
+
+    newStatementElRef.current.focus();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statementSubmitted]);
 
@@ -129,6 +138,7 @@ function Moderator() {
               size="md"
               onChange={handleTitleChange}
               borderRadius="none"
+              ref={titleElRef}
             />
 
             <Heading size="md" pt="4">
@@ -194,6 +204,7 @@ function Moderator() {
                 onChange={handleStatementChange}
                 mb={2}
                 borderRadius="none"
+                ref={newStatementElRef}
               />
 
               <Stack justify="flex-end" direction="row" spacing={2}>
