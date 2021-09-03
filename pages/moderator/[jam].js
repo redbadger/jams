@@ -142,7 +142,7 @@ const LiveStatementCard = ({
 const Jam = () => {
   const router = useRouter();
   const { jam: jamUrlPath } = router.query;
-  const [jam, setJam] = useState({});
+  const [jam, setJam] = useState();
   const [published, setPublished] = useState();
   const [location, setLocation] = useState();
   const [approvedStatements, setApprovedStatements] = useState([]);
@@ -165,7 +165,7 @@ const Jam = () => {
   }, [router.isReady]);
 
   useEffect(() => {
-    if (!jam.statements) {
+    if (!jam || !jam.statements) {
       return;
     }
 
@@ -181,7 +181,7 @@ const Jam = () => {
   }, [jam, updateSuccess]);
 
   useEffect(() => {
-    if (!jam.statements) {
+    if (!jam || !jam.statements) {
       return;
     }
 
@@ -449,8 +449,8 @@ const Jam = () => {
           </Stack>
         </GridItem>
       ) : (
-        <GridItem colSpan="4">
-          <LoadingState>Loading jam...</LoadingState>
+        <GridItem colSpan="6">
+          <LoadingState>Loading Jam...</LoadingState>
         </GridItem>
       )}
     </AdminLayout>

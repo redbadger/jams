@@ -37,7 +37,7 @@ function Auth({ children }) {
     return children;
   }
 
-  return <LoadingState>Loading...</LoadingState>;
+  return <LoadingState>Loading session...</LoadingState>;
 }
 
 export default MyApp;
