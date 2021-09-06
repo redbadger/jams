@@ -34,54 +34,52 @@ function Moderator() {
   return (
     <>
       <AdminHeader />
-      <Container maxW="100%" p="6">
-        <HStack spacing="5" mb="8">
-          <Heading as="h2" size="lg">
-            Jams overview
-          </Heading>
-          <Button
-            colorScheme="blue"
-            onClick={() => router.push('/moderator/create-jam')}
-          >
-            Create a new Jam
-          </Button>
-        </HStack>
-        <HStack spacing="5">
-          <Layout>
-            {!jams && (
-              <GridItem colSpan="6">
-                <LoadingState>Loading jams...</LoadingState>
-              </GridItem>
-            )}
-            {jams && !jams.length ? (
-              <GridItem colSpan="6">
-                <EmptyState>
-                  No jams found. Create one using the button above!
-                </EmptyState>
-              </GridItem>
-            ) : (
-              ''
-            )}
-            {jams && jams.length
-              ? jams.map((jam, i) => {
-                  return (
-                    <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
-                      <OverviewJamCard
-                        jamUrl={jam.urlPath}
-                        isOpen={jam.isOpen}
-                        jamName={jam.name}
-                        openFor={timeSince(jam.createdAt._seconds)}
-                        createdAt={convertDate(
-                          jam.createdAt._seconds,
-                        )}
-                      />
-                    </GridItem>
-                  );
-                })
-              : ''}
-          </Layout>
-        </HStack>
-      </Container>
+      <HStack spacing="6">
+        <Layout>
+          <GridItem colSpan={{ sm: 1, md: 6 }}>
+            <HStack spacing="5" mt="8" mb="2">
+              <Heading as="h2" size="lg">
+                Jams overview
+              </Heading>
+              <Button
+                colorScheme="blue"
+                onClick={() => router.push('/moderator/create-jam')}
+              >
+                Create a new Jam
+              </Button>
+            </HStack>
+          </GridItem>
+          {!jams && (
+            <GridItem colSpan={{ sm: 1, md: 6 }}>
+              <LoadingState>Loading jams...</LoadingState>
+            </GridItem>
+          )}
+          {jams && !jams.length ? (
+            <GridItem colSpan={{ sm: 1, md: 6 }}>
+              <EmptyState>
+                No jams found. Create one using the button above!
+              </EmptyState>
+            </GridItem>
+          ) : (
+            ''
+          )}
+          {jams && jams.length
+            ? jams.map((jam, i) => {
+                return (
+                  <GridItem key={i} colSpan={{ sm: 1, md: 2 }}>
+                    <OverviewJamCard
+                      jamUrl={jam.urlPath}
+                      isOpen={jam.isOpen}
+                      jamName={jam.name}
+                      openFor={timeSince(jam.createdAt._seconds)}
+                      createdAt={convertDate(jam.createdAt._seconds)}
+                    />
+                  </GridItem>
+                );
+              })
+            : ''}
+        </Layout>
+      </HStack>
     </>
   );
 }
