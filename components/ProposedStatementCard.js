@@ -41,7 +41,11 @@ const EditableStatement = ({
         ref={textAreaRef}
       />
       <Stack justify="flex-end" direction="row" spacing={2}>
-        <Button onClick={() => invertComponent()} variant="outline">
+        <Button
+          onClick={() => invertComponent()}
+          variant="outline"
+          colorScheme="blue"
+        >
           Cancel
         </Button>
         <Button
@@ -49,7 +53,6 @@ const EditableStatement = ({
             onSave(index, statement);
             invertComponent();
           }}
-          variant="outline"
           colorScheme="blue"
         >
           Save
@@ -72,14 +75,23 @@ const VisibleOnlyStatement = ({
       borderColor="gray.200"
       p={4}
       borderRadius="md"
+      bg="white"
     >
       <Text>{children}</Text>
 
       <Stack justify="flex-end" direction="row" spacing={2}>
-        <Button onClick={() => onDelete(index)} variant="outline">
+        <Button
+          onClick={() => onDelete(index)}
+          variant="outline"
+          colorScheme="blue"
+        >
           Delete
         </Button>
-        <Button onClick={() => invertComponent()} variant="outline">
+        <Button
+          onClick={() => invertComponent()}
+          variant="outline"
+          colorScheme="blue"
+        >
           Edit
         </Button>
       </Stack>
