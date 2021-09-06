@@ -347,6 +347,7 @@ const Jam = () => {
             <Stack direction="row" spacing={5}>
               <Switch
                 size="md"
+                pt={0.5}
                 colorScheme="green"
                 isChecked={published}
                 onChange={(e) => {
@@ -358,11 +359,11 @@ const Jam = () => {
                 }}
               ></Switch>
               {published ? (
-                <Badge p="1" colorScheme="green">
+                <Badge p="1" colorScheme="green" variant="outline">
                   Open
                 </Badge>
               ) : (
-                <Badge pt="1" colorScheme="gray">
+                <Badge p="1" colorScheme="gray" variant="outline">
                   Closed
                 </Badge>
               )}
