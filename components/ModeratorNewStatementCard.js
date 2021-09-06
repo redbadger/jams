@@ -44,7 +44,11 @@ const ModeratorEditStatementCard = ({
         mb={4}
       ></Textarea>
       <Stack justify="flex-end" direction="row" spacing={2}>
-        <Button onClick={() => invertComponent()} variant="outline">
+        <Button
+          onClick={() => invertComponent()}
+          variant="outline"
+          colorScheme="blue"
+        >
           Cancel
         </Button>
         <Button
@@ -93,7 +97,11 @@ const ModeratorDecisionStatementCard = ({
         <Spacer />
 
         <HStack spacing={2}>
-          <Button onClick={() => invertComponent()} variant="outline">
+          <Button
+            onClick={() => invertComponent()}
+            variant="outline"
+            colorScheme="blue"
+          >
             Edit
           </Button>
           <Button

@@ -131,7 +131,11 @@ const LiveStatementCard = ({
 
         <Spacer />
 
-        <Button variant="outline" onClick={onClick}>
+        <Button
+          variant="outline"
+          colorScheme="blue"
+          onClick={onClick}
+        >
           {buttonText}
         </Button>
       </Flex>
