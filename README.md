@@ -91,6 +91,6 @@ The software is currently at MVP stage, contributions welcome!
  - [pol.is](http://pol.is/)
 
 
-## Licence
+## Licence
 
 [Apache 2.0](/LICENCE.md)
