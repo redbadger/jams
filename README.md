@@ -70,16 +70,16 @@ The site will be running on [http://localhost:3000](http://localhost:3000).
 
 We're currently deploying using Github Actions. Our CI pipeline expects to find the following secrets set:
 
-    ```
-    AUTH0_ISSUER_BASE_URL
-    AUTH0_CLIENT_ID
-    AUTH0_CLIENT_SECRET
-    NEXTAUTH_URL # the callback URL for NextAuth
-    FIREBASE_DB_URL
-    $FIREBASE_ADMIN_CREDENTIALS # a base64 encoded version of the service account json
-    NETLIFY_AUTH_TOKEN # for deploying to Netlify
-    NETLIFY_SITE_ID
-    ```
+```
+AUTH0_ISSUER_BASE_URL
+AUTH0_CLIENT_ID
+AUTH0_CLIENT_SECRET
+NEXTAUTH_URL # the callback URL for NextAuth
+FIREBASE_DB_URL
+$FIREBASE_ADMIN_CREDENTIALS # a base64 encoded version of the service account json
+NETLIFY_AUTH_TOKEN # for deploying to Netlify
+NETLIFY_SITE_ID
+```
 
 ## Getting involved
 
