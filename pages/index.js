@@ -67,19 +67,36 @@ export default function Home() {
       </Head>
       <HomeHeader session={session} />
       <Layout>
-        <GridItem colSpan={6} py={20}>
+        <GridItem colSpan={4} colStart={2} py={20}>
           <Box as={'main'} align={'center'}>
             <Heading as="h1" size="4xl">
               Welcome to Jam!
             </Heading>
-            {session && (
-              <Box mt="4">
-                <Link href="/moderator">
-                  Click here for the Admin Dashboard
-                </Link>
-              </Box>
-            )}
+            <Box m={14}>
+              {session && (
+                <Link href="/moderator">Admin dashboard</Link>
+              )}
+              {!session && (
+                <Text color="gray.600">
+                  Please sign in to get started.
+                </Text>
+              )}
+            </Box>
           </Box>
+          <Heading as="h4" fontSize="lg" mb={1}>
+            What is a jam?
+          </Heading>
+          <Text color="gray.600">
+            Jam is a collaborative surveying tool that’s used to
+            gather how certain statements are received within a large
+            group of people who are invited to take part. Each user
+            responding to the lightweight survey (called a Jam) will
+            be shown these statements, one by one, being able to vote
+            in agreement, disagreement or abstaining, passing on to
+            the next one. Users can themselves suggest new sentences
+            to be included in that Jam for others to agree/disagree
+            on, provided they get approved by the administrator.
+          </Text>
         </GridItem>
       </Layout>
       <HomeFooter />
