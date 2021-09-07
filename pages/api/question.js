@@ -62,7 +62,7 @@ export default function handler(req, res) {
             text: randomQ.text,
             key: randomKey,
             jamId: jamId,
-            createdAt: randomQ.createdAt,
+            submittedAt: randomQ.submittedAt,
             isUserSubmitted: randomQ.isUserSubmitted,
             meta: {
               numQuestions: Object.keys(questions).length,
