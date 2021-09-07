@@ -44,9 +44,9 @@ The free tiers on all these services are adequate for low traffic deployments.
     - `AUTH0_CLIENT_ID` - Auth0 app ID (should be a Web application)
     - `AUTH0_CLIENT_SECRET` - Auth0 app secret
     - `NEXTAUTH_URL` - Redirect URL for NextAuth. Probably http://localhost:3000 for local development
-    - `FIREBASE_DB_URL` - URL of the Firebase DB
+    - `FIREBASE_DB_URL` - URL of your Firebase DB
 
-    Check [.env.example](./env.example) for more information about these variables and example values.
+    Check [.env.example](./.env.example) for some example values.
 
 1. To authenticate API requests with Firebase, you'll need a service account key on a `/secrets` folder. After [getting this file from Firebase](https://console.firebase.google.com/project/jams-dev/settings/serviceaccounts/adminsdk) run something like:
 
