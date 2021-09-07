@@ -16,7 +16,12 @@ function HomeHeader({ session }) {
     <Box as="header" p={4} bg={'white'}>
       <HStack>
         <Box w={'50%'}>
-          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+          <Heading
+            as="h1"
+            size="lg"
+            letterSpacing={'tighter'}
+            fontWeight={600}
+          >
             Jam
           </Heading>
         </Box>

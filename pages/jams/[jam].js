@@ -21,10 +21,15 @@ import {
 
 function JamHeader({ title, description, participantId }) {
   return (
-    <Box as="header" py={4} pb={0} bg={'white'}>
-      <HStack px={4}>
+    <Box as="header" bg={'white'} p={4}>
+      <HStack>
         <Box w={'50%'}>
-          <Heading as="h1" size="lg" letterSpacing={'tighter'}>
+          <Heading
+            as="h1"
+            size="lg"
+            letterSpacing={'tighter'}
+            fontWeight={600}
+          >
             Jam
           </Heading>
         </Box>

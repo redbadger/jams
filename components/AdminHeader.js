@@ -17,7 +17,7 @@ const AdminHeader = () => {
       as="nav"
       justify="space-between"
       wrap="wrap"
-      padding="23px"
+      padding={4}
       bg="white"
       color="black"
     >
