@@ -21,7 +21,7 @@ import { cloneDeep } from 'lodash';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { MAX_STATEMENT_LENGTH } from '../../components/constants';
 
-function Moderator() {
+function CreateJam() {
   const [title, setTitle] = useState();
   const [allStatements, setAllStatements] = useState([]);
   const [currentStatement, setCurrentStatement] = useState('');
@@ -250,4 +250,5 @@ function Moderator() {
   );
 }
 
-export default Moderator;
+CreateJam.auth = true;
+export default CreateJam;
