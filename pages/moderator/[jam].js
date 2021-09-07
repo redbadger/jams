@@ -37,6 +37,22 @@ import EmptyState from '@/components/EmptyState';
 
 const ApprovedStatementCard = ({ statement, onClick }) => {
   return (
+    <LiveStatementCard
+      statement={statement}
+      buttonText="Reject"
+      stateChangeText={
+        <>
+          <CheckIcon /> Approved
+        </>
+      }
+      onClick={onClick}
+    />
+  );
+};
+
+const RejectedStatementCard = ({ statement, onClick }) => {
+  return (
+    <LiveStatementCard
       statement={statement}
       buttonText="Approve"
       stateChangeText={
