@@ -20,7 +20,7 @@ This is broadly the tech stack the project is using:
  - [Prettier](https://prettier.io/) for code formatting
 
 
-It requires accounts/tenants with the following services:
+The current setup uses accounts/tenants configured with the following services:
 
  - [Auth0](https://auth0.com/) as the authentication provider
  - [Firebase Firestore](https://firebase.com/) as a data store
