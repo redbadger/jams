@@ -251,8 +251,8 @@ const Jam = () => {
         )}
         <GridItem colSpan={6}>
           <Text as="h5" fontWeight={600} pb={4}>
-            Have a different statement in mind? Suggest a new one to
-            be voted on as part of this Jam:
+            Have another statement in mind? Suggest a new one to be
+            voted on as part of this Jam.
           </Text>
           <ParticipantAddNewStatement jamId={jam ? jam.key : null} />
         </GridItem>
