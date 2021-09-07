@@ -162,13 +162,7 @@ function Moderator() {
               Statements
             </Heading>
             <VStack spacing={4} align="start" w="100%">
-              <UnorderedList
-                size="sm"
-                color="gray.500"
-                styleType="none"
-                p="0"
-                m="0"
-              >
+              <UnorderedList size="sm" color="gray.600">
                 <ListItem>
                   Statements should be easy for everyone to understand
                 </ListItem>
