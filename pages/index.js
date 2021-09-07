@@ -84,7 +84,7 @@ export default function Home() {
             </Box>
           </Box>
           <Heading as="h4" fontSize="lg" mb={1}>
-            What is a jam?
+            What is a Jam?
           </Heading>
           <Text color="gray.600">
             Jam is a collaborative surveying tool that’s used to
