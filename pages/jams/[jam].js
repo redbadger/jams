@@ -213,7 +213,7 @@ const Jam = () => {
                 <InfoOutlineIcon />
                 <Text fontSize="xs" color="gray.600">
                   <strong>Participant</strong> submitted{' '}
-                  {convertDate(question.createdAt?._seconds)}
+                  {convertDate(question.submittedAt?._seconds)}
                 </Text>
               </>
             ) : (

@@ -81,6 +81,7 @@ function createJam({ name, description, statements, adminId }) {
       isUserSubmitted: false,
       numAgrees: 0,
       numDisagrees: 0,
+      numSkipped: 0,
       stateChangeTime: fire.firestore.Timestamp.now(),
       submittedAt: fire.firestore.Timestamp.now(),
     });
