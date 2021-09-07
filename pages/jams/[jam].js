@@ -198,7 +198,7 @@ const Jam = () => {
               {question.meta.numQuestions}
             </Text>
           )}
-          <Heading as="h1" size="xl" mb={4}>
+          <Heading as="h1" size="xl" mb={2}>
             {!isDone ? question.text : 'All done'}
           </Heading>
           {isDone && (
@@ -207,9 +207,7 @@ const Jam = () => {
               statements!
             </Text>
           )}
-        </GridItem>
-        <GridItem colSpan={4}>
-          <HStack pb="8">
+          <HStack pb="2">
             {question && question.isUserSubmitted ? (
               <>
                 <InfoOutlineIcon />
@@ -228,7 +226,7 @@ const Jam = () => {
             <Text pb={4} color={'gray.600'}>
               What do you think about this statement?
             </Text>
-            <Stack direction="row" spacing={4} align="left" pb={8}>
+            <Stack direction="row" spacing={4} align="left" pb={12}>
               <JamButton
                 vote="Agree"
                 colorScheme={'blue'}
@@ -252,7 +250,7 @@ const Jam = () => {
           </GridItem>
         )}
         <GridItem colSpan={6}>
-          <Text as="h5" fontWeight={600} mt={8} pb={4}>
+          <Text as="h5" fontWeight={600} pb={4}>
             Have a different statement in mind? Suggest a new one to
             be voted on as part of this Jam:
           </Text>
