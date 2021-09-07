@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/hooks';
 import {
+  ListItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -8,6 +9,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  UnorderedList,
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/textarea';
 import { useState } from 'react';
@@ -53,12 +55,19 @@ export default function ParticipantAddNewStatement({ jamId }) {
               <ModalHeader>Submit statements for voting</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                - Statements should be easy for everyone to understand
-                without further explanation.
-                <br />
-                - Keep them clear and under 140 characters long.
-                <br />- Each one should be unique and raise a
-                different point.
+                <UnorderedList size="sm" color="gray.600">
+                  <ListItem>
+                    Statements should be easy for everyone to
+                    understand
+                  </ListItem>
+                  <ListItem>
+                    Keep them clear and under 140 characters
+                  </ListItem>
+                  <ListItem>
+                    Each one should be unique and raise a different
+                    point
+                  </ListItem>
+                </UnorderedList>
                 <Textarea
                   mt={5}
                   placeholder="Please enter your statement here"
