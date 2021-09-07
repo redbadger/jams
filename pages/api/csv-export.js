@@ -94,7 +94,9 @@ export default async function handler(req, res) {
 
     if (!(vote.participantId in acc)) {
       // add participant id as a column
-      acc[vote.participantId] = { id: vote.participantId };
+      acc[vote.participantId] = {
+        'Participant ID': vote.participantId,
+      };
     }
 
     // prefixing question text with Q_
