@@ -30,7 +30,7 @@ function HomeHeader({ session }) {
           ) : (
             <>
               <Text
-                d={'inline-block'}
+                d={{ md: 'inline-block', base: 'none' }}
                 color={'gray.400'}
                 px={2}
                 fontSize={'sm'}
