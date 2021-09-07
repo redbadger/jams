@@ -395,7 +395,7 @@ const Jam = () => {
                 <Tab>New {newStatements.length}</Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>
+                <TabPanel p={0}>
                   <StatementList
                     list={approvedStatements}
                     type="approved"
@@ -420,7 +420,7 @@ const Jam = () => {
                     postRequest={postStatementRequest}
                   />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel p={0}>
                   <StatementList
                     type="rejected"
                     list={rejectedStatements}
@@ -441,7 +441,7 @@ const Jam = () => {
                     }
                   ></StatementList>
                 </TabPanel>
-                <TabPanel>
+                <TabPanel p={0}>
                   <StatementList
                     type="new"
                     list={newStatements}

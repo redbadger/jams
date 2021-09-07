@@ -17,7 +17,7 @@ function HomeHeader({ session }) {
       <HStack>
         <Box w={'50%'}>
           <Heading as="h1" size="lg" letterSpacing={'tighter'}>
-            Jams
+            Jam
           </Heading>
         </Box>
         <Box w={'50%'} align={'right'}>
@@ -65,7 +65,7 @@ export default function Home() {
         <GridItem colSpan={6} py={20}>
           <Box as={'main'} align={'center'}>
             <Heading as="h1" size="4xl">
-              Welcome to Jams!
+              Welcome to Jam!
             </Heading>
             {session && (
               <Box mt="4">

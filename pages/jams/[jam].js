@@ -25,7 +25,7 @@ function JamHeader({ title, description, participantId }) {
       <HStack px={4}>
         <Box w={'50%'}>
           <Heading as="h1" size="lg" letterSpacing={'tighter'}>
-            Jams
+            Jam
           </Heading>
         </Box>
         <Box

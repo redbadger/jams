@@ -23,7 +23,7 @@ const AdminHeader = () => {
     >
       <Flex align="center" mr={5}>
         <Heading as="h1" size="lg" letterSpacing={'tighter'}>
-          <Link href="/moderator">Jams</Link>
+          <Link href="/moderator">Jam</Link>
         </Heading>
       </Flex>
 
