@@ -40,21 +40,19 @@ The free tiers on all these services are adequate for low traffic deployments.
 
 1. The project expects a `.env.local` file with the following keys set:
 
-    ```
-    AUTH0_ISSUER_BASE_URL
-    AUTH0_CLIENT_ID
-    AUTH0_CLIENT_SECRET
-    NEXTAUTH_URL
-    FIREBASE_DB_URL
-    ```
+    - `AUTH0_ISSUER_BASE_URL` - Auth0 tenant URL
+    - `AUTH0_CLIENT_ID` - Auth0 app ID (should be a Web application)
+    - `AUTH0_CLIENT_SECRET` - Auth0 app secret
+    - `NEXTAUTH_URL` - Redirect URL for NextAuth. Probably http://localhost:3000 for local development
+    - `FIREBASE_DB_URL` - URL of the Firebase DB
 
-    It's probably better to ask one of the project maintainers for this.
+    Check [.env.example](./env.example) for more information about these variables and example values.
 
 1. To authenticate API requests with Firebase, you'll need a service account key on a `/secrets` folder. After [getting this file from Firebase](https://console.firebase.google.com/project/jams-dev/settings/serviceaccounts/adminsdk) run something like:
 
     ```bash
     mkdir secrets
-    mv ~/Downloads/${downloaded_file.json} secrets/firebase_admin_credentials.json
+    mv ${downloaded_file_path} secrets/firebase_admin_credentials.json
     ```
 
 1. Finally, run:
@@ -70,16 +68,14 @@ The site will be running on [http://localhost:3000](http://localhost:3000).
 
 We're currently deploying using Github Actions. Our CI pipeline expects to find the following secrets set:
 
-```
-AUTH0_ISSUER_BASE_URL
-AUTH0_CLIENT_ID
-AUTH0_CLIENT_SECRET
-NEXTAUTH_URL # the callback URL for NextAuth
-FIREBASE_DB_URL
-$FIREBASE_ADMIN_CREDENTIALS # a base64 encoded version of the service account json
-NETLIFY_AUTH_TOKEN # for deploying to Netlify
-NETLIFY_SITE_ID
-```
+ - `AUTH0_ISSUER_BASE_URL`
+ - `AUTH0_CLIENT_ID`
+ - `AUTH0_CLIENT_SECRET`
+ - `NEXTAUTH_URL`
+ - `FIREBASE_DB_URL`
+ - `FIREBASE_ADMIN_CREDENTIALS` - a base64 encoded version of the service account json
+ - `NETLIFY_AUTH_TOKEN` - for deploying to Netlify through Github Actions
+ - `NETLIFY_SITE_ID`
 
 ## Getting involved
 
