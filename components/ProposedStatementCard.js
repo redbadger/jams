@@ -77,7 +77,7 @@ const VisibleOnlyStatement = ({
       borderRadius="md"
       bg="white"
     >
-      <Text>{children}</Text>
+      <Text pb={2}>{children}</Text>
 
       <Stack justify="flex-end" direction="row" spacing={2}>
         <Button
