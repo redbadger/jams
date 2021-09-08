@@ -341,9 +341,11 @@ const Jam = () => {
             <Heading as="h2" size="lg">
               {jam.name}
             </Heading>
-            <Link href={`${location}/jams/${jam.urlPath}`}>
-              {`${location}/jams/${jam.urlPath}`}
-            </Link>
+            <Box>
+              <Link href={`${location}/jams/${jam.urlPath}`}>
+                {`${location}/jams/${jam.urlPath}`}
+              </Link>
+            </Box>
             <Stack direction="row" spacing={5}>
               <Switch
                 size="md"
