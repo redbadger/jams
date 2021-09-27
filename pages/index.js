@@ -10,20 +10,14 @@ import {
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Link from 'next/link';
 import Layout from '../components/Layout';
+import Logo from '@/components/Logo';
 
 function HomeHeader({ session }) {
   return (
     <Box as="header" p={4} bg={'white'}>
       <HStack>
         <Box w={'50%'}>
-          <Heading
-            as="h1"
-            size="lg"
-            letterSpacing={'tighter'}
-            fontWeight={600}
-          >
-            Jam
-          </Heading>
+          <Logo />
         </Box>
         <Box w={'50%'} align={'right'}>
           {!session ? (

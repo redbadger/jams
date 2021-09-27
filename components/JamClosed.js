@@ -1,14 +1,11 @@
 import { GridItem, Text, Box, Heading, Link } from '@chakra-ui/react';
 import Layout from 'components/Layout';
+import JamHeader from 'components/ParticipantJamHeader';
 
 export default function JamClosed() {
   return (
     <>
-      <Heading as="h1" size="md" p={6} bg="white">
-        <Box align="left">
-          <Link href="/">JAMS</Link>
-        </Box>
-      </Heading>
+      <JamHeader />
       <Layout mt={40}>
         <GridItem colStart="2" colSpan="4">
           <Text fontSize="lg">

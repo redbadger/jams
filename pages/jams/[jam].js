@@ -18,43 +18,7 @@ import {
   HStack,
   Progress,
 } from '@chakra-ui/react';
-
-function JamHeader({ title, description, participantId }) {
-  return (
-    <Box as="header" bg={'white'} p={4}>
-      <HStack>
-        <Box w={'50%'}>
-          <Heading
-            as="h1"
-            size="lg"
-            letterSpacing={'tighter'}
-            fontWeight={600}
-          >
-            Jam
-          </Heading>
-        </Box>
-        <Box
-          w={'50%'}
-          align={'right'}
-          color={'gray.400'}
-          fontSize={'sm'}
-        >
-          Participant ID: {participantId}
-        </Box>
-      </HStack>
-      <Layout>
-        <GridItem colSpan={6} py={8}>
-          <Heading as="h2" size="lg">
-            {title || 'Loading...'}
-          </Heading>
-          <Text color={'gray.600'} mt={4}>
-            {description}&nbsp;
-          </Text>
-        </GridItem>
-      </Layout>
-    </Box>
-  );
-}
+import JamHeader from '@/components/ParticipantJamHeader';
 
 const Jam = () => {
   const router = useRouter();
@@ -179,7 +143,7 @@ const Jam = () => {
   return jam && (question || isDone) ? (
     <Box>
       <Head>
-        <title>Jams - participate in a jam</title>
+        <title>Jams - Participate in a Jam.</title>
       </Head>
       <JamHeader
         title={jam && jam.name}

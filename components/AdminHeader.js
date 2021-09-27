@@ -8,6 +8,7 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
+import Logo from '@/components/Logo';
 
 const AdminHeader = () => {
   const [session] = useSession();
@@ -22,9 +23,9 @@ const AdminHeader = () => {
       color="black"
     >
       <Flex align="center" mr={5}>
-        <Heading as="h1" size="lg" letterSpacing={'tighter'}>
-          <Link href="/moderator">Jam</Link>
-        </Heading>
+        <Link href="/moderator">
+          <Logo />
+        </Link>
       </Flex>
 
       <Box display={{ base: 'block' }}>
