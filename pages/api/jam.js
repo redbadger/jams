@@ -14,8 +14,10 @@ async function getJamByUrlPath(
 
   var token;
   try {
-    token = await ensureAdmin(req, res);
-    queryPath = queryPath.where('adminId', '==', token.sub);
+    if (includeStatements) {
+      token = await ensureAdmin(req, res);
+      queryPath = queryPath.where('adminId', '==', token.sub);
+    }
   } catch (e) {
     // No session here so no change to queryPath needed
   }
