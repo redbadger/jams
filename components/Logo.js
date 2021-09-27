@@ -15,7 +15,7 @@ const Logo = () => {
     LOGO_ENABLED_ORIGINS.some((o) => origin.includes(o))
   ) {
     return <Image src="/runtime-logo.png" alt="Runtime" h="24px" />;
-  } else {
+  } else if (origin) {
     return (
       <Heading
         as="h1"
@@ -26,6 +26,8 @@ const Logo = () => {
         Jam
       </Heading>
     );
+  } else {
+    return '';
   }
 };
 
