@@ -1,4 +1,4 @@
-import { Heading, Image } from '@chakra-ui/react';
+import { Heading, Img } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 
 const LOGO_ENABLED_ORIGINS = ['runtime.is', 'localhost:3000'];
@@ -14,7 +14,7 @@ const Logo = () => {
     origin &&
     LOGO_ENABLED_ORIGINS.some((o) => origin.includes(o))
   ) {
-    return <Image src="/runtime-logo.png" alt="Runtime" h="24px" />;
+    return <Img src="/runtime-logo.png" alt="Runtime" h="24px" />;
   } else if (origin) {
     return (
       <Heading
