@@ -2,7 +2,7 @@ import OverviewJamCard from '@/components/OverviewJamCard';
 import { GridItem } from '@chakra-ui/react';
 import { convertDate, timeSince } from '../utils/date';
 
-function ResultsCard({ jam, key }) {
+function ResultsCard({ jam, key, bgColour }) {
   console.log('inside ResultCard');
   const i = key;
   return (
@@ -12,6 +12,7 @@ function ResultsCard({ jam, key }) {
       colStart={{ sm: 1, md: 3 }}
     >
       <OverviewJamCard
+        bgColour={bgColour}
         jamUrl={jam.urlPath}
         isOpen={jam.isOpen}
         jamName={jam.name}

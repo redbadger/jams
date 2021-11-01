@@ -18,11 +18,12 @@ import EmptyState from '@/components/EmptyState';
 import ResultsCard from '@/components/ResultsCard';
 
 function Moderator() {
-  const [jams, setJams] = useState();
+  const [jams, setJams] = useState([]);
   const [searchText, setSearchText] = useState();
   const [searchResults, setSearchResults] = useState();
   const [title, setTitle] = useState([]);
   const [searchResultsJam, setSearchResultsJam] = useState();
+  const [otherJamsResults, setOtherJamsResults] = useState([]);
 
   useEffect(() => {
     loadJams();
@@ -63,16 +64,6 @@ function Moderator() {
 
   const loadSearchResults = () => {
     console.log('in load search');
-    //Filter the array the Jam array so that it only shows
-    // What's in the 'titles' array.
-
-    // All the jam names array
-    // Search result titles array
-
-    // All the 'filtered' jams
-
-    // Show component based on final array of Jam names.
-    // Refactored into new component.
 
     let showTitles = [];
 
@@ -85,29 +76,14 @@ function Moderator() {
     return showTitles;
   };
 
-  const loadFilteredJams = () => {
-    console.log('Load Filtered Jams');
-    let filteredJams = [];
-    let jamKeys = [];
+  // const [matchedJams, setMatchedJams] = useState();
+  // const [otherJams, setOthersJams] = useState();
 
-    searchResults.map((item) => {
-      jams.filter((jam) => {
-        if (jam.name === item) {
-          // jamKeys = [...jamKeys, jam.key];
-          filteredJams = [...filteredJams, jam];
-        }
-      });
-    });
-
-    // filteredJams.map((item) =>
-    //   console.log(`item.name: ${item.name}`),
-    // );
-
-    // setSearchResultsJam(filteredJams);
-    // console.log(`searchResultsJam: ${searchResultsJam}`);
-
-    return filteredJams;
-  };
+  // useEffect(() => {
+  //   const [matchedJams, otherJams] = loadFilteredJams();
+  //   setMatchedJams(matchedJams);// only running this when either jams or searchResults change
+  //   setOthersJams(otherJams);
+  // }, [jams, searchResults])
 
   return (
     <>
@@ -163,13 +139,17 @@ function Moderator() {
               })
             : ''} */}
 
-          {title && searchResults
-            ? loadFilteredJams().map((item, i) => (
-                <ResultsCard jam={item} key={i} />
-              ))
-            : jams && jams.length
-            ? jams.map((jam, i) => <ResultsCard jam={jam} key={i} />)
-            : ''}
+          {title && searchResults ? (
+            <ShowMatchingJamsLists
+              jams={jams}
+              searchResults={searchResults}
+              searchText={searchText}
+            />
+          ) : jams && jams.length ? (
+            jams.map((jam, i) => <ResultsCard jam={jam} key={i} />)
+          ) : (
+            ''
+          )}
 
           {/* {jams && jams.length
             ? jams.map((jam, i) => {
@@ -196,6 +176,50 @@ function Moderator() {
             : ''} */}
         </Layout>
       </HStack>
+    </>
+  );
+}
+
+function ShowMatchingJamsLists({ jams, searchResults, searchText }) {
+  const loadFilteredJams = () => {
+    if (!searchResults) {
+      return;
+    }
+
+    const filteredJams = jams.filter((jam) =>
+      searchResults.includes(jam.name),
+    );
+
+    const otherJams = jams.filter(
+      (jam) => !searchResults.includes(jam.name),
+    );
+
+    return [filteredJams, otherJams];
+  };
+
+  const [matchedJams, otherJams] = loadFilteredJams(); // running this every time the component re-renders
+
+  return (
+    <>
+      <h1></h1>
+      <GridItem
+        colSpan={{ sm: 1, md: 6 }}
+        colStart={{ sm: 1, md: 3 }}
+      >
+        Jams matching <em>{searchText}...</em>
+      </GridItem>
+      {matchedJams.map((item, i) => (
+        <ResultsCard jam={item} key={i} bgColour="#FFFFBF" />
+      ))}
+      <GridItem
+        colSpan={{ sm: 1, md: 6 }}
+        colStart={{ sm: 1, md: 3 }}
+      >
+        Other jams:
+      </GridItem>
+      {otherJams.map((item, i) => (
+        <ResultsCard jam={item} key={i} />
+      ))}
     </>
   );
 }

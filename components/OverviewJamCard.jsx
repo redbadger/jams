@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Badge,
   Box,
@@ -9,16 +10,21 @@ import {
   Link,
 } from '@chakra-ui/react';
 
+// const bgColour = 'white';
 const overviewCard = ({
+  bgColour,
   isOpen,
   jamName,
   createdAt,
   openFor,
   jamUrl,
 }) => {
+  // TODO Sort out the Background Colour
+  // const bgColour = '#FFFFBF';
+
   return (
     <Box
-      bg="white"
+      bg={bgColour ? bgColour : ''}
       rounded={'md'}
       p={5}
       overflow={'hidden'}
