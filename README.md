@@ -68,14 +68,14 @@ The site will be running on [http://localhost:3000](http://localhost:3000).
 
 We're currently deploying using Github Actions. Our CI pipeline expects to find the following secrets set:
 
- - `AUTH0_ISSUER_BASE_URL`
+ - `AUTH0_ISSUER_BASE_URL` - Auth0 tenant URL 
  - `AUTH0_CLIENT_ID`
  - `AUTH0_CLIENT_SECRET`
- - `NEXTAUTH_URL`
+ - `NEXTAUTH_URL` - canonical URL of the deployed production site (used for redirect after auth)
  - `FIREBASE_DB_URL`
  - `FIREBASE_ADMIN_CREDENTIALS` - a base64 encoded version of the service account json
- - `NETLIFY_AUTH_TOKEN` - for deploying to Netlify through Github Actions
- - `NETLIFY_SITE_ID`
+ - `NETLIFY_AUTH_TOKEN` - (optional) for deploying to Netlify through Github Actions
+ - `NETLIFY_SITE_ID` - (optional)
 
 ## Getting involved
 
